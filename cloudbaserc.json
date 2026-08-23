@@ -1,0 +1,15 @@
+{
+  "version": "2.0",
+  "envId": "{{env.ENV_ID}}",
+  "framework": {
+    "name": "what-to-eat",
+    "plugins": {
+      "website": {
+        "use": "@cloudbase/framework-plugin-website",
+        "inputs": {
+          "outputPath": "frontend/dist"
+        }
+      }
+    }
+  }
+}
