@@ -10,15 +10,15 @@ CREATE TABLE IF NOT EXISTS "IngredientUnitTypes" (
 
 CREATE TABLE IF NOT EXISTS "Locations" (
     "id" INTEGER PRIMARY KEY,
-    "parentLocation" INTEGER REFERENCES "Locations"("id"),
+    "parentLocation" INTEGER NULL REFERENCES "Locations"("id"),
     "name" TEXT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS "Ingredients" (
     "id" INTEGER PRIMARY KEY,
     "name" TEXT NOT NULL,
-    "quantity" NUMERIC(15, 3),
-    "unitTypeId" INTEGER REFERENCES "IngredientUnitTypes"("id"),
+    "quantity" NUMERIC(15, 3) NOT NULL,
+    "unitTypeId" INTEGER NOT NULL REFERENCES "IngredientUnitTypes"("id"),
     "locationId" INTEGER NOT NULL REFERENCES "Locations"("id"),
-    "expiryDate" TIMESTAMPTZ DEFAULT NOW()
+    "expiryDate" TIMESTAMPTZ NULL
 );
