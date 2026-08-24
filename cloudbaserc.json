@@ -10,6 +10,16 @@
           "outputPath": "frontend/dist"
         }
       }
+    },
+    "requirement": {
+      "addons": [
+        {
+          "type": "PostgreSQL",
+          "name": "what-to-eat-postgresql",
+          "tier": "base",
+          "storageGB": 1
+        }
+      ]
     }
   }
 }
