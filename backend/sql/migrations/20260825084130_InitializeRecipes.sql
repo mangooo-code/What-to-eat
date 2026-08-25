@@ -8,5 +8,6 @@ CREATE TABLE IF NOT EXISTS "Recipes" (
 CREATE TABLE IF NOT EXISTS "RecipeIngredients" (
     "id" INTEGER PRIMARY KEY,
     "recipeId" UUID NOT NULL REFERENCES "Recipes"("id"),
-    "ingredientId" UUID NOT NULL REFERENCES "Ingredients"("id")
+    "ingredientId" UUID NOT NULL REFERENCES "Ingredients"("id"),
+    "quantity" NUMERIC(15, 3) NOT NULL
 );
