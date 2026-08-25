@@ -13,26 +13,10 @@ CREATE TABLE IF NOT EXISTS "Users" (
     "updatedDate" TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
-INSERT INTO "Users" (
-    "firstName",
-    "middleName",
-    "lastName",
-    "phoneNumber",
-    "isInternalAuthorization"
-)
-VALUES (
-    'System',
-    NULL,
-    'Migration',
-    '__migration_system_user__',
-    TRUE
-)
-ON CONFLICT ("phoneNumber") DO NOTHING;
-
 ALTER TABLE "Locations"
     ADD COLUMN "id_uuid" UUID NOT NULL DEFAULT gen_random_uuid(),
     ADD COLUMN "parentLocation_uuid" UUID NULL,
-    ADD COLUMN "userId" UUID NULL,
+    ADD COLUMN "userId" UUID NOT NULL,
     ADD COLUMN "updatedDate" TIMESTAMPTZ NOT NULL DEFAULT now();
 
 UPDATE "Locations" child
@@ -40,22 +24,10 @@ SET "parentLocation_uuid" = parent."id_uuid"
 FROM "Locations" parent
 WHERE child."parentLocation" = parent."id";
 
-UPDATE "Locations"
-SET "userId" = (
-    SELECT "id"
-    FROM "Users"
-    WHERE "phoneNumber" = '__migration_system_user__'
-    LIMIT 1
-)
-WHERE "userId" IS NULL;
-
-ALTER TABLE "Locations"
-    ALTER COLUMN "userId" SET NOT NULL;
-
 ALTER TABLE "Ingredients"
     ADD COLUMN "id_uuid" UUID NOT NULL DEFAULT gen_random_uuid(),
     ADD COLUMN "locationId_uuid" UUID NULL,
-    ADD COLUMN "userId" UUID NULL,
+    ADD COLUMN "userId" UUID NOT NULL,
     ADD COLUMN "updatedDate" TIMESTAMPTZ NOT NULL DEFAULT now();
 
 UPDATE "Ingredients" ingredient
@@ -63,18 +35,8 @@ SET "locationId_uuid" = location."id_uuid"
 FROM "Locations" location
 WHERE ingredient."locationId" = location."id";
 
-UPDATE "Ingredients"
-SET "userId" = (
-    SELECT "id"
-    FROM "Users"
-    WHERE "phoneNumber" = '__migration_system_user__'
-    LIMIT 1
-)
-WHERE "userId" IS NULL;
-
 ALTER TABLE "Ingredients"
-    ALTER COLUMN "locationId_uuid" SET NOT NULL,
-    ALTER COLUMN "userId" SET NOT NULL;
+    ALTER COLUMN "locationId_uuid" SET NOT NULL;
 
 ALTER TABLE "Ingredients"
     DROP COLUMN "locationId",
