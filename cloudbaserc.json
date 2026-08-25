@@ -1,5 +1,5 @@
 {
-  "version": "2.0",
+  "version": "2.1",
   "envId": "{{env.ENV_ID}}",
   "framework": {
     "name": "what-to-eat",
@@ -18,7 +18,7 @@
           "name": "what-to-eat-postgresql",
           "tier": "base",
           "storageGB": 1,
-          "migrationsPath": "backend/sql/migrations"
+          "migrationsPath": "./backend/sql/migrations"
         }
       ]
     }
