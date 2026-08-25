@@ -17,7 +17,8 @@
           "type": "PostgreSQL",
           "name": "what-to-eat-postgresql",
           "tier": "base",
-          "storageGB": 1
+          "storageGB": 1,
+          "migrationsPath": "backend/sql/migrations"
         }
       ]
     }
