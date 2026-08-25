@@ -1,26 +1,18 @@
 {
   "version": "2.1",
   "envId": "{{env.ENV_ID}}",
-  "framework": {
-    "name": "what-to-eat",
-    "plugins": {
-      "website": {
-        "use": "@cloudbase/framework-plugin-website",
-        "inputs": {
-          "outputPath": "frontend/dist"
-        }
-      }
-    },
-    "requirement": {
-      "addons": [
-        {
-          "type": "PostgreSQL",
-          "name": "what-to-eat-postgresql",
-          "tier": "base",
-          "storageGB": 1,
-          "migrationsPath": "./backend/sql/migrations"
-        }
-      ]
+  "database": {
+    "type": "postgresql",
+    "migrations": "./backend/sql/migrations"
+  },
+  "hosting": [
+    {
+      "name": "web",
+      "root": "./frontend",
+      "framework": "vite",
+      "installCommand": "npm install",
+      "buildCommand": "npm run build",
+      "outputDir": "dist"
     }
-  }
+  ]
 }
