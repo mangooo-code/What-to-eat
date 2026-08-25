@@ -9,16 +9,20 @@ CREATE TABLE IF NOT EXISTS "IngredientUnitTypes" (
 );
 
 CREATE TABLE IF NOT EXISTS "Locations" (
-    "id" INTEGER PRIMARY KEY,
-    "parentLocation" INTEGER NULL REFERENCES "Locations"("id"),
-    "name" TEXT NOT NULL
+    "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    "parentLocation" UUID NULL REFERENCES "Locations"("id"),
+    "name" TEXT NOT NULL,
+    "userId" UUID NOT NULL,
+    "updatedDate" TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
 CREATE TABLE IF NOT EXISTS "Ingredients" (
-    "id" INTEGER PRIMARY KEY,
+    "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     "name" TEXT NOT NULL,
     "quantity" NUMERIC(15, 3) NOT NULL,
     "unitTypeId" INTEGER NOT NULL REFERENCES "IngredientUnitTypes"("id"),
-    "locationId" INTEGER NOT NULL REFERENCES "Locations"("id"),
-    "expiryDate" TIMESTAMPTZ NULL
+    "locationId" UUID NOT NULL REFERENCES "Locations"("id"),
+    "userId" UUID NOT NULL,
+    "expiryDate" TIMESTAMPTZ NULL,
+    "updatedDate" TIMESTAMPTZ NOT NULL DEFAULT now()
 );
