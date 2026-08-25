@@ -1,5 +1,3 @@
-CREATE EXTENSION IF NOT EXISTS "pgcrypto";
-
 CREATE TABLE IF NOT EXISTS "IngredientTypes" (
     "id" INTEGER PRIMARY KEY,
     "name" TEXT NOT NULL
