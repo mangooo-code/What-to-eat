@@ -1,6 +1,26 @@
 {
   "version": "2.1",
   "envId": "{{env.ENV_ID}}",
+  "functionRoot": "./backend/functions",
+  "functions": [
+    {
+      "name": "authentication",
+      "runtime": "Nodejs20.19",
+      "handler": "dist/index.main",
+      "timeout": 10,
+      "memorySize": 256,
+      "installDependency": true
+    }
+  ],
+  "gateway": {
+    "routes": [
+      {
+        "path": "/authentication",
+        "target": "function:authentication",
+        "enableAuth": false
+      }
+    ]
+  },
   "database": {
     "type": "postgresql",
     "migrations": "./backend/sql/migrations"
