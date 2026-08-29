@@ -1,0 +1,23 @@
+.expiry {
+  grid-column: 1/-1;
+  justify-self: start;
+  padding: 3px 7px;
+  border-radius: 99px;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.expiry.normal {
+  background: #dcebdd;
+  color: #28582d;
+}
+
+.expiry.urgent {
+  background: #f2d5d5;
+  color: #8a1f1f;
+}
+
+.expiry.expired {
+  background: #e4e4e4;
+  color: #666;
+}

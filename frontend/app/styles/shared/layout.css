@@ -1,0 +1,149 @@
+.app-shell {
+  width: 100%;
+  min-height: 100vh;
+}
+
+.page {
+  width: min(100%, 1120px);
+  margin: auto;
+}
+
+.page-header h1,
+h1 {
+  margin: 0 0 10px;
+  font-size: 30px;
+  line-height: 1.2;
+}
+
+h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.sticky-actions {
+  position: sticky;
+  z-index: 9;
+  bottom: 0;
+}
+
+.sticky-actions p {
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.sticky-actions .danger-link {
+  width: 100%;
+  margin-top: 14px;
+}
+
+.sticky {
+  position: sticky;
+  z-index: 8;
+  bottom: 10px;
+  margin-top: 24px;
+}
+
+.notice {
+  margin: 18px 0;
+  padding: 12px;
+  background: #eee;
+  font-size: 13px;
+}
+
+@media (min-width: 800px) {
+  .app-shell {
+    width: calc(100% - 64px);
+    min-height: calc(100vh - 64px);
+    margin: 32px;
+    border: 1px solid #c9c9c9;
+  }
+}
+
+@media (min-width: 800px) {
+  .page {
+    padding: 54px 56px 120px;
+  }
+}
+
+@media (min-width: 800px) {
+  .page-header {
+    max-width: 720px;
+  }
+}
+
+@media (min-width: 800px) {
+  .page-header h1 {
+    font-size: 40px;
+  }
+}
+
+@media (min-width: 800px) {
+  .page > .image-placeholder.wide {
+    height: 340px;
+  }
+}
+
+.app-shell {
+  background: #f7f7f7;
+}
+
+.page {
+  padding: 28px 22px 124px;
+}
+
+.page-header {
+  margin-bottom: 30px;
+}
+
+.page-header h1,
+h1 {
+  letter-spacing: -0.02em;
+}
+
+.page-header p {
+  max-width: 680px;
+  margin-top: 8px;
+}
+
+.page > section + section,
+.page > section + div,
+.page > div + section {
+  margin-top: 28px;
+}
+
+.block > h2 {
+  margin-bottom: 18px;
+}
+
+.notice {
+  border-radius: 11px;
+}
+
+.sticky-actions {
+  margin-top: 32px;
+  padding: 16px 0 4px;
+  background: linear-gradient(to bottom, rgba(247, 247, 247, 0), #f7f7f7 20%);
+}
+
+@media (min-width: 800px) {
+  .app-shell {
+    width: calc(100% - 64px);
+    max-width: 1280px;
+    margin: 32px auto;
+    border: 0;
+    border-radius: 20px;
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.06);
+  }
+}
+
+@media (min-width: 800px) {
+  .page {
+    padding: 52px 56px 126px;
+  }
+}

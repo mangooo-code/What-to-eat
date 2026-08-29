@@ -1,0 +1,320 @@
+.profile-row {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  border: 0;
+  background: none;
+  text-align: left;
+}
+
+.profile-row strong,
+.profile-row small {
+  display: block;
+}
+
+.profile-row small {
+  margin-top: 6px;
+  color: var(--muted);
+}
+
+.list-card .image-placeholder {
+  width: 92px;
+  height: 68px;
+}
+
+.person {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.person .image-placeholder {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+}
+
+.logout {
+  display: block;
+  margin: 36px auto;
+}
+
+.person small {
+  display: block;
+  margin-top: 6px;
+  color: #777;
+}
+
+.profile-tag {
+  display: inline-block;
+  border-radius: 99px;
+  color: #666;
+  font-style: normal;
+  font-weight: 400;
+  vertical-align: middle;
+}
+
+.recipe-shortcuts > div {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.recipe-shortcuts > div > button {
+  display: grid;
+  grid-template-columns: 40px 1fr auto;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+}
+
+.recipe-shortcuts strong,
+.recipe-shortcuts small {
+  display: block;
+}
+
+.recipe-shortcuts small {
+  margin-top: 5px;
+  color: #777;
+}
+
+.person {
+  border: 0;
+  border-radius: 15px;
+  background: #fff;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.055);
+}
+
+.person {
+  padding: 20px;
+}
+
+.recipe-shortcuts {
+  padding-top: 0;
+}
+
+.recipe-shortcuts > div {
+  gap: 16px;
+}
+
+.recipe-shortcuts > div > button {
+  padding: 17px;
+  border: 0;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.055);
+}
+
+.profile-row {
+  padding: 17px 2px;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.profile-row:last-of-type {
+  border-bottom: 0;
+}
+
+.profile-tag {
+  border: 0;
+  background: #e8e8e8;
+}
+
+.profile-tag {
+  padding: 5px 9px;
+  font-size: 12px;
+  line-height: 1.2;
+}
+
+.profile-list {
+  display: grid;
+  margin-bottom: 16px;
+}
+
+.profile-list .profile-row {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  border-radius: 13px;
+}
+
+.profile-list .profile-row strong {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.profile-list .profile-row small {
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.profile-section > .add-row {
+  margin-top: 4px;
+}
+
+@media (max-width: 520px) {
+  .profile-list {
+    gap: 8px;
+  }
+}
+
+@media (max-width: 520px) {
+  .profile-list .profile-row {
+    min-height: 124px;
+    padding: 12px 10px;
+  }
+}
+
+@media (max-width: 520px) {
+  .profile-list .profile-row small {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 520px) {
+  .profile-tag {
+    font-size: 11px;
+  }
+}
+
+.section-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 18px;
+}
+
+.section-heading h2 {
+  margin: 0 0 5px;
+}
+
+.section-heading p {
+  font-size: 13px;
+}
+
+.section-heading .secondary {
+  flex: none;
+  min-height: 42px;
+}
+
+.profile-list {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.profile-list .profile-row {
+  display: block;
+  min-height: 210px;
+  padding: 20px;
+  background: #fff;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+}
+
+.profile-card-head {
+  display: grid;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 18px;
+  text-align: left;
+}
+
+.profile-card-head > strong {
+  font-size: 18px;
+}
+
+.profile-card-head .profile-tag {
+  justify-self: start;
+}
+
+.profile-detail {
+  display: block;
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 10px;
+  background: #f1f1f1;
+  color: #555;
+  font-size: 13px;
+  line-height: 1.5;
+  text-align: left;
+}
+
+.profile-detail > strong {
+  display: inline;
+  color: #222;
+}
+
+.profile-detail.allergen {
+  background: #e7e7e7;
+}
+
+@media (max-width: 620px) {
+  .profile-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 620px) {
+  .profile-list .profile-row {
+    min-height: 0;
+  }
+}
+
+@media (max-width: 620px) {
+  .section-heading {
+    align-items: center;
+  }
+}
+
+@media (max-width: 620px) {
+  .section-heading p {
+    display: none;
+  }
+}
+
+.profile-actions {
+  display: flex;
+  justify-self: end;
+  gap: 7px;
+}
+
+.profile-actions button {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.profile-actions .icon-placeholder {
+  width: 27px;
+  height: 25px;
+}
+
+.profile-list .profile-row {
+  cursor: pointer;
+}
+
+.profile-card-head {
+  grid-template-columns: auto 1fr auto;
+}
+
+.compact-add {
+  min-height: 38px;
+  padding: 8px 12px;
+  font-size: 13px;
+}
+
+.profile-list .profile-row {
+  width: 100%;
+  border: 0;
+  text-align: left;
+}
+
+.profile-card-head > b {
+  justify-self: end;
+  font-size: 22px;
+}

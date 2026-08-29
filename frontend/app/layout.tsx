@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import './overrides.css';
 
 export const metadata: Metadata = {
   title: '今天吃什么｜低保真交互原型',

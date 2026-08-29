@@ -1,0 +1,149 @@
+.confirm-item summary {
+  display: grid;
+  gap: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.confirm-item summary span {
+  color: #666;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.confirm-item .food-form {
+  border-width: 1px 0 0;
+}
+
+.confirm-item .danger-link {
+  margin: 12px;
+}
+
+.add-row {
+  width: 100%;
+  padding: 15px;
+  font-weight: 700;
+}
+
+.confirm-item {
+  border-radius: 12px;
+}
+
+.confirm-item {
+  animation: fade-up 0.22s ease both;
+}
+
+.confirm-item:nth-of-type(2) {
+  animation-delay: 0.04s;
+}
+
+.confirm-item:nth-of-type(3) {
+  animation-delay: 0.08s;
+}
+
+.confirm-item:nth-of-type(4) {
+  animation-delay: 0.12s;
+}
+
+.confirm-item {
+  margin-bottom: 16px;
+  border: 0;
+  background: #fff;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
+}
+
+.confirm-item summary {
+  padding: 18px;
+}
+
+.confirm-item .food-form {
+  border: 0;
+  border-radius: 0 0 14px 14px;
+}
+
+.add-row {
+  border: 0;
+  border-radius: 12px;
+  background: #ececec;
+}
+
+.confirm-item summary {
+  grid-template-columns: 32px minmax(0, 1fr) auto;
+  align-items: center;
+}
+
+.confirm-item summary .icon-placeholder {
+  width: 30px;
+  height: 28px;
+}
+
+.confirm-item summary strong {
+  min-width: 0;
+}
+
+.confirm-item summary span {
+  white-space: nowrap;
+}
+
+@media (max-width: 520px) {
+  .confirm-item summary {
+    grid-template-columns: 30px minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 520px) {
+  .confirm-item summary span {
+    grid-column: 2;
+    white-space: normal;
+  }
+}
+
+.confirm-list {
+  display: grid;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.confirm-list .confirm-item {
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+  padding: 15px 16px;
+  border-radius: 13px;
+  background: #fff;
+}
+
+.confirm-list .confirm-item .icon-placeholder {
+  width: 36px;
+  height: 34px;
+}
+
+.confirm-list .confirm-item > span {
+  min-width: 0;
+}
+
+.confirm-list .confirm-item strong,
+.confirm-list .confirm-item small {
+  display: block;
+}
+
+.confirm-list .confirm-item small {
+  margin-top: 5px;
+  color: #666;
+  font-size: 12px;
+  white-space: normal;
+}
+
+.confirm-edit-button {
+  padding: 8px 12px;
+  border: 1px solid #999;
+  background: #fff;
+}
+
+@media (max-width: 620px) {
+  .confirm-list .confirm-item {
+    grid-template-columns: 34px minmax(0, 1fr) auto;
+  }
+}

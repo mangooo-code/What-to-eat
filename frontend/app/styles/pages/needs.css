@@ -1,0 +1,147 @@
+.toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.toggle-row strong,
+.toggle-row small {
+  display: block;
+}
+
+.toggle-row small {
+  margin-top: 6px;
+  color: #666;
+}
+
+.toggle-row input {
+  width: 48px;
+  height: 26px;
+  accent-color: #222;
+}
+
+.error {
+  color: #600;
+}
+
+.needs-layout {
+  display: grid;
+}
+
+.need-card h2 {
+  margin-bottom: 16px;
+}
+
+.option-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.member-options button,
+.option-cards button,
+.relation-options button {
+  min-height: 48px;
+  border-radius: 8px;
+}
+
+.preference-card {
+  display: grid;
+  align-content: center;
+}
+
+.other-limit {
+  display: inline-block;
+}
+
+@media (min-width: 800px) {
+  .needs-layout {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (min-width: 800px) {
+  .need-card.full {
+    grid-column: 1/-1;
+  }
+}
+
+.need-card {
+  border: 0;
+  border-radius: 15px;
+  background: #fff;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.055);
+}
+
+.need-card {
+  padding: 20px;
+}
+
+.needs-layout {
+  gap: 24px;
+}
+
+.option-grid {
+  gap: 14px;
+}
+
+.other-limit {
+  margin-top: 20px;
+}
+
+@media (min-width: 800px) {
+  .needs-layout {
+    gap: 26px;
+  }
+}
+
+.toggle-row {
+  position: relative;
+  cursor: pointer;
+}
+
+.toggle-row input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.switch {
+  display: grid;
+  place-items: center;
+  width: 62px;
+  height: 32px;
+  border-radius: 99px;
+  background: #d5d5d5;
+  color: #555;
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 700;
+  transition: 0.2s ease;
+}
+
+.switch.on {
+  background: #222;
+  color: #fff;
+}
+
+.other-limit-input {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.other-limit-input input {
+  min-width: 0;
+  min-height: 46px;
+  padding: 10px 12px;
+  border: 1px solid #999;
+  border-radius: 11px;
+}
+
+.other-limit-input button {
+  padding: 10px 15px;
+  border: 1px solid #555;
+  background: #fff;
+}

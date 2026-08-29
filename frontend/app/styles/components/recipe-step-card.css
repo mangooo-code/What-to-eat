@@ -1,0 +1,103 @@
+.detail-step {
+  display: grid;
+  grid-template-columns: 42px 1fr;
+  gap: 12px;
+}
+
+.detail-step.is-complete {
+  background: #eee;
+}
+
+.step-number {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #222;
+  color: #fff;
+  font-weight: 700;
+}
+
+.step-title {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.step-title h3 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.step-title strong {
+  color: #666;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.step-content > p {
+  margin: 9px 0 13px;
+}
+
+.compact-timer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 12px 0;
+  padding: 9px 11px;
+  background: #eee;
+}
+
+.compact-timer b {
+  font-variant-numeric: tabular-nums;
+}
+
+.compact-timer span {
+  display: flex;
+  gap: 7px;
+}
+
+.compact-timer button,
+.complete-action {
+  padding: 7px 10px;
+  border: 1px solid #777;
+  background: #fff;
+}
+
+.complete-action {
+  width: 100%;
+}
+
+.detail-step {
+  transition:
+    background-color 0.25s ease,
+    opacity 0.25s ease;
+}
+
+.detail-step.is-complete {
+  opacity: 0.72;
+}
+
+@media (min-width: 800px) {
+  .detail-step {
+    padding: 18px;
+  }
+}
+
+.detail-step {
+  border: 0;
+  border-radius: 15px;
+  background: #fff;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.055);
+}
+
+.detail-step {
+  padding: 18px;
+}
+
+.compact-timer {
+  border-radius: 11px;
+}

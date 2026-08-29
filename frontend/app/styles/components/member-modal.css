@@ -1,0 +1,143 @@
+.member-modal {
+  position: relative;
+  width: min(100%, 820px);
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 18px 54px rgba(0, 0, 0, 0.2);
+  animation: modal-in 0.22s ease both;
+}
+
+.member-modal > h2 {
+  margin-bottom: 22px;
+  padding-right: 40px;
+  font-size: 24px;
+}
+
+.member-basic {
+  display: grid;
+  grid-template-columns: 1.35fr 0.65fr;
+  gap: 18px;
+  margin-bottom: 8px;
+}
+
+.member-basic .label {
+  margin-top: 0;
+}
+
+.member-modal .profile-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 24px;
+}
+
+.member-modal .profile-form > .notice {
+  grid-column: 1/-1;
+}
+
+.member-modal .block > h2 {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.member-modal .block > h2 .icon-placeholder {
+  width: 27px;
+  height: 25px;
+}
+
+.member-modal .modal-edit-actions {
+  bottom: -26px;
+  background: #fff;
+}
+
+@media (max-width: 620px) {
+  .member-basic,
+  .member-modal .profile-form {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 620px) {
+  .member-modal {
+    padding: 22px;
+  }
+}
+
+@media (max-width: 620px) {
+  .member-modal .modal-edit-actions {
+    bottom: -22px;
+    margin: 24px -22px -22px;
+    padding: 14px 22px;
+  }
+}
+
+.member-modal {
+  max-height: 58vh;
+}
+
+@media (max-width: 620px) {
+  .member-modal {
+    max-height: 56vh;
+  }
+}
+
+.member-modal {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  overflow: hidden;
+  padding: 0;
+}
+
+.member-modal-head {
+  position: relative;
+  z-index: 2;
+  padding: 22px 26px;
+  border-bottom: 1px solid #eee;
+  background: #fff;
+}
+
+.member-modal-head h2 {
+  margin: 0;
+  padding-right: 42px;
+  font-size: 24px;
+}
+
+.member-modal-head .modal-close {
+  top: 13px;
+}
+
+.member-modal-body {
+  overflow: auto;
+  padding: 18px 26px 20px;
+}
+
+.member-modal .modal-edit-actions {
+  position: static;
+  margin: 0;
+  padding: 15px 26px;
+  border-top: 1px solid #eee;
+}
+
+@media (max-width: 620px) {
+  .member-modal-head {
+    padding: 18px 20px;
+  }
+}
+
+@media (max-width: 620px) {
+  .member-modal-head h2 {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 620px) {
+  .member-modal-body {
+    padding: 18px 20px;
+  }
+}
+
+@media (max-width: 620px) {
+  .member-modal .modal-edit-actions {
+    padding: 14px 20px;
+  }
+}

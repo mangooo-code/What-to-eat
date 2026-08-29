@@ -1,0 +1,120 @@
+.food-modal {
+  animation: modal-in 0.22s ease both;
+}
+
+.food-modal {
+  position: relative;
+  width: min(100%, 560px);
+  padding: 24px;
+}
+
+.modal-close {
+  position: absolute;
+  right: 15px;
+  top: 12px;
+  border: 0;
+  background: none;
+  font-size: 28px;
+}
+
+.modal-food-title {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-right: 35px;
+}
+
+.modal-food-title .image-placeholder {
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+}
+
+.modal-food-title h2 {
+  margin: 0 0 5px;
+}
+
+.stock-summary {
+  display: grid;
+  gap: 14px;
+  margin: 22px 0;
+  padding: 17px;
+  border-radius: 12px;
+}
+
+.stock-summary > span {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+}
+
+.modal-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.modal-actions button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 74px;
+  background: #eee;
+}
+
+.modal-edit-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.modal-edit-actions > button {
+  min-height: 52px;
+  border: 1px solid #888;
+  background: #fff;
+}
+
+.modal-edit-actions .primary {
+  border-color: #111;
+  background: #111;
+}
+
+.food-modal {
+  border: 0;
+  border-radius: 15px;
+  background: #fff;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.055);
+}
+
+.modal-edit-actions > button {
+  border-radius: 12px;
+}
+
+.stock-summary {
+  border: 0;
+  background: #f1f1f1;
+}
+
+.modal-actions button {
+  border: 0;
+  border-radius: 13px;
+}
+
+.food-modal > .food-form {
+  margin-top: 20px;
+}
+
+.food-modal > h2 {
+  padding-right: 38px;
+}
+
+.food-modal .modal-edit-actions {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.food-modal .modal-edit-actions:has(> button:nth-child(2):last-child) {
+  grid-template-columns: 1fr 1fr;
+}

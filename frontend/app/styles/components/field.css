@@ -1,0 +1,94 @@
+.food-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.food-form label,
+.label {
+  display: grid;
+  gap: 7px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.food-form label:first-child {
+  grid-column: 1/-1;
+}
+
+.food-form input,
+.food-form select,
+.label input,
+.label textarea,
+.full-input {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px;
+  border: 1px solid #aaa;
+  background: #fff;
+}
+
+.suffix {
+  display: grid;
+  grid-template-columns: 1fr auto;
+}
+
+.suffix b {
+  display: grid;
+  place-items: center;
+  padding: 0 12px;
+}
+
+.full-input {
+  margin-top: 15px;
+}
+
+.label {
+  margin-top: 24px;
+}
+
+.label textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.food-form {
+  gap: 18px;
+  padding: 20px;
+  border: 0;
+  border-radius: 14px;
+  background: #f2f2f2;
+}
+
+.suffix {
+  overflow: hidden;
+  border: 1px solid #aaa;
+  border-radius: 11px;
+  background: #fff;
+}
+
+.suffix input {
+  border: 0 !important;
+  border-radius: 0 !important;
+}
+
+.suffix b {
+  border: 0;
+  border-left: 1px solid #aaa;
+  border-radius: 0;
+  background: #eee;
+}
+
+.food-form select,
+.member-basic select {
+  padding-right: 42px;
+  background-position: right 14px center;
+}
+
+.member-basic select {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px;
+  border: 1px solid #aaa;
+  border-radius: 12px;
+  background: #fff;
+}

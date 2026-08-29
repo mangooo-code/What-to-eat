@@ -1,0 +1,44 @@
+.success-state {
+  position: fixed;
+  z-index: 40;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  padding: 30px;
+  background: rgba(255, 255, 255, 0.96);
+  text-align: center;
+}
+
+.success-state > b {
+  font-size: 56px;
+}
+
+.reaction-options {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.reaction-options button {
+  display: grid;
+  place-items: center;
+  gap: 9px;
+  padding: 12px;
+  border: 1px solid #999;
+  background: #fff;
+}
+
+.reaction-options button.active {
+  border: 2px solid #111;
+  background: #eee;
+}
+
+.reaction-options .image-placeholder {
+  width: 54px;
+  height: 54px;
+}
+
+.success-state.quick {
+  animation: quick-confirm 0.6s ease both;
+}

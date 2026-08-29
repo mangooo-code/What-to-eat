@@ -1,0 +1,280 @@
+.upload {
+  display: grid;
+  place-items: center;
+  border: 1px solid #aaa;
+  text-align: center;
+}
+
+.upload .image-placeholder.wide {
+  height: 230px;
+}
+
+.thumbs {
+  display: flex;
+  width: 100%;
+  overflow: auto;
+}
+
+.voice-box {
+  display: grid;
+  grid-template-columns: 52px 1fr;
+  border: 1px solid #999;
+}
+
+.voice-box > button {
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-right: 1px solid #999;
+  background: #eee;
+}
+
+.voice-box > button.listening {
+  background: #333;
+  color: #fff;
+}
+
+.voice-box input {
+  min-width: 0;
+  padding: 13px;
+  border: 0;
+}
+
+.upload,
+.voice-box {
+  border-radius: 12px;
+}
+
+.upload {
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
+}
+
+.upload-thumb {
+  animation: fade-up 0.2s ease both;
+}
+
+.capture-tabs {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.capture-tabs button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+}
+
+.capture-tabs .icon-placeholder {
+  width: 25px;
+  height: 23px;
+}
+
+.upload h2 {
+  font-size: 15px;
+  color: #666;
+  font-weight: 500;
+}
+
+.upload-count {
+  font-size: 13px;
+  color: #777;
+}
+
+.upload-thumb {
+  display: inline-grid;
+}
+
+.upload-thumb .image-placeholder {
+  width: 62px;
+  height: 62px;
+  border-radius: 8px;
+}
+
+.upload-thumb button {
+  margin-top: 5px;
+  padding: 3px;
+  border: 0;
+  background: none;
+  color: #666;
+  font-size: 11px;
+  text-decoration: underline;
+}
+
+.voice-parse {
+  display: grid;
+  place-items: center;
+  gap: 20px;
+  min-height: 480px;
+  padding: 28px;
+  border: 1px solid #aaa;
+  border-radius: 18px;
+  background: #fafafa;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
+  text-align: center;
+}
+
+.voice-trigger {
+  display: grid;
+  place-items: center;
+  width: 112px;
+  height: 112px;
+  border: 1px solid #777;
+  border-radius: 50%;
+  background: #ddd;
+}
+
+.voice-trigger.listening {
+  background: #555;
+  color: #fff;
+}
+
+.voice-trigger .icon-placeholder {
+  width: 55px;
+  height: 48px;
+}
+
+.voice-result {
+  width: min(100%, 620px);
+  padding: 18px;
+  border: 1px solid #aaa;
+  border-radius: 14px;
+  background: #fff;
+  text-align: left;
+}
+
+.voice-result > strong {
+  font-size: 13px;
+  color: #666;
+}
+
+.voice-result p {
+  margin: 10px 0 16px;
+}
+
+.voice-result .primary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+}
+
+.upload,
+.voice-box,
+.voice-parse {
+  border: 0;
+  border-radius: 15px;
+  background: #fff;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.055);
+}
+
+.upload {
+  gap: 18px;
+  padding: 20px;
+}
+
+.voice-box {
+  overflow: hidden;
+  margin-top: 24px;
+}
+
+.upload-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+}
+
+.upload-heading h2,
+.upload-heading p {
+  margin: 0;
+}
+
+.thumbs {
+  gap: 12px;
+  padding: 4px 2px 8px;
+}
+
+.upload-thumb {
+  position: relative;
+  flex: 0 0 62px;
+}
+
+.upload-thumb > button {
+  position: absolute;
+  top: -7px;
+  right: -7px;
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: #333;
+  color: #fff;
+  font-size: 16px;
+  line-height: 1;
+  text-decoration: none;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);
+}
+
+.upload-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.upload-actions .link {
+  color: #666;
+}
+
+.voice-result textarea {
+  width: 100%;
+  min-height: 92px;
+  margin: 10px 0 16px;
+  padding: 13px;
+  border: 1px solid #aaa;
+  border-radius: 11px;
+  background: #fff;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+.upload-dropzone {
+  display: grid;
+  place-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 210px;
+  padding: 24px;
+  border: 1px dashed #aaa;
+  border-radius: 15px;
+  background: #fafafa;
+  text-align: center;
+}
+
+.upload-dropzone .icon-placeholder {
+  width: 62px;
+  height: 58px;
+}
+
+.upload-dropzone h2 {
+  margin: 0;
+  color: #222;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.upload-dropzone p {
+  font-size: 13px;
+}
+
+@media (max-width: 620px) {
+  .upload-dropzone {
+    min-height: 180px;
+  }
+}

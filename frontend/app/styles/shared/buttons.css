@@ -1,0 +1,43 @@
+.primary {
+  width: 100%;
+  min-height: 56px;
+  border: 1px solid #111;
+  border-radius: 10px;
+  background: #171717;
+  color: #fff;
+  font-weight: 700;
+}
+
+.primary:disabled {
+  border-color: #aaa;
+  background: #d6d6d6;
+  color: #888;
+  cursor: not-allowed;
+}
+
+.link,
+.danger-link {
+  border: 0;
+  background: none;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.danger {
+  background: #111 !important;
+  color: #fff !important;
+}
+
+.secondary {
+  min-height: 44px;
+  padding: 10px 18px;
+  border: 1px solid #333;
+  border-radius: 8px;
+  background: #fff;
+  font-weight: 700;
+}
+
+.primary,
+.secondary {
+  border-radius: 12px;
+}

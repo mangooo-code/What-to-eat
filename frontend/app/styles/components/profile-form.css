@@ -1,0 +1,57 @@
+@media (min-width: 800px) {
+  .profile-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 40px;
+  }
+}
+
+.selection-rule {
+  display: inline-block;
+  margin-left: 9px;
+  border-radius: 99px;
+  color: #666;
+  font-weight: 400;
+  vertical-align: middle;
+}
+
+.manual-add {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.manual-add input {
+  min-width: 0;
+  padding: 10px;
+  border: 1px solid #999;
+}
+
+.manual-add button {
+  padding: 10px 14px;
+  border: 1px solid #555;
+  background: #fff;
+}
+
+.selection-rule {
+  border: 0;
+  background: #e8e8e8;
+}
+
+.selection-rule {
+  padding: 5px 9px;
+  font-size: 12px;
+  line-height: 1.2;
+}
+
+.profile-form .block > h2 {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.profile-form .block > h2 .icon-placeholder {
+  width: 27px;
+  height: 25px;
+}
