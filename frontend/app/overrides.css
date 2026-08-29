@@ -1,0 +1,379 @@
+.food-tile{display:grid;grid-template-columns:36px minmax(0,1fr) auto;grid-template-rows:auto auto;align-items:center;gap:7px 9px;width:100%;min-height:76px;padding:9px}
+.food-tile .image-placeholder{grid-row:1/3}
+.food-tile .expiry{grid-column:3;grid-row:1;align-self:start;white-space:nowrap}
+.food-tile .tile-edit{grid-column:3;grid-row:2;justify-self:end;padding:2px 0;border:0;border-bottom:1px solid #555;background:none;font-size:11px}
+.needs-layout{display:grid;gap:14px}
+.need-card{padding:18px;border:1px solid #aaa;background:#fafafa}
+.need-card h2{margin-bottom:16px}
+.option-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.option-grid .choice{height:100%;margin:0}
+.member-options button,.option-cards button,.relation-options button{min-height:48px;border-radius:8px}
+.preference-card{display:grid;align-content:center}
+.other-limit{display:inline-block;margin-top:18px}
+.ingredient-groups{display:grid;gap:18px}
+.ingredient-groups>div{padding:15px;border:1px solid #bbb;background:#fafafa}
+.ingredients .ingredient-groups h3{margin:0 0 10px}
+.mini-cards{display:flex;flex-wrap:wrap;gap:8px}
+.mini-cards>span{display:flex;justify-content:space-between;gap:14px;min-width:120px;padding:9px 11px;border:1px solid #aaa;border-radius:7px;background:#fff;font-size:13px}
+.mini-cards b{font-weight:400;color:#666}
+.step-list{display:grid;gap:12px}
+.detail-step{display:grid;grid-template-columns:42px 1fr;gap:12px;padding:16px;border:1px solid #aaa;background:#fff}
+.detail-step.is-complete{background:#eee}
+.step-number{display:grid;place-items:center;width:38px;height:38px;border-radius:50%;background:#222;color:#fff;font-weight:700}
+.step-title{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.step-title h3{margin:0;font-size:16px}
+.step-title strong{color:#666;font-size:12px;white-space:nowrap}
+.step-content>p{margin:9px 0 13px}
+.compact-timer{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:12px 0;padding:9px 11px;background:#eee}
+.compact-timer b{font-variant-numeric:tabular-nums}
+.compact-timer span{display:flex;gap:7px}
+.compact-timer button,.complete-action{padding:7px 10px;border:1px solid #777;background:#fff}
+.complete-action{width:100%}
+.cook-back{display:inline-block;margin:-12px 0 18px}
+.cook-all-steps{display:grid;gap:12px}
+.reaction-options{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.reaction-options button{display:grid;place-items:center;gap:9px;padding:12px;border:1px solid #999;background:#fff}
+.reaction-options button.active{border:2px solid #111;background:#eee}
+.reaction-options .image-placeholder{width:54px;height:54px}
+.profile-name{max-width:520px;margin-bottom:8px}
+.selection-rule{display:inline-block;margin-left:9px;padding:3px 7px;border:1px solid #aaa;border-radius:99px;color:#666;font-size:10px;font-weight:400;vertical-align:middle}
+.manual-add{display:grid;grid-template-columns:1fr auto;gap:8px;margin-top:14px}
+.manual-add input{min-width:0;padding:10px;border:1px solid #999}
+.manual-add button{padding:10px 14px;border:1px solid #555;background:#fff}
+.success-state.quick{animation:quick-confirm .6s ease both}
+@keyframes quick-confirm{0%{opacity:0}18%,75%{opacity:1}100%{opacity:0}}
+button,input,select,textarea,.block,.need-card,.storage-pane,.upload,.confirm-item,.recipe-card,.saved-card,.person,.stats,.dialog,.food-modal,.detail-step,.consume,.voice-box{border-radius:12px}
+.block,.need-card,.storage-pane,.upload,.recipe-card,.saved-card,.person,.food-modal,.detail-step,.consume{box-shadow:0 3px 10px rgba(0,0,0,.06)}
+button,.food-tile,.recipe-card,.saved-card,.icon-placeholder,.tabs button{transition:transform .2s ease,box-shadow .2s ease,background-color .2s ease,color .2s ease,border-color .2s ease}
+button:hover{transform:translateY(-1px)}button:active{transform:scale(.97)}
+.food-tile:hover,.recipe-card:hover,.saved-card:hover{transform:scale(1.025);box-shadow:0 7px 18px rgba(0,0,0,.12)}
+.icon-placeholder:hover,.food-tile:hover .icon-placeholder{transform:scale(1.06);filter:contrast(1.2)}
+.heart:active{transform:scale(1.12)}
+.tabs button.active{background:#eee}
+.overlay{animation:overlay-in .2s ease both}.dialog,.food-modal{animation:modal-in .22s ease both}
+.toast{animation:toast-life 1.8s ease both}.spinner{animation:spin .8s linear infinite}
+.upload-thumb{animation:fade-up .2s ease both}.confirm-item{animation:fade-up .22s ease both}.confirm-item:nth-of-type(2){animation-delay:.04s}.confirm-item:nth-of-type(3){animation-delay:.08s}.confirm-item:nth-of-type(4){animation-delay:.12s}
+.detail-step{transition:background-color .25s ease,opacity .25s ease}.detail-step.is-complete{opacity:.72}
+@keyframes overlay-in{from{opacity:0}to{opacity:1}}@keyframes modal-in{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}@keyframes fade-up{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}@keyframes toast-life{0%,100%{opacity:0;transform:translate(-50%,6px)}15%,82%{opacity:1;transform:translate(-50%,0)}}
+.capture-tabs{grid-template-columns:repeat(3,1fr)}.capture-tabs button{display:flex;align-items:center;justify-content:center;gap:7px}.capture-tabs .icon-placeholder{width:25px;height:23px}
+.upload h2{font-size:15px;color:#666;font-weight:500}.upload-count{font-size:13px;color:#777}
+.upload-thumb{position:relative;display:inline-grid}.upload-thumb .image-placeholder{width:62px;height:62px;border-radius:8px}.upload-thumb button{margin-top:5px;padding:3px;border:0;background:none;color:#666;font-size:11px;text-decoration:underline}
+.voice-parse{display:grid;place-items:center;gap:20px;min-height:480px;padding:28px;border:1px solid #aaa;border-radius:18px;background:#fafafa;box-shadow:0 3px 10px rgba(0,0,0,.06);text-align:center}.voice-trigger{display:grid;place-items:center;width:112px;height:112px;border:1px solid #777;border-radius:50%;background:#ddd}.voice-trigger.listening{background:#555;color:#fff}.voice-trigger .icon-placeholder{width:55px;height:48px}.voice-result{width:min(100%,620px);padding:18px;border:1px solid #aaa;border-radius:14px;background:#fff;text-align:left}.voice-result>strong{font-size:13px;color:#666}.voice-result p{margin:10px 0 16px}.voice-result .primary{display:flex;align-items:center;justify-content:center;gap:9px}
+.food-tile{grid-template-columns:36px minmax(0,1fr) auto;grid-template-rows:1fr;min-height:72px}.food-tile .image-placeholder{grid-row:1}.food-tile .expiry{grid-column:3;grid-row:1;align-self:center}.food-tile strong{overflow:visible;white-space:normal;text-overflow:clip;font-size:13px;line-height:1.25}.food-tile small{font-size:12px}.food-tile .tile-edit{display:none}
+.food-modal{position:relative;width:min(100%,560px);padding:24px;border:1px solid #aaa;background:#fff}.modal-close{position:absolute;right:15px;top:12px;border:0;background:none;font-size:28px}.modal-food-title{display:flex;align-items:center;gap:14px;padding-right:35px}.modal-food-title .image-placeholder{width:62px;height:62px;border-radius:50%}.modal-food-title h2{margin:0 0 5px}.stock-summary{display:grid;gap:14px;margin:22px 0;padding:17px;border:1px solid #bbb;border-radius:12px;background:#fafafa}.stock-summary>span{display:flex;align-items:center;justify-content:space-between;gap:15px}.modal-actions{display:grid;grid-template-columns:1fr 1fr;gap:12px}.modal-actions button{display:flex;align-items:center;justify-content:center;gap:8px;min-height:74px;border:1px solid #999;background:#eee}.modal-edit-actions{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}.modal-edit-actions>button{min-height:52px;border:1px solid #888;background:#fff}.modal-edit-actions .primary{border-color:#111;background:#111}
+.person small{display:block;margin-top:6px;color:#777}.profile-tag{display:inline-block;padding:3px 7px;border:1px solid #999;border-radius:99px;color:#666;font-size:10px;font-style:normal;font-weight:400;vertical-align:middle}.recipe-shortcuts>div{display:grid;grid-template-columns:1fr 1fr;gap:12px}.recipe-shortcuts>div>button{display:grid;grid-template-columns:40px 1fr auto;align-items:center;gap:10px;padding:15px;border:1px solid #aaa;background:#fff;text-align:left}.recipe-shortcuts strong,.recipe-shortcuts small{display:block}.recipe-shortcuts small{margin-top:5px;color:#777}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+@media(min-width:700px){.inventory-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(min-width:800px){.needs-layout{grid-template-columns:1fr 1fr}.need-card.full{grid-column:1/-1}.ingredient-groups{grid-template-columns:1fr 1fr}.detail-step{padding:18px}}
+@media(min-width:1000px){.inventory-grid{grid-template-columns:repeat(5,minmax(0,1fr))}}
+
+/* 全站布局与层级统一：以留白、浅色背景和轻阴影替代多层描边 */
+.app-shell{background:#f7f7f7}
+.page{padding:28px 22px 124px}
+.page-header{margin-bottom:30px}
+.page-header h1,h1{letter-spacing:-.02em}
+.page-header p{max-width:680px;margin-top:8px}
+.page>section+section,.page>section+div,.page>div+section{margin-top:28px}
+
+.block,.need-card,.storage-pane,.upload,.recipe-card,.saved-card,.person,.stats,.food-modal,.detail-step,.consume,.voice-box,.voice-parse{
+  border:0;
+  border-radius:15px;
+  background:#fff;
+  box-shadow:0 4px 14px rgba(0,0,0,.055)
+}
+.block{margin-top:28px;padding:18px 0 0;border-top:0;background:transparent;box-shadow:none}
+.block>h2{margin-bottom:18px}
+.need-card{padding:20px}
+.needs-layout{gap:24px}
+.storage-pane{padding:20px}
+.upload{gap:18px;padding:20px}
+.recipe-body,.saved-card>span{padding:20px}
+.recipe-grid,.desktop-grid,.form-grid{gap:24px}
+.step-list,.cook-all-steps,.consume-grid{gap:18px}
+.detail-step,.consume{padding:18px}
+
+.home-feature{margin-bottom:28px;border:0;border-radius:16px;box-shadow:0 4px 14px rgba(0,0,0,.06)}
+.home-entries{gap:16px}
+.home-entries>button{padding:18px;border:0;border-radius:14px;box-shadow:0 4px 14px rgba(0,0,0,.055)}
+
+.tabs,.storage-tabs{
+  padding:5px;
+  border:0;
+  border-radius:14px;
+  background:#e9e9e9;
+  box-shadow:none
+}
+.tabs{gap:4px;margin-bottom:28px}
+.tabs button,.storage-tabs button{
+  border:0;
+  border-radius:10px;
+  background:transparent
+}
+.tabs button.active,.storage-tabs button.active{
+  border:0;
+  background:#fff;
+  color:#171717;
+  box-shadow:0 2px 8px rgba(0,0,0,.08)
+}
+.storage-tabs{top:10px;gap:4px;margin-bottom:24px}
+.storage-tabs button{padding:12px 8px}
+.storage-tabs button.active small{color:#666}
+
+.inventory-grid{gap:14px}
+.food-tile{border:0;border-radius:13px;background:#f5f5f5;box-shadow:0 2px 8px rgba(0,0,0,.045)}
+.food-tile:hover,.recipe-card:hover,.saved-card:hover{transform:scale(1.025);box-shadow:0 8px 20px rgba(0,0,0,.1)}
+.storage-heading{margin-bottom:22px}
+.empty{border:0;border-radius:12px;background:#f1f1f1}
+
+.food-form{gap:18px;padding:20px;border:0;border-radius:14px;background:#f2f2f2}
+.confirm-item{margin-bottom:16px;border:0;background:#fff;box-shadow:0 3px 12px rgba(0,0,0,.05)}
+.confirm-item summary{padding:18px}
+.confirm-item .food-form{border:0;border-radius:0 0 14px 14px}
+.add-row{border:0;border-radius:12px;background:#ececec}
+
+.choice{margin:0;padding:15px;border:0;border-radius:12px;background:#f1f1f1}
+.choice.selected{border:0;background:#d9d9d9;box-shadow:inset 0 0 0 1px #777}
+.chips{gap:12px}
+.chips button,.tags span{border-color:#c6c6c6}
+.option-grid{gap:14px}
+.other-limit{margin-top:20px}
+
+.recipe-card,.saved-card{overflow:hidden}
+.tags{gap:8px;margin:14px 0}
+.ingredients{margin-top:28px}
+.ingredient-groups{gap:22px}
+.ingredient-groups>div{padding:17px;border:0;border-radius:12px;background:#f1f1f1}
+.mini-cards{gap:10px}
+.mini-cards>span{border:0;background:#fff;box-shadow:0 2px 7px rgba(0,0,0,.045)}
+.progress,.timer,.completed,.compact-timer,.notice{border-radius:11px}
+
+.person{padding:20px}
+.recipe-shortcuts{padding-top:0}
+.recipe-shortcuts>div{gap:16px}
+.recipe-shortcuts>div>button{padding:17px;border:0;border-radius:14px;background:#fff;box-shadow:0 4px 14px rgba(0,0,0,.055)}
+.profile-row{padding:17px 2px;border-bottom:1px solid #e5e5e5}
+.profile-row:last-of-type{border-bottom:0}
+.profile-tag,.selection-rule{border:0;background:#e8e8e8}
+
+.bottom-nav{
+  min-height:82px;
+  padding:6px max(14px,env(safe-area-inset-right)) max(6px,env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-left));
+  border:0;
+  border-top:1px solid #ededed;
+  background:rgba(255,255,255,.97);
+  box-shadow:0 -4px 16px rgba(0,0,0,.045)
+}
+.bottom-nav button{margin:5px 3px;border:0;border-radius:12px;background:transparent}
+.bottom-nav button.active{border:0;background:#eeeeee;color:#111}
+
+.sticky-actions{margin-top:32px;padding:16px 0 4px;background:linear-gradient(to bottom,rgba(247,247,247,0),#f7f7f7 20%)}
+.primary,.secondary,.heart,.actions button,.modal-edit-actions>button{border-radius:12px}
+.voice-box{overflow:hidden;margin-top:24px}
+.stock-summary{border:0;background:#f1f1f1}
+.modal-actions button{border:0;border-radius:13px}
+.dialog{border:0;border-radius:16px;box-shadow:0 16px 48px rgba(0,0,0,.18)}
+
+@media(min-width:800px){
+  .app-shell{width:calc(100% - 64px);max-width:1280px;margin:32px auto;border:0;border-radius:20px;box-shadow:0 8px 28px rgba(0,0,0,.06)}
+  .page{padding:52px 56px 126px}
+  .bottom-nav{width:min(680px,calc(100% - 128px));bottom:22px;border:0;border-radius:16px;box-shadow:0 8px 28px rgba(0,0,0,.12)}
+  .needs-layout{gap:26px}
+  .recipe-grid{gap:26px}
+}
+
+/* 本轮细节：上传、核对、食材弹窗、食材图标与档案卡片 */
+.upload-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;width:100%}
+.upload-heading h2,.upload-heading p{margin:0}
+.thumbs{gap:12px;padding:4px 2px 8px}
+.upload-thumb{position:relative;flex:0 0 62px}
+.upload-thumb>button{position:absolute;top:-7px;right:-7px;display:grid;place-items:center;width:22px;height:22px;margin:0;padding:0;border:0;border-radius:50%;background:#333;color:#fff;font-size:16px;line-height:1;text-decoration:none;box-shadow:0 2px 6px rgba(0,0,0,.18)}
+.upload-actions{display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap}
+.upload-actions .link{color:#666}
+.voice-result textarea{width:100%;min-height:92px;margin:10px 0 16px;padding:13px;border:1px solid #aaa;border-radius:11px;background:#fff;resize:vertical;line-height:1.6}
+
+.confirm-item summary{grid-template-columns:32px minmax(0,1fr) auto;align-items:center}
+.confirm-item summary .icon-placeholder{width:30px;height:28px}
+.confirm-item summary strong{min-width:0}
+.confirm-item summary span{white-space:nowrap}
+
+.suffix{overflow:hidden;border:1px solid #aaa;border-radius:11px;background:#fff}
+.suffix input{border:0!important;border-radius:0!important}
+.suffix b{border:0;border-left:1px solid #aaa;border-radius:0;background:#eee}
+.food-modal>.food-form{margin-top:20px}
+.food-modal>h2{padding-right:38px}
+
+.mini-cards>span{display:grid;grid-template-columns:28px minmax(0,1fr) auto;align-items:center;gap:9px}
+.mini-cards>span:not(:has(.icon-placeholder)){display:flex}
+.mini-cards .icon-placeholder{width:27px;height:25px}
+.mini-cards em{font-style:normal}
+
+.selection-rule,.profile-tag{padding:5px 9px;font-size:12px;line-height:1.2}
+.profile-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:16px}
+.profile-list .profile-row{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:start;min-height:112px;padding:15px;border:0;border-radius:13px;background:#f1f1f1;box-shadow:0 2px 8px rgba(0,0,0,.04)}
+.profile-list .profile-row strong{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.profile-list .profile-row small{font-size:12px;line-height:1.45}
+.profile-section>.add-row{margin-top:4px}
+
+@media(max-width:520px){
+  .confirm-item summary{grid-template-columns:30px minmax(0,1fr)}
+  .confirm-item summary span{grid-column:2;white-space:normal}
+  .profile-list{gap:8px}
+  .profile-list .profile-row{min-height:124px;padding:12px 10px}
+  .profile-list .profile-row small{font-size:11px}
+  .profile-tag{font-size:11px}
+}
+
+/* 成员弹窗、固定分页与需求控件 */
+.storage-pane{display:flex;flex-direction:column;min-height:580px;background-position:center;background-size:cover}
+.storage-pane .pagination{margin-top:auto;padding-top:28px}
+.food-form select,.member-basic select{padding-right:42px;background-position:right 14px center}
+.choice{grid-template-columns:30px minmax(0,1fr);align-items:center}
+.choice .icon-placeholder{width:28px;height:26px}
+.choice strong{font-size:14px;line-height:1.35}
+.icon-options button{display:flex;align-items:center;gap:8px}
+.icon-options .icon-placeholder{width:25px;height:23px}
+.toggle-row{position:relative;cursor:pointer}
+.toggle-row input{position:absolute;opacity:0;pointer-events:none}
+.switch{display:grid;place-items:center;width:62px;height:32px;border-radius:99px;background:#d5d5d5;color:#555;font-size:11px;font-style:normal;font-weight:700;transition:.2s ease}
+.switch.on{background:#222;color:#fff}
+
+.member-modal{position:relative;width:min(100%,820px);max-height:min(88vh,900px);overflow:auto;padding:26px;border-radius:18px;background:#fff;box-shadow:0 18px 54px rgba(0,0,0,.2);animation:modal-in .22s ease both}
+.member-modal>h2{margin-bottom:22px;padding-right:40px;font-size:24px}
+.member-basic{display:grid;grid-template-columns:1.35fr .65fr;gap:18px;margin-bottom:8px}
+.member-basic .label{margin-top:0}
+.member-basic select{width:100%;min-height:44px;padding:10px;border:1px solid #aaa;border-radius:12px;background:#fff}
+.member-modal .profile-form{display:grid;grid-template-columns:1fr 1fr;gap:0 24px}
+.member-modal .profile-form>.notice{grid-column:1/-1}
+.member-modal .block>h2,.profile-form .block>h2{display:flex;align-items:center;gap:9px}
+.member-modal .block>h2 .icon-placeholder,.profile-form .block>h2 .icon-placeholder{width:27px;height:25px}
+.member-modal .modal-edit-actions{position:sticky;bottom:-26px;margin:24px -26px -26px;padding:16px 26px;background:#fff;border-top:1px solid #eee}
+
+.section-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:18px}
+.section-heading h2{margin:0 0 5px}
+.section-heading p{font-size:13px}
+.section-heading .secondary{flex:none;min-height:42px}
+.profile-list{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.profile-list .profile-row{display:block;min-height:210px;padding:20px;background:#fff;box-shadow:0 4px 14px rgba(0,0,0,.06)}
+.profile-card-head{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:9px;margin-bottom:18px;text-align:left}
+.profile-card-head>strong{font-size:18px}
+.profile-card-head .profile-tag{justify-self:start}
+.profile-detail{display:block;margin-top:12px;padding:12px;border-radius:10px;background:#f1f1f1;color:#555;font-size:13px;line-height:1.5;text-align:left}
+.profile-detail>strong{display:inline;color:#222}
+.profile-detail.allergen{background:#e7e7e7}
+
+@media(max-width:620px){
+  .member-basic,.member-modal .profile-form{grid-template-columns:1fr}
+  .member-modal{padding:22px}
+  .member-modal .modal-edit-actions{bottom:-22px;margin:24px -22px -22px;padding:14px 22px}
+  .profile-list{grid-template-columns:1fr}
+  .profile-list .profile-row{min-height:0}
+  .section-heading{align-items:center}
+  .section-heading p{display:none}
+}
+
+/* 登录、来源返回、消耗弹窗及本轮流程细节 */
+.login-page{width:min(100%,620px);margin:0 auto}
+.login-page>header{margin-bottom:24px}
+.login-page>header h1{margin-bottom:8px;font-size:34px}
+.login-page>.image-placeholder.wide{height:240px;border-radius:18px}
+.login-form{display:grid;gap:18px;margin-top:26px}
+.login-form>label{display:grid;gap:8px;font-weight:700}
+.phone-input,.password-input{display:grid;grid-template-columns:auto 1fr;overflow:hidden;border:1px solid #aaa;border-radius:13px;background:#fff}
+.phone-input b{display:grid;place-items:center;padding:0 14px;border-right:1px solid #ddd}
+.phone-input input,.password-input input{min-width:0;min-height:52px;padding:12px;border:0}
+.password-input{grid-template-columns:1fr auto}
+.password-input button{border:0;background:none;padding:0 14px;color:#666}
+.test-account{display:flex;gap:10px 18px;flex-wrap:wrap;padding:14px;border-radius:12px;background:#ededed;font-size:13px}
+.login-error{color:#8b1f1f;font-size:13px}
+.agreement{display:flex!important;grid-template-columns:none!important;align-items:flex-start;gap:9px!important;font-size:13px;font-weight:400!important;line-height:1.5}
+.agreement input{width:18px;height:18px;margin-top:1px}
+.agreement button{padding:0;border:0;background:none;text-decoration:underline}
+.other-login-title{text-align:center;font-size:13px}
+.other-login{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.other-login button{display:flex;align-items:center;justify-content:center;gap:9px;min-height:50px;border:1px solid #aaa;background:#fff}
+
+.home-feature .feature-motion{height:clamp(330px,62vw,560px)}
+.fab{width:66px;height:66px;font-size:34px}
+.fab::before{content:attr(data-tip);position:absolute;right:76px;top:50%;width:max-content;padding:8px 11px;border-radius:9px;background:#222;color:#fff;font-size:12px;opacity:0;pointer-events:none;transform:translateY(-50%) translateX(5px);transition:.2s ease}
+.fab:hover{transform:scale(1.06)}
+.fab:hover::before{opacity:1;transform:translateY(-50%) translateX(0)}
+.pagination button{display:grid;place-items:center;width:44px;height:44px;padding:0;border-radius:50%;font-size:28px;line-height:1}
+
+.other-limit-input{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;margin-top:15px}
+.other-limit-input input{min-width:0;min-height:46px;padding:10px 12px;border:1px solid #999;border-radius:11px}
+.other-limit-input button{padding:10px 15px;border:1px solid #555;background:#fff}
+
+.loading-state{gap:10px}
+.loading-state .image-placeholder.wide{width:min(100%,680px);height:clamp(260px,45vw,430px);margin-top:28px;border-radius:18px}
+.step-preview{display:grid;grid-template-columns:38px minmax(0,1fr) auto;align-items:center;gap:14px;padding:16px 18px;border-radius:13px;background:#fff;box-shadow:0 3px 11px rgba(0,0,0,.055)}
+.step-preview>span{display:grid;place-items:center;width:36px;height:36px;border-radius:50%;background:#222;color:#fff;font-weight:700}
+.step-preview small{color:#666}
+
+.consume-modal{position:relative;width:min(100%,620px);padding:26px;border-radius:18px;background:#fff;box-shadow:0 18px 54px rgba(0,0,0,.2);animation:modal-in .22s ease both}
+.consume-modal .page-header{padding-right:36px}
+.consume-modal .consume-grid{margin-bottom:16px}
+.consume-modal .consume small{display:block;margin-top:5px;color:#777;font-weight:400}
+.consume-modal .notice{margin-bottom:20px}
+
+.member-modal{max-height:58vh}
+.profile-actions{display:flex;justify-self:end;gap:7px}
+.profile-actions button{display:grid;place-items:center;width:34px;height:34px;padding:0;border:0;background:transparent}
+.profile-actions .icon-placeholder{width:27px;height:25px}
+.profile-list .profile-row{cursor:pointer}
+.profile-card-head{grid-template-columns:auto 1fr auto}
+
+@media(max-width:620px){
+  .login-page>.image-placeholder.wide{height:190px}
+  .member-modal{max-height:56vh}
+  .consume-modal{padding:22px}
+  .home-feature .feature-motion{height:380px}
+}
+
+/* 本轮修正：登录区号、紧凑上传、核对卡片与固定弹窗头 */
+.login-subtitle{margin:16px 0 0;font-size:16px;color:#555}
+.phone-input{grid-template-columns:96px 1fr}
+.phone-input select{min-height:52px;padding:0 34px 0 12px;border:0;border-right:1px solid #ddd;border-radius:0;background:#fff}
+.other-login{display:flex;justify-content:center;gap:28px}
+.other-login button{width:48px;height:48px;min-height:0;padding:0;border:0;border-radius:50%;background:#e8e8e8}
+.other-login .icon-placeholder{width:30px;height:28px}
+
+.storage-toolbar{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:stretch;gap:12px;margin-bottom:24px}
+.storage-toolbar .storage-tabs{margin-bottom:0}
+.storage-add{padding:0 16px;border:0;border-radius:12px;background:#222;color:#fff;font-weight:700}
+
+.upload-dropzone{display:grid;place-items:center;gap:10px;width:100%;min-height:210px;padding:24px;border:1px dashed #aaa;border-radius:15px;background:#fafafa;text-align:center}
+.upload-dropzone .icon-placeholder{width:62px;height:58px}
+.upload-dropzone h2{margin:0;color:#222;font-size:17px;font-weight:700}
+.upload-dropzone p{font-size:13px}
+.upload-heading>span{font-size:13px;color:#666}
+
+.confirm-list{display:grid;gap:14px;margin-bottom:18px}
+.confirm-list .confirm-item{display:grid;grid-template-columns:38px minmax(0,1fr) auto;align-items:center;gap:12px;margin:0;padding:15px 16px;border-radius:13px;background:#fff}
+.confirm-list .confirm-item .icon-placeholder{width:36px;height:34px}
+.confirm-list .confirm-item>span{min-width:0}
+.confirm-list .confirm-item strong,.confirm-list .confirm-item small{display:block}
+.confirm-list .confirm-item small{margin-top:5px;color:#666;font-size:12px;white-space:normal}
+.confirm-edit-button{padding:8px 12px;border:1px solid #999;background:#fff}
+.food-modal .modal-edit-actions{grid-template-columns:repeat(3,minmax(0,1fr))}
+.food-modal .modal-edit-actions:has(>button:nth-child(2):last-child){grid-template-columns:1fr 1fr}
+
+.member-modal{display:grid;grid-template-rows:auto minmax(0,1fr) auto;overflow:hidden;padding:0}
+.member-modal-head{position:relative;z-index:2;padding:22px 26px;border-bottom:1px solid #eee;background:#fff}
+.member-modal-head h2{margin:0;padding-right:42px;font-size:24px}
+.member-modal-head .modal-close{top:13px}
+.member-modal-body{overflow:auto;padding:18px 26px 20px}
+.member-modal .modal-edit-actions{position:static;margin:0;padding:15px 26px;border-top:1px solid #eee}
+.compact-add{min-height:38px;padding:8px 12px;font-size:13px}
+.profile-list .profile-row{width:100%;border:0;text-align:left}
+.profile-card-head>b{justify-self:end;font-size:22px}
+
+@media(max-width:620px){
+  .storage-toolbar{grid-template-columns:1fr}
+  .storage-add{min-height:44px}
+  .upload-dropzone{min-height:180px}
+  .confirm-list .confirm-item{grid-template-columns:34px minmax(0,1fr) auto}
+  .member-modal-head{padding:18px 20px}
+  .member-modal-head h2{font-size:20px}
+  .member-modal-body{padding:18px 20px}
+  .member-modal .modal-edit-actions{padding:14px 20px}
+}

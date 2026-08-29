@@ -1,0 +1,20 @@
+import type { Metadata } from 'next';
+import './globals.css';
+import './overrides.css';
+
+export const metadata: Metadata = {
+  title: '今天吃什么｜低保真交互原型',
+  description: '根据家里的食材和用餐需求，帮你快速决定今天吃什么。',
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="zh-CN">
+      <body>{children}</body>
+    </html>
+  );
+}
