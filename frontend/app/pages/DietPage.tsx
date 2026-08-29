@@ -18,23 +18,25 @@ export function DietPage() {
     setDraftLimits,
     draftAllergens,
     setDraftAllergens,
-    setPeople,
-    setMembers,
-    setProfileData,
-    say,
+    householdMembers,
+    profileMemberId,
+    memberSaving,
+    saveDietProfile,
+    deleteProfileMember,
     go,
   } = useApp();
+  const activeMember = householdMembers.find((member) => member.memberId === profileMemberId);
   return (
     <>
       <Header
         title={
-          draftProfileName === "我"
+          activeMember?.isOwner
             ? "我的饮食档案"
             : `${draftProfileName}的饮食档案`
         }
         back={() => go("profile")}
       />
-      {profileName !== "我" && (
+      {!activeMember?.isOwner && (
         <label className="label profile-name">
           成员姓名
           <input
@@ -60,37 +62,16 @@ export function DietPage() {
       />
       <button
         className="primary sticky"
-        disabled={!draftProfileName.trim()}
-        onClick={() => {
-          const next = draftProfileName.trim();
-          setPeople((a) => a.map((x) => (x === profileName ? next : x)));
-          setMembers((a) => a.map((x) => (x === profileName ? next : x)));
-          setProfileData((a) => {
-            const copy = { ...a };
-            delete copy[profileName];
-            copy[next] = {
-              taste: draftTaste,
-              diet: draftDiet,
-              limits: draftLimits,
-              allergens: draftAllergens,
-            };
-            return copy;
-          });
-          setProfileName(next);
-          say("档案已保存");
-          go("profile");
-        }}
+        disabled={!draftProfileName.trim() || memberSaving}
+        onClick={saveDietProfile}
       >
-        保存
+        {memberSaving ? "保存中……" : "保存"}
       </button>
-      {profileName !== "我" && (
+      {!activeMember?.isOwner && (
         <button
           className="danger-link"
-          onClick={() => {
-            setPeople((a) => a.filter((x) => x !== profileName));
-            setMembers((a) => a.filter((x) => x !== profileName));
-            go("profile");
-          }}
+          disabled={memberSaving}
+          onClick={deleteProfileMember}
         >
           删除成员
         </button>

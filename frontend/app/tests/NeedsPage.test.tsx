@@ -26,7 +26,7 @@ describe("NeedsPage", () => {
 
   it("toggles a dining member", () => {
     const setMembers = vi.fn();
-    mockApp({ people: ["我", "阳"], members: ["我"], setMembers });
+    mockApp({ members: ["11111111-1111-4111-8111-111111111111"], setMembers });
     render(<NeedsPage />);
     fireEvent.click(screen.getByText("阳"));
     expect(setMembers).toHaveBeenCalledTimes(1);

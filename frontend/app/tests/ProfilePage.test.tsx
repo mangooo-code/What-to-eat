@@ -44,7 +44,7 @@ describe("ProfilePage", () => {
     mockApp({ openDiet });
     render(<ProfilePage />);
     fireEvent.click(screen.getByText("阳"));
-    expect(openDiet).toHaveBeenCalledWith("阳");
+    expect(openDiet).toHaveBeenCalledWith("22222222-2222-4222-8222-222222222222");
   });
 
   it("asks for confirmation before logging out", () => {

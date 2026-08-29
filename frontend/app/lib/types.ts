@@ -18,11 +18,20 @@ export type Page =
   | "recipes";
 
 export type Food = {
+  id?: string;
   name: string;
   qty: number | string;
   unit: string;
   place: string;
   days: number;
+  normalizedName?: string | null;
+  unitTypeId?: number;
+  locationId?: string;
+  expiryDate?: string | null;
+  imageFileId?: string | null;
+  source?: "manual" | "recognition" | "import";
+  createdDate?: string;
+  updatedDate?: string;
 };
 
 export type ProfileData = {

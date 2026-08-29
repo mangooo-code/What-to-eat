@@ -10,7 +10,8 @@ export function NeedsPage() {
   const {
     time,
     setTime,
-    people,
+    householdMembers,
+    membersLoading,
     members,
     setMembers,
     openMember,
@@ -53,19 +54,22 @@ export function NeedsPage() {
         <section className="need-card">
           <h2>今天和谁一起吃？</h2>
           <div className="chips member-options">
-            {people.map((x) => (
+            {householdMembers.map((member) => (
               <button
-                className={members.includes(x) ? "active" : ""}
-                key={x}
+                className={members.includes(member.memberId) ? "active" : ""}
+                key={member.memberId}
                 onClick={() =>
                   setMembers((a) =>
-                    a.includes(x) ? a.filter((v) => v !== x) : [...a, x],
+                    a.includes(member.memberId)
+                      ? a.filter((id) => id !== member.memberId)
+                      : [...a, member.memberId],
                   )
                 }
               >
-                {x}
+                {member.name}
               </button>
             ))}
+            {membersLoading && <span>成员加载中……</span>}
             <button onClick={() => openMember("needs")}>＋ 添加成员</button>
           </div>
         </section>

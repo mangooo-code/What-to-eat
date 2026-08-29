@@ -1,10 +1,11 @@
 "use client";
 import "../styles/components/nav.css";
 import "../styles/components/member-modal.css";
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import { useApp } from "../context/AppContext";
 import { Placeholder } from "./Placeholder";
 import { ProfileForm } from "./ProfileForm";
+import { inventoryService } from "../services/inventoryService";
 
 export function Shell({
   children,
@@ -27,12 +28,24 @@ export function Shell({
     relation,
     setRelation,
     saveMember,
+    memberSaving,
+    draftTaste,
+    setDraftTaste,
+    draftDiet,
+    setDraftDiet,
+    draftLimits,
+    setDraftLimits,
+    draftAllergens,
+    setDraftAllergens,
     dialog,
     setDialog,
     logout,
+    say,
     setFoods,
+    foods,
     editIndex,
   } = useApp();
+  const [deleting, setDeleting] = useState(false);
 
   const nav = (
     <nav className="bottom-nav">
@@ -113,16 +126,24 @@ export function Shell({
                   </select>
                 </label>
               </div>
-              <ProfileForm />
+              <ProfileForm
+                value={{ taste: draftTaste, diet: draftDiet, limits: draftLimits, allergens: draftAllergens }}
+                onChange={(data) => {
+                  setDraftTaste(data.taste);
+                  setDraftDiet(data.diet);
+                  setDraftLimits(data.limits);
+                  setDraftAllergens(data.allergens);
+                }}
+              />
             </div>
             <div className="modal-edit-actions">
               <button onClick={() => setMemberOpen(false)}>取消</button>
               <button
                 className="primary"
-                disabled={!newMemberName.trim() || !relation}
+                disabled={!newMemberName.trim() || !relation || memberSaving}
                 onClick={saveMember}
               >
-                保存档案
+                {memberSaving ? "保存中……" : "保存档案"}
               </button>
             </div>
           </div>
@@ -145,12 +166,29 @@ export function Shell({
               <button onClick={() => setDialog("")}>取消</button>
               <button
                 className="danger"
-                onClick={() => {
+                disabled={deleting}
+                onClick={async () => {
                   if (dialog.includes("退出")) logout();
                   else {
                     if (dialog.includes("删除")) {
-                      setFoods((f) => f.filter((_, i) => i !== editIndex));
-                      go("fridge");
+                      const ingredient = foods[editIndex];
+                      if (!ingredient?.id) {
+                        say("删除失败：库存数据缺少稳定 ID");
+                        return;
+                      }
+                      setDeleting(true);
+                      try {
+                        await inventoryService.remove(ingredient.id);
+                        setFoods((items) => items.filter((food) => food.id !== ingredient.id));
+                        setDialog("");
+                        say("食材已删除");
+                        go("fridge");
+                      } catch (error) {
+                        say(`删除失败：${error instanceof Error ? error.message : "请稍后重试"}`);
+                      } finally {
+                        setDeleting(false);
+                      }
+                      return;
                     }
                     if (dialog.includes("结束")) go("home");
                     setDialog("");
@@ -161,6 +199,8 @@ export function Shell({
                   ? "确认退出"
                   : dialog.includes("结束")
                     ? "结束制作"
+                  : deleting
+                    ? "删除中……"
                     : "删除"}
               </button>
             </div>

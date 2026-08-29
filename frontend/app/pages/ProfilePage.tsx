@@ -5,7 +5,7 @@ import { Header } from "../components/Header";
 import { Placeholder } from "../components/Placeholder";
 
 export function ProfilePage() {
-  const { people, profileData, openRecipes, openMember, openDiet, setDialog } =
+  const { householdMembers, membersLoading, openRecipes, openMember, openDiet, setDialog } =
     useApp();
   return (
     <>
@@ -55,34 +55,29 @@ export function ProfilePage() {
           </button>
         </div>
         <div className="profile-list">
-          {people.map((name, i) => {
-            const d = profileData[name] || {
-              taste: "",
-              diet: "",
-              limits: [],
-              allergens: [],
-            };
+          {membersLoading && <p>成员加载中……</p>}
+          {householdMembers.map((member) => {
             return (
               <button
                 type="button"
                 className="profile-row"
-                key={name}
-                onClick={() => openDiet(name)}
+                key={member.memberId}
+                onClick={() => openDiet(member.memberId)}
               >
                 <div className="profile-card-head">
-                  <strong>{name}</strong>
+                  <strong>{member.name}</strong>
                   <em className="profile-tag">
-                    {i === 0 ? "主用户" : i === 1 ? "伴侣" : "父母"}
+                    {member.isOwner ? "主用户" : member.relationship}
                   </em>
                   <b>›</b>
                 </div>
                 <span className="profile-detail">
                   <strong>口味偏好：</strong>
-                  {[d.taste, d.diet].filter(Boolean).join("、") || "未设置"}
+                  {[member.tastePreference, member.dietPreference].filter(Boolean).join("、") || "未设置"}
                 </span>
                 <span className="profile-detail">
                   <strong>长期忌口：</strong>
-                  {d.limits.join("、") || "无"}
+                  {member.dietaryRestrictions.join("、") || "无"}
                 </span>
               </button>
             );

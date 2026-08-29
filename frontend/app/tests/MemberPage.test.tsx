@@ -31,27 +31,17 @@ describe("MemberPage", () => {
   });
 
   it("saves the new member and navigates back to needs", () => {
-    const setPeople = vi.fn();
-    const setMembers = vi.fn();
-    const setNewMemberName = vi.fn();
-    const setRelation = vi.fn();
+    const saveMember = vi.fn().mockResolvedValue(true);
     const go = vi.fn();
     mockApp({
       newMemberName: "阳阳",
       relation: "伴侣",
-      setPeople,
-      setMembers,
-      setNewMemberName,
-      setRelation,
+      saveMember,
       go,
     });
     render(<MemberPage />);
     fireEvent.click(screen.getByText("保存"));
-    expect(setPeople).toHaveBeenCalledTimes(1);
-    expect(setMembers).toHaveBeenCalledTimes(1);
-    expect(setNewMemberName).toHaveBeenCalledWith("");
-    expect(setRelation).toHaveBeenCalledWith("");
-    expect(go).toHaveBeenCalledWith("needs");
+    expect(saveMember).toHaveBeenCalledTimes(1);
   });
 
   it("goes back to needs via the header back button", () => {

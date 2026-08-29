@@ -1,0 +1,18 @@
+{
+  "name": "what-to-eat-backend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "tsc --noEmit",
+    "test": "tsc -p functions/authentication/tsconfig.json && node --test functions/authentication/dist/index.test.js",
+    "seed:inventory": "tsc -p scripts/tsconfig.json && node dist-scripts/scripts/seedInventory.js"
+  },
+  "dependencies": {
+    "pg": "^8.16.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20.17.0",
+    "@types/pg": "^8.15.5",
+    "typescript": "^5.9.3"
+  }
+}

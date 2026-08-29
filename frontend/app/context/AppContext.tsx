@@ -8,6 +8,8 @@ import {
 } from "react";
 import { initialFoods } from "../lib/data";
 import type { Food, Page, ProfileData } from "../lib/types";
+import type { HouseholdMember } from "../types/domain";
+import { memberService } from "../services/memberService";
 
 interface AppContextValue {
   page: Page;
@@ -61,6 +63,9 @@ interface AppContextValue {
   setTaste: (v: string) => void;
   people: string[];
   setPeople: React.Dispatch<React.SetStateAction<string[]>>;
+  householdMembers: HouseholdMember[];
+  membersLoading: boolean;
+  memberSaving: boolean;
   members: string[];
   setMembers: React.Dispatch<React.SetStateAction<string[]>>;
   profileData: Record<string, ProfileData>;
@@ -69,6 +74,7 @@ interface AppContextValue {
   >;
   profileName: string;
   setProfileName: (v: string) => void;
+  profileMemberId: string;
   draftProfileName: string;
   setDraftProfileName: (v: string) => void;
   draftTaste: string;
@@ -113,9 +119,11 @@ interface AppContextValue {
   setNeedError: (v: boolean) => void;
   success: boolean;
   setSuccess: (v: boolean) => void;
-  saveMember: () => void;
+  saveMember: () => Promise<boolean>;
+  saveDietProfile: () => Promise<boolean>;
+  deleteProfileMember: () => Promise<boolean>;
   openMember: (from: "needs" | "profile") => void;
-  editMember: (name: string, index: number) => void;
+  editMember: (memberId: string) => void;
   openRecipes: (tab: "done" | "liked") => void;
   openDiet: (name: string) => void;
   logout: () => void;
@@ -159,7 +167,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [time, setTime] = useState("");
   const [taste, setTaste] = useState("按平时口味");
   const [people, setPeople] = useState(["我", "阳", "妈妈"]);
-  const [members, setMembers] = useState(["我"]);
+  const [householdMembers, setHouseholdMembers] = useState<HouseholdMember[]>([]);
+  const [membersLoading, setMembersLoading] = useState(true);
+  const [memberSaving, setMemberSaving] = useState(false);
+  const [members, setMembers] = useState<string[]>([]);
   const [profileData, setProfileData] = useState<Record<string, ProfileData>>(
     {
       我: { taste: "家常", diet: "低脂", limits: [], allergens: [] },
@@ -178,6 +189,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     },
   );
   const [profileName, setProfileName] = useState("我");
+  const [profileMemberId, setProfileMemberId] = useState("");
   const [draftProfileName, setDraftProfileName] = useState("我");
   const [draftTaste, setDraftTaste] = useState("");
   const [draftDiet, setDraftDiet] = useState("");
@@ -229,35 +241,92 @@ export function AppProvider({ children }: { children: ReactNode }) {
     else localStorage.removeItem("wte_login_expires");
   }, []);
 
-  const saveMember = () => {
+  useEffect(() => {
+    let active = true;
+    setMembersLoading(true);
+    memberService.list()
+      .then((items) => {
+        if (!active) return;
+        setHouseholdMembers(items);
+        setMembers((selected) => {
+          const valid = selected.filter((id) => items.some((item) => item.memberId === id));
+          if (valid.length) return valid;
+          const owner = items.find((item) => item.isOwner);
+          return owner ? [owner.memberId] : [];
+        });
+      })
+      .catch((error) => {
+        if (active) say(`成员加载失败：${error instanceof Error ? error.message : "请稍后重试"}`);
+      })
+      .finally(() => {
+        if (active) setMembersLoading(false);
+      });
+    return () => { active = false; };
+  }, []);
+
+  const saveMember = async (): Promise<boolean> => {
     const name = newMemberName.trim();
-    if (!name || !relation) return;
-    if (memberMode === "edit") {
-      setPeople((a) => a.map((x) => (x === profileName ? name : x)));
-      setMembers((a) => a.map((x) => (x === profileName ? name : x)));
-    } else {
-      setPeople((a) => (a.includes(name) ? a : [...a, name]));
-      if (memberFrom === "needs")
-        setMembers((a) => (a.includes(name) ? a : [...a, name]));
+    if (!name || !relation || memberSaving) return false;
+    setMemberSaving(true);
+    try {
+      const input = {
+        name,
+        relationship: relation,
+        tastePreference: draftTaste || null,
+        dietPreference: draftDiet || null,
+        dietaryRestrictions: draftLimits,
+        allergens: draftAllergens,
+      };
+      const saved = memberMode === "edit" && profileMemberId
+        ? await memberService.update(profileMemberId, input)
+        : await memberService.create({ ...input, isOwner: false });
+      setHouseholdMembers((items) => memberMode === "edit"
+        ? items.map((item) => item.memberId === saved.memberId ? saved : item)
+        : [...items, saved]);
+      if (memberFrom === "needs") {
+        setMembers((ids) => ids.includes(saved.memberId) ? ids : [...ids, saved.memberId]);
+      }
+      setNewMemberName("");
+      setRelation("");
+      setDraftTaste("");
+      setDraftDiet("");
+      setDraftLimits([]);
+      setDraftAllergens([]);
+      setMemberOpen(false);
+      say("成员档案已保存");
+      return true;
+    } catch (error) {
+      say(`成员保存失败：${error instanceof Error ? error.message : "请稍后重试"}`);
+      return false;
+    } finally {
+      setMemberSaving(false);
     }
-    setNewMemberName("");
-    setRelation("");
-    setMemberOpen(false);
-    say("成员档案已保存");
   };
   const openMember = (from: "needs" | "profile") => {
     setMemberMode("add");
     setMemberFrom(from);
     setNewMemberName("");
     setRelation("");
+    setProfileMemberId("");
+    setDraftTaste("");
+    setDraftDiet("");
+    setDraftLimits([]);
+    setDraftAllergens([]);
     setMemberOpen(true);
   };
-  const editMember = (name: string, index: number) => {
+  const editMember = (memberId: string) => {
+    const member = householdMembers.find((item) => item.memberId === memberId);
+    if (!member) return;
     setMemberMode("edit");
     setMemberFrom("profile");
-    setProfileName(name);
-    setNewMemberName(name);
-    setRelation(index === 0 ? "主用户" : index === 1 ? "伴侣" : "家人");
+    setProfileMemberId(member.memberId);
+    setProfileName(member.name);
+    setNewMemberName(member.name);
+    setRelation(member.relationship);
+    setDraftTaste(member.tastePreference ?? "");
+    setDraftDiet(member.dietPreference ?? "");
+    setDraftLimits(member.dietaryRestrictions);
+    setDraftAllergens(member.allergens);
     setMemberOpen(true);
   };
   const openRecipes = (tab: "done" | "liked") => {
@@ -265,20 +334,58 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setPage("recipes");
     window.scrollTo(0, 0);
   };
-  const openDiet = (name: string) => {
-    const d = profileData[name] || {
-      taste: "",
-      diet: "",
-      limits: [],
-      allergens: [],
-    };
-    setProfileName(name);
-    setDraftProfileName(name);
-    setDraftTaste(d.taste);
-    setDraftDiet(d.diet);
-    setDraftLimits(d.limits);
-    setDraftAllergens(d.allergens);
+  const openDiet = (memberId: string) => {
+    const member = householdMembers.find((item) => item.memberId === memberId);
+    if (!member) return;
+    setProfileMemberId(member.memberId);
+    setProfileName(member.name);
+    setDraftProfileName(member.name);
+    setDraftTaste(member.tastePreference ?? "");
+    setDraftDiet(member.dietPreference ?? "");
+    setDraftLimits(member.dietaryRestrictions);
+    setDraftAllergens(member.allergens);
     go("diet");
+  };
+  const saveDietProfile = async (): Promise<boolean> => {
+    const name = draftProfileName.trim();
+    if (!name || !profileMemberId || memberSaving) return false;
+    setMemberSaving(true);
+    try {
+      const saved = await memberService.update(profileMemberId, {
+        name,
+        tastePreference: draftTaste || null,
+        dietPreference: draftDiet || null,
+        dietaryRestrictions: draftLimits,
+        allergens: draftAllergens,
+      });
+      setHouseholdMembers((items) => items.map((item) => item.memberId === saved.memberId ? saved : item));
+      setProfileName(saved.name);
+      say("档案已保存");
+      go("profile");
+      return true;
+    } catch (error) {
+      say(`档案保存失败：${error instanceof Error ? error.message : "请稍后重试"}`);
+      return false;
+    } finally {
+      setMemberSaving(false);
+    }
+  };
+  const deleteProfileMember = async (): Promise<boolean> => {
+    if (!profileMemberId || memberSaving) return false;
+    setMemberSaving(true);
+    try {
+      await memberService.remove(profileMemberId);
+      setHouseholdMembers((items) => items.filter((item) => item.memberId !== profileMemberId));
+      setMembers((ids) => ids.filter((id) => id !== profileMemberId));
+      go("profile");
+      say("成员已删除");
+      return true;
+    } catch (error) {
+      say(`成员删除失败：${error instanceof Error ? error.message : "请稍后重试"}`);
+      return false;
+    } finally {
+      setMemberSaving(false);
+    }
   };
   const logout = () => {
     localStorage.removeItem("wte_login_expires");
@@ -343,12 +450,16 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setTaste,
     people,
     setPeople,
+    householdMembers,
+    membersLoading,
+    memberSaving,
     members,
     setMembers,
     profileData,
     setProfileData,
     profileName,
     setProfileName,
+    profileMemberId,
     draftProfileName,
     setDraftProfileName,
     draftTaste,
@@ -394,6 +505,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
     success,
     setSuccess,
     saveMember,
+    saveDietProfile,
+    deleteProfileMember,
     openMember,
     editMember,
     openRecipes,

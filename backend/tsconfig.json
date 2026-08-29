@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "Node16",
+    "moduleResolution": "Node16",
+    "types": ["node"],
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true
+  },
+  "include": ["shared/**/*.ts", "functions/auth/**/*.ts", "functions/inventory/**/*.ts", "functions/members/**/*.ts", "scripts/**/*.ts"]
+}

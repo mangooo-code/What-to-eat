@@ -1,7 +1,8 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { Shell } from "../components/Shell";
 import { useApp } from "../context/AppContext";
+import { inventoryService } from "../services/inventoryService";
 
 vi.mock("../context/AppContext", () => ({
   useApp: vi.fn(),
@@ -24,9 +25,20 @@ function mockApp(overrides: Partial<ReturnType<typeof useApp>> = {}) {
     relation: "",
     setRelation: vi.fn(),
     saveMember: vi.fn(),
+    memberSaving: false,
+    draftTaste: "",
+    setDraftTaste: vi.fn(),
+    draftDiet: "",
+    setDraftDiet: vi.fn(),
+    draftLimits: [],
+    setDraftLimits: vi.fn(),
+    draftAllergens: [],
+    setDraftAllergens: vi.fn(),
     dialog: "",
     setDialog: vi.fn(),
     logout: vi.fn(),
+    say: vi.fn(),
+    foods: [],
     setFoods: vi.fn(),
     editIndex: 0,
     ...overrides,
@@ -92,13 +104,20 @@ describe("Shell", () => {
     expect(logout).toHaveBeenCalledTimes(1);
   });
 
-  it("removes the food item when the dialog confirms deletion", () => {
+  it("removes the food item when the dialog confirms deletion", async () => {
     const setFoods = vi.fn();
     const go = vi.fn();
-    mockApp({ dialog: "删除这项食材？", setFoods, go, editIndex: 1 });
+    vi.spyOn(inventoryService, "remove").mockResolvedValue(undefined);
+    mockApp({
+      dialog: "删除这项食材？",
+      setFoods,
+      go,
+      editIndex: 0,
+      foods: [{ id: "10000000-0000-4000-8000-000000000001", name: "番茄", qty: 2, unit: "个", place: "冷藏", days: 3 }],
+    });
     render(<Shell>内容</Shell>);
     fireEvent.click(screen.getByText("删除"));
-    expect(setFoods).toHaveBeenCalledTimes(1);
+    await waitFor(() => expect(setFoods).toHaveBeenCalledTimes(1));
     expect(go).toHaveBeenCalledWith("fridge");
   });
 });

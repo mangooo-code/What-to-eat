@@ -10,8 +10,16 @@ export function MemberPage() {
     setNewMemberName,
     relation,
     setRelation,
-    setPeople,
-    setMembers,
+    saveMember,
+    memberSaving,
+    draftTaste,
+    setDraftTaste,
+    draftDiet,
+    setDraftDiet,
+    draftLimits,
+    setDraftLimits,
+    draftAllergens,
+    setDraftAllergens,
     go,
   } = useApp();
   return (
@@ -39,20 +47,23 @@ export function MemberPage() {
           ))}
         </div>
       </section>
-      <ProfileForm />
+      <ProfileForm
+        value={{ taste: draftTaste, diet: draftDiet, limits: draftLimits, allergens: draftAllergens }}
+        onChange={(data) => {
+          setDraftTaste(data.taste);
+          setDraftDiet(data.diet);
+          setDraftLimits(data.limits);
+          setDraftAllergens(data.allergens);
+        }}
+      />
       <button
         className="primary sticky"
-        disabled={!newMemberName.trim() || !relation}
-        onClick={() => {
-          const name = newMemberName.trim();
-          setPeople((a) => (a.includes(name) ? a : [...a, name]));
-          setMembers((a) => (a.includes(name) ? a : [...a, name]));
-          setNewMemberName("");
-          setRelation("");
-          go("needs");
+        disabled={!newMemberName.trim() || !relation || memberSaving}
+        onClick={async () => {
+          if (await saveMember()) go("needs");
         }}
       >
-        保存
+        {memberSaving ? "保存中……" : "保存"}
       </button>
     </>
   );
