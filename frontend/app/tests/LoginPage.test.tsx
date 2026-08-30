@@ -7,7 +7,10 @@ import { authToken } from "../services/authToken";
 import { createAppState } from "./mockApp";
 
 vi.mock("../context/AppContext", () => ({ useApp: vi.fn() }));
-vi.mock("../services/authService", () => ({ authService: { login: vi.fn() } }));
+vi.mock("../services/authService", () => ({
+  authService: { login: vi.fn() },
+  getLoginErrorMessage: () => "账号或密码不正确",
+}));
 vi.mock("../services/authToken", () => ({ authToken: { set: vi.fn(), get: vi.fn(), clear: vi.fn() } }));
 const mockedUseApp = vi.mocked(useApp);
 const mockedLogin = vi.mocked(authService.login);
@@ -28,13 +31,15 @@ describe("LoginPage", () => {
     expect(screen.getByText("+86 800800")).toBeInTheDocument();
   });
 
-  it("shows a loading state while login is pending", () => {
+  it("disables fields and shows a spinner while login is pending", () => {
     mockedLogin.mockReturnValue(new Promise(() => {}));
     mockApp({ phone: "800800", password: "123456", agreed: true });
     render(<LoginPage />);
     fireEvent.click(screen.getByRole("button", { name: "登录" }));
-    expect(screen.getByText("正在登录中～")).toBeInTheDocument();
-    expect(screen.getByAltText("开饭猫正在登录")).toHaveAttribute("src", "/assets/login-loading.png");
+    expect(screen.getByPlaceholderText("请输入手机号")).toBeDisabled();
+    expect(screen.getByPlaceholderText("请输入密码")).toBeDisabled();
+    expect(screen.getByRole("checkbox")).toBeDisabled();
+    expect(screen.getByRole("status", { name: "登录中" })).toBeInTheDocument();
   });
 
   it("disables the login button until phone, password and agreement are set", () => {
@@ -91,7 +96,7 @@ describe("LoginPage", () => {
     const setLegal = vi.fn();
     mockApp({ setLegal });
     render(<LoginPage />);
-    fireEvent.click(screen.getByText("《用户协议》"));
+    fireEvent.click(screen.getByText("用户协议"));
     expect(setLegal).toHaveBeenCalledWith("用户协议");
   });
 

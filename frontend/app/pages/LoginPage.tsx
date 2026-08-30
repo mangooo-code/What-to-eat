@@ -1,9 +1,9 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "../styles/pages/login.css";
 import { useApp } from "../context/AppContext";
 import { AssetImage } from "../components/AssetImage";
-import { authService } from "../services/authService";
+import { authService, getLoginErrorMessage } from "../services/authService";
 import { authToken } from "../services/authToken";
 
 export function LoginPage() {
@@ -28,6 +28,15 @@ export function LoginPage() {
     loadMembers,
   } = useApp();
   const enabled = phone.trim() && password && agreed;
+  const [displayedError, setDisplayedError] = useState("");
+  useEffect(() => {
+    if (loginError) setDisplayedError(loginError);
+  }, [loginError]);
+  useEffect(() => {
+    if (!loginError) return;
+    const t = setTimeout(() => setLoginError(""), 5000);
+    return () => clearTimeout(t);
+  }, [loginError, setLoginError]);
   const submit = async () => {
     setSubmitting(true);
     try {
@@ -37,26 +46,18 @@ export function LoginPage() {
       setLoginError("");
       go("home");
     } catch (error) {
-      setLoginError(error instanceof Error ? error.message : "账号或密码不正确");
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      setLoginError(getLoginErrorMessage(error));
     } finally {
       setSubmitting(false);
     }
   };
-  if (submitting) {
-    return (
-      <div className="login-loading-state" role="status" aria-live="polite">
-        <AssetImage name="login-loading.png" alt="开饭猫正在登录" className="login-loading-image" />
-        <h1>正在登录中～</h1>
-      </div>
-    );
-  }
   return (
     <div className="login-page">
       <header className="login-logo-header">
         <AssetImage name="logo-characters.png" alt="开饭猫" className="login-logo" />
       </header>
       <AssetImage name="login-hero.png" alt="开饭猫欢迎你" className="asset-hero login-hero-image" />
-      <p className="login-subtitle">手机号密码登录</p>
       <div className="login-form">
         <label>
           手机号
@@ -65,6 +66,7 @@ export function LoginPage() {
               value={countryCode}
               onChange={(e) => setCountryCode(e.target.value)}
               aria-label="国家或地区区号"
+              disabled={submitting}
             >
               <option>+86</option>
               <option>+852</option>
@@ -77,6 +79,7 @@ export function LoginPage() {
               inputMode="numeric"
               onChange={(e) => setPhone(e.target.value)}
               placeholder="请输入手机号"
+              disabled={submitting}
             />
           </span>
         </label>
@@ -88,8 +91,9 @@ export function LoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="请输入密码"
+              disabled={submitting}
             />
-            <button onClick={() => setShowPassword((v) => !v)}>
+            <button onClick={() => setShowPassword((v) => !v)} disabled={submitting}>
               {showPassword ? "隐藏" : "显示"}
             </button>
           </span>
@@ -99,12 +103,16 @@ export function LoginPage() {
           <span>+86 800800</span>
           <span>密码：123456</span>
         </div>
-        {loginError && <p className="login-error">{loginError}</p>}
+        <p className={`login-error${loginError ? " visible" : ""}`}>
+          {displayedError}
+          <span className="login-error-progress" />
+        </p>
         <label className="agreement">
           <input
             type="checkbox"
             checked={agreed}
             onChange={(e) => setAgreed(e.target.checked)}
+            disabled={submitting}
           />
           <span>
             我已阅读并同意 
@@ -114,7 +122,7 @@ export function LoginPage() {
           </span>
         </label>
         <button className="primary" disabled={!enabled || submitting} onClick={submit}>
-          登录
+          {submitting ? <span className="button-spinner" role="status" aria-label="登录中" /> : "登录"}
         </button>
         <p className="other-login-title">其他登录方式</p>
         <div className="other-login">

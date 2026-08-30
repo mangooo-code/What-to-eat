@@ -6,6 +6,7 @@
   background: var(--orange);
   color: var(--paper-raised);
   font-weight: 700;
+  transition: background-color 0.75s ease-in-out, border-color 0.75s ease-in-out, color 0.75s ease-in-out;
 }
 
 .primary:disabled {
