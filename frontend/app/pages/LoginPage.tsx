@@ -23,13 +23,14 @@ export function LoginPage() {
     go,
     say,
     loadCurrentUser,
+    loadMembers,
   } = useApp();
   const enabled = phone.trim() && password && agreed;
   const submit = async () => {
     try {
       const token = await authService.login({ phoneNumber: phone.trim(), password });
       authToken.set(token);
-      await loadCurrentUser();
+      await Promise.all([loadCurrentUser(), loadMembers()]);
       setLoginError("");
       go("home");
     } catch (error) {

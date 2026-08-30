@@ -12,6 +12,12 @@ vi.mock("../services/memberService", () => ({
     remove: vi.fn(),
   },
 }));
+vi.mock("../services/authToken", () => ({
+  authToken: { get: () => "test-token", set: vi.fn(), clear: vi.fn() },
+}));
+vi.mock("../services/userService", () => ({
+  userService: { getProfile: vi.fn().mockResolvedValue(null) },
+}));
 
 const owner: HouseholdMember = {
   memberId: "10000000-0000-4000-8000-000000000101",

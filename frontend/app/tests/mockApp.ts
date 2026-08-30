@@ -110,6 +110,7 @@ export function createAppState(overrides: Partial<AppState> = {}): AppState {
     },
     currentUserLoading: false,
     loadCurrentUser: vi.fn().mockResolvedValue(undefined),
+    loadMembers: vi.fn().mockResolvedValue(undefined),
     memberSaving: false,
     members: [householdMembers[0].memberId],
     setMembers: vi.fn(),

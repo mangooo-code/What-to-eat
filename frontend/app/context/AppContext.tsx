@@ -70,6 +70,7 @@ interface AppContextValue {
   currentUser: User | null;
   currentUserLoading: boolean;
   loadCurrentUser: () => Promise<void>;
+  loadMembers: () => Promise<void>;
   memberSaving: boolean;
   members: string[];
   setMembers: React.Dispatch<React.SetStateAction<string[]>>;
@@ -256,35 +257,38 @@ export function AppProvider({ children }: { children: ReactNode }) {
       setCurrentUserLoading(false);
     }
   };
+  const loadMembers = async () => {
+    if (!authToken.get()) {
+      setHouseholdMembers([]);
+      setMembersLoading(false);
+      return;
+    }
+    setMembersLoading(true);
+    try {
+      const items = await memberService.list();
+      setHouseholdMembers(items);
+      setMembers((selected) => {
+        const valid = selected.filter((id) => items.some((item) => item.memberId === id));
+        if (valid.length) return valid;
+        const owner = items.find((item) => item.isOwner);
+        return owner ? [owner.memberId] : [];
+      });
+    } catch (error) {
+      say(`成员加载失败：${error instanceof Error ? error.message : "请稍后重试"}`);
+    } finally {
+      setMembersLoading(false);
+    }
+  };
   useEffect(() => {
     if (authToken.get()) {
       setPage("home");
       loadCurrentUser();
+      loadMembers();
+    } else {
+      setMembersLoading(false);
     }
   }, []);
 
-  useEffect(() => {
-    let active = true;
-    setMembersLoading(true);
-    memberService.list()
-      .then((items) => {
-        if (!active) return;
-        setHouseholdMembers(items);
-        setMembers((selected) => {
-          const valid = selected.filter((id) => items.some((item) => item.memberId === id));
-          if (valid.length) return valid;
-          const owner = items.find((item) => item.isOwner);
-          return owner ? [owner.memberId] : [];
-        });
-      })
-      .catch((error) => {
-        if (active) say(`成员加载失败：${error instanceof Error ? error.message : "请稍后重试"}`);
-      })
-      .finally(() => {
-        if (active) setMembersLoading(false);
-      });
-    return () => { active = false; };
-  }, []);
 
   const saveMember = async (): Promise<boolean> => {
     const name = newMemberName.trim();
@@ -478,6 +482,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     currentUser,
     currentUserLoading,
     loadCurrentUser,
+    loadMembers,
     memberSaving,
     members,
     setMembers,
