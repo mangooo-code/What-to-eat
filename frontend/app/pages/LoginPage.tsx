@@ -107,10 +107,10 @@ export function LoginPage() {
             onChange={(e) => setAgreed(e.target.checked)}
           />
           <span>
-            我已阅读并同意
-            <button onClick={() => setLegal("用户协议")}>《用户协议》</button>
-            和
-            <button onClick={() => setLegal("隐私政策")}>《隐私政策》</button>
+            我已阅读并同意 
+            {"\u300A"}<span className="legal-link" onClick={(e) => { e.preventDefault(); e.stopPropagation(); setLegal("用户协议"); }}>用户协议</span>{"\u300B"}
+             和 
+            {"\u300A"}<span className="legal-link" onClick={(e) => { e.preventDefault(); e.stopPropagation(); setLegal("隐私政策"); }}>隐私政策</span>{"\u300B"}
           </span>
         </label>
         <button className="primary" disabled={!enabled || submitting} onClick={submit}>

@@ -3,4 +3,6 @@ node_modules/
 .env*.local
 .next/
 out/
+.wrangler/
+.vinext/
 .DS_Store

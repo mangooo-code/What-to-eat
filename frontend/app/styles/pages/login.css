@@ -27,6 +27,38 @@
   margin-inline: auto;
 }
 
+@media (min-width: 900px) and (orientation: landscape) {
+  .login-page {
+    width: min(100%, 1100px);
+    display: grid;
+    grid-template-columns: minmax(320px, 460px) 1fr;
+    grid-template-areas:
+      "logo   logo"
+      "hero   subtitle"
+      "hero   form";
+    align-items: start;
+    column-gap: 48px;
+  }
+
+  .login-logo-header {
+    grid-area: logo;
+  }
+
+  .login-hero-image {
+    grid-area: hero;
+    width: 100%;
+    align-self: center;
+  }
+
+  .login-subtitle {
+    grid-area: subtitle;
+  }
+
+  .login-form {
+    grid-area: form;
+  }
+}
+
 .login-form {
   display: grid;
   gap: 18px;
@@ -44,9 +76,17 @@
   display: grid;
   grid-template-columns: auto 1fr;
   overflow: hidden;
-  border: 1px solid var(--line-strong);
+  border: 2px solid var(--line-strong);
   border-radius: 13px;
   background: var(--paper-raised);
+  box-shadow: 0 0 0 4px rgba(242, 154, 61, 0);
+  transition: border-color 0.75s ease, box-shadow 0.75s ease;
+}
+
+.phone-input:focus-within,
+.password-input:focus-within {
+  border-color: var(--orange);
+  box-shadow: 0 0 0 4px rgba(242, 154, 61, 0.35);
 }
 
 .phone-input b {
@@ -62,6 +102,12 @@
   min-height: 52px;
   padding: 12px;
   border: 0;
+}
+
+.phone-input input:focus,
+.password-input input:focus,
+.phone-input select:focus {
+  outline: none;
 }
 
 .password-input {
@@ -113,6 +159,12 @@
   text-decoration: underline;
 }
 
+.legal-link {
+  text-decoration: underline;
+  font-weight: 700;
+  cursor: pointer;
+}
+
 .other-login-title {
   text-align: center;
   font-size: 13px;
@@ -142,16 +194,22 @@
 }
 
 .phone-input {
-  grid-template-columns: 96px 1fr;
+  grid-template-columns: 80px 1fr;
 }
 
 .phone-input select {
   min-height: 52px;
-  padding: 0 34px 0 12px;
+  padding: 0 20px 0 10px;
   border: 0;
   border-right: 1px solid var(--line);
   border-radius: 0;
-  background: var(--paper-raised);
+  background-color: var(--paper-raised);
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23a47b60' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 6px center;
 }
 
 .other-login {
