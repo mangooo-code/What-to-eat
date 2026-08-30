@@ -5,7 +5,7 @@ import { Header } from "../components/Header";
 import { Placeholder } from "../components/Placeholder";
 
 export function ProfilePage() {
-  const { householdMembers, membersLoading, openRecipes, openMember, openDiet, setDialog } =
+  const { householdMembers, membersLoading, currentUser, openRecipes, openMember, openDiet, setDialog } =
     useApp();
   return (
     <>
@@ -14,10 +14,10 @@ export function ProfilePage() {
         <Placeholder />
         <div>
           <h2>
-            佳美 <span className="profile-tag">主用户</span>
+            {currentUser?.displayName || "我"} <span className="profile-tag">主用户</span>
           </h2>
-          <p>+86 800800</p>
-          <small>ID：102837658</small>
+          <p>{currentUser?.phoneNumber ?? ""}</p>
+          <small>ID：{currentUser?.id ?? ""}</small>
         </div>
       </div>
       <section className="block recipe-shortcuts">

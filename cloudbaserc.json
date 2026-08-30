@@ -36,6 +36,12 @@
         "target": "function:api",
         "enablePathTransmission": true,
         "enableAuth": false
+      },
+      {
+        "path": "/user",
+        "target": "function:api",
+        "enablePathTransmission": true,
+        "enableAuth": false
       }
     ]
   },

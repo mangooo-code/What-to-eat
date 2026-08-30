@@ -2,6 +2,8 @@
 import "../styles/pages/login.css";
 import { useApp } from "../context/AppContext";
 import { Placeholder } from "../components/Placeholder";
+import { authService } from "../services/authService";
+import { authToken } from "../services/authToken";
 
 export function LoginPage() {
   const {
@@ -20,21 +22,19 @@ export function LoginPage() {
     setLegal,
     go,
     say,
+    loadCurrentUser,
   } = useApp();
   const enabled = phone.trim() && password && agreed;
-  const submit = () => {
-    if (
-      countryCode === "+86" &&
-      phone.trim() === "800800" &&
-      password === "123456"
-    ) {
-      localStorage.setItem(
-        "wte_login_expires",
-        String(Date.now() + 12 * 60 * 60 * 1000),
-      );
+  const submit = async () => {
+    try {
+      const token = await authService.login({ phoneNumber: phone.trim(), password });
+      authToken.set(token);
+      await loadCurrentUser();
       setLoginError("");
       go("home");
-    } else setLoginError("账号或密码不正确，请使用测试账号登录");
+    } catch (error) {
+      setLoginError(error instanceof Error ? error.message : "账号或密码不正确");
+    }
   };
   return (
     <div className="login-page">

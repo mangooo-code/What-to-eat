@@ -1,11 +1,16 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { LoginPage } from "../pages/LoginPage";
 import { useApp } from "../context/AppContext";
+import { authService } from "../services/authService";
+import { authToken } from "../services/authToken";
 import { createAppState } from "./mockApp";
 
 vi.mock("../context/AppContext", () => ({ useApp: vi.fn() }));
+vi.mock("../services/authService", () => ({ authService: { login: vi.fn() } }));
+vi.mock("../services/authToken", () => ({ authToken: { set: vi.fn(), get: vi.fn(), clear: vi.fn() } }));
 const mockedUseApp = vi.mocked(useApp);
+const mockedLogin = vi.mocked(authService.login);
 
 function mockApp(overrides: Parameters<typeof createAppState>[0] = {}) {
   mockedUseApp.mockReturnValue(createAppState(overrides));
@@ -14,6 +19,7 @@ function mockApp(overrides: Parameters<typeof createAppState>[0] = {}) {
 describe("LoginPage", () => {
   beforeEach(() => {
     mockApp();
+    mockedLogin.mockReset();
   });
 
   it("renders the title and test-account hint", () => {
@@ -27,9 +33,10 @@ describe("LoginPage", () => {
     expect(screen.getByRole("button", { name: "登录" })).toBeDisabled();
   });
 
-  it("logs in and navigates home with the correct test credentials", () => {
+  it("logs in and navigates home with the correct test credentials", async () => {
     const go = vi.fn();
     const setLoginError = vi.fn();
+    mockedLogin.mockResolvedValue("signed-jwt-token");
     mockApp({
       phone: "800800",
       password: "123456",
@@ -41,13 +48,15 @@ describe("LoginPage", () => {
     const button = screen.getByRole("button", { name: "登录" });
     expect(button).not.toBeDisabled();
     fireEvent.click(button);
-    expect(go).toHaveBeenCalledWith("home");
+    await waitFor(() => expect(go).toHaveBeenCalledWith("home"));
+    expect(authToken.set).toHaveBeenCalledWith("signed-jwt-token");
     expect(setLoginError).toHaveBeenCalledWith("");
   });
 
-  it("shows an error and does not navigate with the wrong password", () => {
+  it("shows an error and does not navigate with the wrong password", async () => {
     const go = vi.fn();
     const setLoginError = vi.fn();
+    mockedLogin.mockRejectedValue(new Error("账号或密码不正确"));
     mockApp({
       phone: "800800",
       password: "wrong",
@@ -57,10 +66,8 @@ describe("LoginPage", () => {
     });
     render(<LoginPage />);
     fireEvent.click(screen.getByRole("button", { name: "登录" }));
+    await waitFor(() => expect(setLoginError).toHaveBeenCalledWith("账号或密码不正确"));
     expect(go).not.toHaveBeenCalled();
-    expect(setLoginError).toHaveBeenCalledWith(
-      "账号或密码不正确，请使用测试账号登录",
-    );
   });
 
   it("toggles password visibility", () => {

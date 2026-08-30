@@ -22,5 +22,6 @@ export {
 } from "./memberRepository";
 export {
   getSalt,
+  getUserById,
   verifyCredentials,
 } from "./userRepository";

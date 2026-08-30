@@ -8,8 +8,10 @@ import {
 } from "react";
 import { initialFoods } from "../lib/data";
 import type { Food, Page, ProfileData } from "../lib/types";
-import type { HouseholdMember } from "../types/domain";
+import type { HouseholdMember, User } from "../types/domain";
 import { memberService } from "../services/memberService";
+import { userService } from "../services/userService";
+import { authToken } from "../services/authToken";
 
 interface AppContextValue {
   page: Page;
@@ -65,6 +67,9 @@ interface AppContextValue {
   setPeople: React.Dispatch<React.SetStateAction<string[]>>;
   householdMembers: HouseholdMember[];
   membersLoading: boolean;
+  currentUser: User | null;
+  currentUserLoading: boolean;
+  loadCurrentUser: () => Promise<void>;
   memberSaving: boolean;
   members: string[];
   setMembers: React.Dispatch<React.SetStateAction<string[]>>;
@@ -169,6 +174,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [people, setPeople] = useState(["我", "阳", "妈妈"]);
   const [householdMembers, setHouseholdMembers] = useState<HouseholdMember[]>([]);
   const [membersLoading, setMembersLoading] = useState(true);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [currentUserLoading, setCurrentUserLoading] = useState(false);
   const [memberSaving, setMemberSaving] = useState(false);
   const [members, setMembers] = useState<string[]>([]);
   const [profileData, setProfileData] = useState<Record<string, ProfileData>>(
@@ -235,10 +242,25 @@ export function AppProvider({ children }: { children: ReactNode }) {
       return () => clearTimeout(t);
     }
   }, [page]);
+  const loadCurrentUser = async () => {
+    if (!authToken.get()) {
+      setCurrentUser(null);
+      return;
+    }
+    setCurrentUserLoading(true);
+    try {
+      setCurrentUser(await userService.getProfile());
+    } catch {
+      setCurrentUser(null);
+    } finally {
+      setCurrentUserLoading(false);
+    }
+  };
   useEffect(() => {
-    const expires = Number(localStorage.getItem("wte_login_expires") || 0);
-    if (expires > Date.now()) setPage("home");
-    else localStorage.removeItem("wte_login_expires");
+    if (authToken.get()) {
+      setPage("home");
+      loadCurrentUser();
+    }
   }, []);
 
   useEffect(() => {
@@ -388,7 +410,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
     }
   };
   const logout = () => {
-    localStorage.removeItem("wte_login_expires");
+    authToken.clear();
+    setCurrentUser(null);
     setDialog("");
     setPage("login");
   };
@@ -452,6 +475,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setPeople,
     householdMembers,
     membersLoading,
+    currentUser,
+    currentUserLoading,
+    loadCurrentUser,
     memberSaving,
     members,
     setMembers,

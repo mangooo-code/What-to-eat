@@ -5,6 +5,7 @@ import { getMethod } from "../../shared/validation/http";
 import { handleLogin } from "./handlers/login";
 import { handleInventory } from "./handlers/inventory";
 import { handleMembers } from "./handlers/members";
+import { handleUser } from "./handlers/user";
 
 export async function main(event: HttpEvent = {}): Promise<HttpResponse> {
   try {
@@ -20,6 +21,10 @@ export async function main(event: HttpEvent = {}): Promise<HttpResponse> {
 
     if (path.includes("/members")) {
       return await handleMembers(event);
+    }
+
+    if (path.includes("/user")) {
+      return await handleUser(event);
     }
 
     throw new AppError("ROUTE_NOT_FOUND", "Route not found", 404);

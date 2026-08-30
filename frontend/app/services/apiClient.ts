@@ -1,4 +1,5 @@
 import type { ApiResponse } from "../types/api";
+import { authToken } from "./authToken";
 
 const DEFAULT_TIMEOUT_MS = 10_000;
 
@@ -96,4 +97,9 @@ export class ApiClient {
   }
 }
 
-export const apiClient = new ApiClient();
+export const apiClient = new ApiClient({
+  getAuthHeaders: () => {
+    const token = authToken.get();
+    return token ? { Authorization: `Bearer ${token}` } : {};
+  },
+});
