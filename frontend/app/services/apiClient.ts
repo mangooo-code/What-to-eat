@@ -98,8 +98,10 @@ export class ApiClient {
 }
 
 export const apiClient = new ApiClient({
-  getAuthHeaders: () => {
+  getAuthHeaders: (): Record<string, string> => {
     const token = authToken.get();
-    return token ? { Authorization: `Bearer ${token}` } : {};
+    const headers: Record<string, string> = {};
+    if (token) headers.Authorization = `Bearer ${token}`;
+    return headers;
   },
 });

@@ -4,7 +4,14 @@ import type { ApiResponse, HttpResponse } from "../types/api";
 const headers = {
   "content-type": "application/json; charset=utf-8",
   "cache-control": "no-store",
+  "access-control-allow-origin": "*",
+  "access-control-allow-headers": "Content-Type, Authorization",
+  "access-control-allow-methods": "GET, POST, PATCH, DELETE, OPTIONS",
 };
+
+export function corsPreflightResponse(): HttpResponse {
+  return { statusCode: 204, headers, body: "" };
+}
 
 export function successResponse<T>(data: T, statusCode = 200): HttpResponse {
   const payload: ApiResponse<T> = { success: true, data };

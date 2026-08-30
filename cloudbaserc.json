@@ -1,62 +1,66 @@
 {
-  "version": "2.1",
-  "envId": "{{env.ENV_ID}}",
-  "functionRoot": "./backend/functions",
-  "functions": [
-    {
-      "name": "api",
-      "runtime": "Nodejs20.19",
-      "handler": "index.main",
-      "timeout": 10,
-      "memorySize": 256,
-      "installDependency": true,
-      "envVariables": {
-        "ENV_ID": "{{env.ENV_ID}}",
-        "JWT_SECRET": "{{env.JWT_SECRET}}",
-        "CLOUDBASE_API_KEY": "{{env.CLOUDBASE_API_KEY}}"
-      }
+    "envId": "{{env.ENV_ID}}",
+    "version": "2.1",
+    "$schema": "https://framework-1258016615.tcloudbaseapp.com/schema/latest.json",
+    "functionRoot": "./backend/functions",
+    "functions": [
+        {
+            "name": "api",
+            "runtime": "Nodejs20.19",
+            "handler": "index.main",
+            "timeout": 10,
+            "memorySize": 256,
+            "installDependency": true,
+            "envVariables": {
+                "ENV_ID": "{{env.ENV_ID}}",
+                "JWT_SECRET": "{{env.JWT_SECRET}}",
+                "CLOUDBASE_API_KEY": "{{env.CLOUDBASE_API_KEY}}"
+            }
+        }
+    ],
+    "gateway": {
+        "routes": [
+            {
+                "path": "/login",
+                "target": "function:api",
+                "enablePathTransmission": true,
+                "enableAuth": false
+            },
+            {
+                "path": "/inventory",
+                "target": "function:api",
+                "enablePathTransmission": true,
+                "enableAuth": false
+            },
+            {
+                "path": "/members",
+                "target": "function:api",
+                "enablePathTransmission": true,
+                "enableAuth": false
+            },
+            {
+                "path": "/user",
+                "target": "function:api",
+                "enablePathTransmission": true,
+                "enableAuth": false
+            }
+        ]
+    },
+    "database": {
+        "type": "postgresql",
+        "migrations": "./backend/sql/migrations"
+    },
+    "hosting": [
+        {
+            "name": "web",
+            "root": "./frontend",
+            "installCommand": "npm install",
+            "buildCommand": "npm run build:hosting",
+            "outputDir": "out"
+        }
+    ],
+    "framework": {
+        "name": "What-to-eat",
+        "plugins": {}
     }
-  ],
-  "gateway": {
-    "routes": [
-      {
-        "path": "/login",
-        "target": "function:api",
-        "enablePathTransmission": true,
-        "enableAuth": false
-      },
-      {
-        "path": "/inventory",
-        "target": "function:api",
-        "enablePathTransmission": true,
-        "enableAuth": false
-      },
-      {
-        "path": "/members",
-        "target": "function:api",
-        "enablePathTransmission": true,
-        "enableAuth": false
-      },
-      {
-        "path": "/user",
-        "target": "function:api",
-        "enablePathTransmission": true,
-        "enableAuth": false
-      }
-    ]
-  },
-  "database": {
-    "type": "postgresql",
-    "migrations": "./backend/sql/migrations"
-  },
-  "hosting": [
-    {
-      "name": "web",
-      "root": "./frontend",
-      "framework": "vite",
-      "installCommand": "npm install",
-      "buildCommand": "npm run build",
-      "outputDir": "dist"
-    }
-  ]
 }

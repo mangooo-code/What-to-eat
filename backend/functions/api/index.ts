@@ -1,5 +1,5 @@
 import { AppError } from "../../shared/errors/AppError";
-import { errorResponse } from "../../shared/errors/httpResponse";
+import { corsPreflightResponse, errorResponse } from "../../shared/errors/httpResponse";
 import type { HttpEvent, HttpResponse } from "../../shared/types/api";
 import { getMethod } from "../../shared/validation/http";
 import { handleLogin } from "./handlers/login";
@@ -8,10 +8,15 @@ import { handleMembers } from "./handlers/members";
 import { handleUser } from "./handlers/user";
 
 export async function main(event: HttpEvent = {}): Promise<HttpResponse> {
+  const method = getMethod(event);
+  if (method === "OPTIONS") {
+    return corsPreflightResponse();
+  }
+
   try {
     const path = event.path ?? "";
 
-    if (getMethod(event) === "POST" && path.endsWith("/login")) {
+    if (method === "POST" && path.endsWith("/login")) {
       return await handleLogin(event);
     }
 
