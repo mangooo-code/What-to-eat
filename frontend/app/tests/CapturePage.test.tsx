@@ -18,7 +18,7 @@ describe("CapturePage", () => {
 
   it("shows the camera upload section by default", () => {
     render(<CapturePage />);
-    expect(screen.getByText("对着冰箱或食材拍一张")).toBeInTheDocument();
+    expect(screen.getByText("拍下冰箱或食材")).toBeInTheDocument();
   });
 
   it("switches to the voice tab", () => {
@@ -35,13 +35,14 @@ describe("CapturePage", () => {
     expect(
       screen.getByText("轻点麦克风，口述刚刚买的食材"),
     ).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "开始语音录入" }).querySelector("img")).toHaveAttribute("src", "/assets/voice-analysis.png");
   });
 
   it("starts listening when the mic is tapped", () => {
     const setListening = vi.fn();
     mockApp({ captureTab: "voice", listening: false, setListening });
     render(<CapturePage />);
-    fireEvent.click(screen.getByRole("button", { name: "图标占位" }));
+    fireEvent.click(screen.getByRole("button", { name: "开始语音录入" }));
     expect(setListening).toHaveBeenCalledWith(true);
   });
 
@@ -50,7 +51,7 @@ describe("CapturePage", () => {
     const setListening = vi.fn();
     mockApp({ captureTab: "voice", listening: true, setInput, setListening });
     render(<CapturePage />);
-    fireEvent.click(screen.getByRole("button", { name: "图标占位" }));
+    fireEvent.click(screen.getByRole("button", { name: "完成语音录入" }));
     expect(setInput).toHaveBeenCalledWith("买了西红柿 2 个、鸡蛋 1 盒、牛肉半斤");
     expect(setListening).toHaveBeenCalledWith(false);
   });

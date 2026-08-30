@@ -2,31 +2,28 @@
 import "../styles/pages/home.css";
 import { useApp } from "../context/AppContext";
 import { Header } from "../components/Header";
-import { Placeholder } from "../components/Placeholder";
+import { AssetImage } from "../components/AssetImage";
 
 export function HomePage() {
   const { foods, go, setDialog, openRecipes } = useApp();
   return (
     <>
-      <Header title="今天吃什么？" sub="看看家里有什么，再帮你挑一道刚刚好的。" />
+      <Header title="今天想吃点什么？" sub="看看家里有什么，我来帮你挑。" />
       <section className="home-feature">
         <div className="feature-motion">
-          <span>动态大图占位</span>
-          <i />
-          <i />
-          <i />
+          <AssetImage name="home-hero.png" alt="开饭猫准备今天的一餐" className="home-hero-image" />
         </div>
         <div className="feature-copy">
-          <strong>今天的一餐，从家里有什么开始。</strong>
-          <small>此区域预留给后续动态视觉素材</small>
+          <strong>今天这顿，就从冰箱里找找灵感吧。</strong>
+          <small>不用想吃什么，我来帮你挑。</small>
         </div>
       </section>
       <div className="home-entries">
         <button type="button" onClick={() => go("fridge")}>
-          <Placeholder kind="icon" />
+          <AssetImage name="open-fridge.png" alt="打开冰箱" />
           <span>
             <strong>打开冰箱</strong>
-            <small>查看和管理家里的食材</small>
+            <small>看看家里还有什么</small>
           </span>
           <b>›</b>
         </button>
@@ -34,21 +31,21 @@ export function HomePage() {
           type="button"
           className="featured"
           onClick={() =>
-            foods.length ? go("needs") : setDialog("冰箱里还没记东西呢")
+            foods.length ? go("needs") : setDialog("冰箱还是空空的，先放点食材进来吧。")
           }
         >
-          <Placeholder kind="icon" />
+          <AssetImage name="help-me-decide.png" alt="帮我决定" />
           <span>
             <strong>帮我决定</strong>
-            <small>根据这一顿的需求帮你挑</small>
+            <small>告诉我这顿想怎么吃</small>
           </span>
           <b>›</b>
         </button>
         <button type="button" onClick={() => openRecipes("done")}>
-          <Placeholder kind="icon" />
+          <AssetImage name="my-recipes.png" alt="我的菜谱" />
           <span>
             <strong>我的菜谱</strong>
-            <small>查看做过和喜欢的菜谱</small>
+            <small>看看我们以前吃过什么</small>
           </span>
           <b>›</b>
         </button>

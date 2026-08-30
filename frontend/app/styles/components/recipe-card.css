@@ -11,9 +11,9 @@
 }
 
 .tags span {
-  border: 1px solid #999;
+  border: 1px solid var(--line-strong);
   border-radius: 99px;
-  background: #fff;
+  background: var(--paper-raised);
 }
 
 .recipe-body {
@@ -22,8 +22,8 @@
 
 .heart {
   padding: 7px 10px;
-  border: 1px solid #888;
-  background: #fff;
+  border: 1px solid var(--line-strong);
+  background: var(--paper-raised);
 }
 
 .heart.big {
@@ -72,7 +72,7 @@
 .saved-card small,
 .saved-card em,
 .saved-card i {
-  color: #666;
+  color: var(--muted);
   font-size: 12px;
   font-style: normal;
 }
@@ -107,8 +107,8 @@
 .saved-card {
   border: 0;
   border-radius: 15px;
-  background: #fff;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.055);
+  background: var(--paper-raised);
+  box-shadow: var(--shadow-soft);
 }
 
 .recipe-body,
@@ -121,7 +121,7 @@
 }
 
 .tags span {
-  border-color: #c6c6c6;
+  border-color: var(--line);
 }
 
 .saved-card {

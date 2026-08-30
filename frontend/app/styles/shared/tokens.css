@@ -1,18 +1,41 @@
 :root {
-  --ink: #191919;
-  --muted: #686868;
-  --line: #d2d2d2;
-  --paper: #fff;
+  --ink: #9b6342;
+  --ink-strong: #7a4d30;
+  --muted: #a47b60;
+  --line: #e4cdb8;
+  --line-strong: #cda47f;
+  --paper: #faf6ed;
+  --paper-raised: #fffaf1;
+  --cream-white: #fffdf8;
+  --butter: #fbe29d;
+  --butter-soft: #fff0c5;
+  --orange: #f29a3d;
+  --orange-hover: #e88b2f;
+  --orange-soft: #f8c98f;
+  --blue: #c0ddda;
+  --disabled: #eadfce;
+  --disabled-ink: #a58c74;
+  --danger: #ad5b49;
+  --danger-ink: #7d382d;
+  --shadow-soft: 0 4px 14px rgba(155, 99, 66, 0.09);
+  --shadow-raised: 0 10px 28px rgba(155, 99, 66, 0.13);
+  --overlay: rgba(122, 77, 48, 0.46);
 }
 
 html,
 body {
   margin: 0;
   min-height: 100%;
-  background: #e8e8e8;
+  background: var(--paper);
   color: var(--ink);
 }
 
 body {
   font-family: Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+  background-color: var(--paper);
+  background-image: url("/assets/default-background.png");
+  background-position: top center;
+  background-size: min(100vw, 1254px) auto;
+  background-repeat: repeat-y;
+  background-attachment: scroll;
 }

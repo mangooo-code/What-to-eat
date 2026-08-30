@@ -62,6 +62,6 @@ describe("EditPage", () => {
     mockApp({ foods, editIndex: 0, setDialog });
     render(<EditPage />);
     fireEvent.click(screen.getByText("删除食材"));
-    expect(setDialog).toHaveBeenCalledWith("删除这项食材？");
+    expect(setDialog).toHaveBeenCalledWith("要移除这项食材吗？");
   });
 });

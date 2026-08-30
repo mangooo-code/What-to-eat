@@ -1,5 +1,5 @@
 "use client";
-import { Placeholder } from "./Placeholder";
+import { AssetImage } from "./AssetImage";
 
 export function Choice({
   label,
@@ -17,7 +17,10 @@ export function Choice({
       className={`choice ${selected ? "selected" : ""}`}
       onClick={onClick}
     >
-      <Placeholder kind="icon" />
+      <AssetImage
+        name={label.startsWith("快速") ? "quick-solution.png" : "cook-at-your-own-pace.png"}
+        alt=""
+      />
       <span>
         <strong>{label}</strong>
         {help && <small>{help}</small>}

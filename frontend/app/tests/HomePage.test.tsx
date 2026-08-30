@@ -18,7 +18,7 @@ describe("HomePage", () => {
 
   it("renders the greeting", () => {
     render(<HomePage />);
-    expect(screen.getByText("今天吃什么？")).toBeInTheDocument();
+    expect(screen.getByText("今天想吃点什么？")).toBeInTheDocument();
   });
 
   it("navigates to the fridge", () => {
@@ -42,7 +42,7 @@ describe("HomePage", () => {
     mockApp({ foods: [], setDialog });
     render(<HomePage />);
     fireEvent.click(screen.getByText("帮我决定"));
-    expect(setDialog).toHaveBeenCalledWith("冰箱里还没记东西呢");
+    expect(setDialog).toHaveBeenCalledWith("冰箱还是空空的，先放点食材进来吧。");
   });
 
   it("opens saved recipes", () => {

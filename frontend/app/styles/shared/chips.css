@@ -12,7 +12,7 @@
 
 .choice small {
   margin-top: 6px;
-  color: #666;
+  color: var(--muted);
   line-height: 1.5;
   font-weight: 400;
 }
@@ -24,15 +24,16 @@
 
 .chips button {
   padding: 9px 12px;
-  border: 1px solid #999;
+  border: 1px solid var(--line-strong);
   border-radius: 99px;
-  background: #fff;
+  background: var(--paper-raised);
+  color: var(--ink);
 }
 
 .chips button.active {
-  background: #222;
-  color: #fff;
-  border-color: #222;
+  background: var(--butter);
+  color: var(--ink-strong);
+  border-color: var(--orange);
 }
 
 .option-grid .choice {
@@ -45,13 +46,13 @@
   padding: 15px;
   border: 0;
   border-radius: 12px;
-  background: #f1f1f1;
+  background: var(--paper-raised);
 }
 
 .choice.selected {
   border: 0;
-  background: #d9d9d9;
-  box-shadow: inset 0 0 0 1px #777;
+  background: var(--butter-soft);
+  box-shadow: inset 0 0 0 1px var(--orange);
 }
 
 .chips {
@@ -59,7 +60,7 @@
 }
 
 .chips button {
-  border-color: #c6c6c6;
+  border-color: var(--line);
 }
 
 .choice {

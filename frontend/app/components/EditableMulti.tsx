@@ -1,7 +1,7 @@
 "use client";
 import "../styles/components/profile-form.css";
 import { useState } from "react";
-import { Placeholder } from "./Placeholder";
+import { AssetImage } from "./AssetImage";
 
 export function EditableMulti({
   title,
@@ -26,7 +26,7 @@ export function EditableMulti({
   return (
     <section className="block">
       <h2>
-        <Placeholder kind="icon" />
+        <AssetImage name={allergy ? "allergens.png" : "foods-to-avoid.png"} alt="" />
         {title}
         <small className="selection-rule">多选</small>
       </h2>

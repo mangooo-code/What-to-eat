@@ -4,6 +4,7 @@ import "../styles/components/tabs.css";
 import { useApp } from "../context/AppContext";
 import { Header } from "../components/Header";
 import { Placeholder } from "../components/Placeholder";
+import { AssetImage } from "../components/AssetImage";
 
 export function CapturePage() {
   const {
@@ -23,8 +24,8 @@ export function CapturePage() {
   return (
     <>
       <Header
-        title="家里还有什么？"
-        sub="拍张照片最快，也可以直接告诉我。"
+        title="让我看看家里有什么"
+        sub="拍给我看，或者直接告诉我都可以。"
         back={() => go("fridge")}
       />
       <div className="tabs capture-tabs">
@@ -32,37 +33,34 @@ export function CapturePage() {
           className={captureTab === "camera" ? "active" : ""}
           onClick={() => setCaptureTab("camera")}
         >
-          <Placeholder kind="icon" />
           拍一张
         </button>
         <button
           className={captureTab === "album" ? "active" : ""}
           onClick={() => setCaptureTab("album")}
         >
-          <Placeholder kind="icon" />
           从相册选
         </button>
         <button
           className={captureTab === "voice" ? "active" : ""}
           onClick={() => setCaptureTab("voice")}
         >
-          <Placeholder kind="icon" />
           语音解析
         </button>
       </div>
       {photoMode ? (
         <section className="upload">
           <div className="upload-dropzone">
-            <Placeholder kind="icon" />
+            <AssetImage name={captureTab === "camera" ? "take-photo.png" : "choose-from-album.png"} alt="" className="upload-guide-image" />
             <h2>
               {captureTab === "camera"
-                ? "对着冰箱或食材拍一张"
-                : "点击打开手机 / 电脑相册"}
+                ? "拍下冰箱或食材"
+                : "从相册选照片"}
             </h2>
             <p>
               {captureTab === "camera"
-                ? "拍摄冰箱或食材即可"
-                : "支持多选食材照片"}
+                ? "尽量拍清楚一点，我会认得更准。"
+                : "一次可以选多张。"}
             </p>
           </div>
           <div className="upload-heading">
@@ -122,6 +120,7 @@ export function CapturePage() {
         <section className="voice-parse">
           <button
             className={`voice-trigger ${listening ? "listening" : ""}`}
+            aria-label={listening ? "完成语音录入" : "开始语音录入"}
             onClick={() => {
               if (listening) {
                 setInput("买了西红柿 2 个、鸡蛋 1 盒、牛肉半斤");
@@ -129,9 +128,9 @@ export function CapturePage() {
               } else setListening(true);
             }}
           >
-            <Placeholder kind="icon" />
+            <AssetImage name="voice-analysis.png" alt="" className="voice-trigger-image" />
           </button>
-          <h2>{listening ? "正在听……" : "轻点麦克风，口述刚刚买的食材"}</h2>
+          <h2>{listening ? "我在听……" : "轻点麦克风，口述刚刚买的食材"}</h2>
           <div className="voice-result">
             <strong>语音解析结果：</strong>
             <textarea
@@ -144,7 +143,7 @@ export function CapturePage() {
               disabled={!input}
               onClick={() => go("recognize")}
             >
-              <Placeholder kind="icon" />
+              <span className="ui-icon" aria-hidden="true">✓</span>
               确认填入食材
             </button>
           </div>
@@ -153,7 +152,7 @@ export function CapturePage() {
       {photoMode && (
         <>
           <div className="voice-box">
-            <Placeholder kind="icon" />
+            <AssetImage name="text-input.png" alt="" className="text-input-icon" />
             <input
               value={input}
               onChange={(e) => setInput(e.target.value)}

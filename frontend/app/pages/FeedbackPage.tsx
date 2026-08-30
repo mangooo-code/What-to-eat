@@ -2,7 +2,7 @@
 import "../styles/pages/feedback.css";
 import { useApp } from "../context/AppContext";
 import { Header } from "../components/Header";
-import { Placeholder } from "../components/Placeholder";
+import { AssetImage } from "../components/AssetImage";
 
 export function FeedbackPage() {
   const {
@@ -26,7 +26,10 @@ export function FeedbackPage() {
               key={x}
               onClick={() => setMealReaction(x)}
             >
-              <Placeholder />
+              <AssetImage
+                name={x === "好吃！" ? "delicious.png" : x === "一般" ? "average.png" : "dislike.png"}
+                alt=""
+              />
               <strong>{x}</strong>
             </button>
           ))}
@@ -53,7 +56,7 @@ export function FeedbackPage() {
       </button>
       {success && (
         <div className="success-state">
-          <b>✓</b>
+          <AssetImage name="got-it.png" alt="开饭猫记住了这次反馈" className="asset-state" />
           <h2>记住啦，下次继续帮你挑合适的。</h2>
         </div>
       )}

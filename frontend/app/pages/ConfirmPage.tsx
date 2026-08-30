@@ -4,7 +4,7 @@ import "../styles/components/food-modal.css";
 import { useApp } from "../context/AppContext";
 import { Field } from "../components/Field";
 import { Header } from "../components/Header";
-import { Placeholder } from "../components/Placeholder";
+import { FoodEmoji } from "../components/FoodEmoji";
 
 export function ConfirmPage() {
   const {
@@ -33,7 +33,7 @@ export function ConfirmPage() {
       <div className="confirm-list">
         {foods.map((f, i) => (
           <article className="confirm-item" key={`${f.name}${i}`}>
-            <Placeholder kind="icon" />
+            <FoodEmoji name={f.name} />
             <span>
               <strong>{f.name || "未命名食材"}</strong>
               <small>

@@ -3,7 +3,7 @@ import "../styles/components/nav.css";
 import "../styles/components/member-modal.css";
 import { useState, type ReactNode } from "react";
 import { useApp } from "../context/AppContext";
-import { Placeholder } from "./Placeholder";
+import { AssetImage } from "./AssetImage";
 import { ProfileForm } from "./ProfileForm";
 import { inventoryService } from "../services/inventoryService";
 
@@ -53,21 +53,21 @@ export function Shell({
         className={page === "fridge" ? "active" : ""}
         onClick={() => go("fridge")}
       >
-        <Placeholder kind="icon" />
+        <AssetImage name="fridge.png" alt="冰箱" />
         冰箱
       </button>
       <button
         className={page === "home" ? "active" : ""}
         onClick={() => go("home")}
       >
-        <Placeholder kind="icon" />
+        <AssetImage name="what-to-eat-today.png" alt="今天吃什么" />
         今天吃什么
       </button>
       <button
         className={page === "profile" ? "active" : ""}
         onClick={() => go("profile")}
       >
-        <Placeholder kind="icon" />
+        <AssetImage name="profile.png" alt="我的" />
         我的
       </button>
     </nav>
@@ -85,7 +85,7 @@ export function Shell({
               ×
             </button>
             <h2>{legal}</h2>
-            <p>这里是「{legal}」的低保真内容占位。</p>
+            <p>「{legal}」正在开发中</p>
           </div>
         </div>
       )}
@@ -156,8 +156,8 @@ export function Shell({
             <p>
               {dialog.includes("退出")
                 ? "退出后将返回登录页，不会删除冰箱、档案和菜谱数据。"
-                : dialog.includes("删除")
-                  ? "删除后，这项食材不会再参与菜谱推荐。"
+                : dialog.includes("删除") || dialog.includes("移除")
+                  ? "移除后，这项食材不会再参与菜谱推荐。"
                   : dialog.includes("结束")
                     ? "结束后不会更新冰箱库存，也不会生成本次制作记录。"
                     : "请确认本次操作。"}
@@ -170,7 +170,7 @@ export function Shell({
                 onClick={async () => {
                   if (dialog.includes("退出")) logout();
                   else {
-                    if (dialog.includes("删除")) {
+                    if (dialog.includes("删除") || dialog.includes("移除")) {
                       const ingredient = foods[editIndex];
                       if (!ingredient?.id) {
                         say("删除失败：库存数据缺少稳定 ID");

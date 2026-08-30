@@ -22,10 +22,19 @@ describe("LoginPage", () => {
     mockedLogin.mockReset();
   });
 
-  it("renders the title and test-account hint", () => {
+  it("renders the centered brand logo and test-account hint", () => {
     render(<LoginPage />);
-    expect(screen.getByText("今天吃什么")).toBeInTheDocument();
+    expect(screen.getByAltText("开饭猫")).toHaveAttribute("src", "/assets/logo-characters.png");
     expect(screen.getByText("+86 800800")).toBeInTheDocument();
+  });
+
+  it("shows a loading state while login is pending", () => {
+    mockedLogin.mockReturnValue(new Promise(() => {}));
+    mockApp({ phone: "800800", password: "123456", agreed: true });
+    render(<LoginPage />);
+    fireEvent.click(screen.getByRole("button", { name: "登录" }));
+    expect(screen.getByText("正在登录中～")).toBeInTheDocument();
+    expect(screen.getByAltText("开饭猫正在登录")).toHaveAttribute("src", "/assets/login-loading.png");
   });
 
   it("disables the login button until phone, password and agreement are set", () => {

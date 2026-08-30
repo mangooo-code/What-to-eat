@@ -3,6 +3,7 @@ import "../styles/pages/recipe.css";
 import { useApp } from "../context/AppContext";
 import { Header } from "../components/Header";
 import { Placeholder } from "../components/Placeholder";
+import { FoodEmoji } from "../components/FoodEmoji";
 import { steps } from "../lib/data";
 
 export function RecipePage() {
@@ -27,12 +28,12 @@ export function RecipePage() {
             <h3>家里已有</h3>
             <div className="mini-cards">
               <span>
-                <Placeholder kind="icon" />
+                <FoodEmoji name="番茄" />
                 <em>番茄</em>
                 <b>2 个</b>
               </span>
               <span>
-                <Placeholder kind="icon" />
+                <FoodEmoji name="鸡蛋" />
                 <em>鸡蛋</em>
                 <b>3 个</b>
               </span>
@@ -48,17 +49,17 @@ export function RecipePage() {
             <h3>调料</h3>
             <div className="mini-cards">
               <span>
-                <Placeholder kind="icon" />
+                <FoodEmoji name="盐" />
                 <em>盐</em>
                 <b>适量</b>
               </span>
               <span>
-                <Placeholder kind="icon" />
+                <FoodEmoji name="食用油" />
                 <em>食用油</em>
                 <b>适量</b>
               </span>
               <span>
-                <Placeholder kind="icon" />
+                <FoodEmoji name="白糖" />
                 <em>白糖</em>
                 <b>少许</b>
               </span>

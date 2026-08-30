@@ -1,7 +1,7 @@
 "use client";
 import "../styles/components/loading.css";
+import { AssetImage } from "./AssetImage";
 import { useEffect, useState } from "react";
-import { Placeholder } from "./Placeholder";
 
 export function LoadingSequence({ texts }: { texts: string[] }) {
   const [i, setI] = useState(0);
@@ -16,8 +16,8 @@ export function LoadingSequence({ texts }: { texts: string[] }) {
     <div className="center-state loading-state">
       <span className="spinner" />
       <h1>{texts[i]}</h1>
-      <p>正在为这一顿缩小选择范围。</p>
-      <Placeholder wide />
+      <p>快选好啦，再等我一下。</p>
+      <AssetImage name="ai-decision-loading.png" alt="开饭猫正在帮你挑选菜谱" className="asset-state ai-loading-image" />
     </div>
   );
 }

@@ -52,7 +52,7 @@ p {
 .notice {
   margin: 18px 0;
   padding: 12px;
-  background: #eee;
+  background: var(--butter-soft);
   font-size: 13px;
 }
 
@@ -61,7 +61,7 @@ p {
     width: calc(100% - 64px);
     min-height: calc(100vh - 64px);
     margin: 32px;
-    border: 1px solid #c9c9c9;
+    border: 1px solid var(--line);
   }
 }
 
@@ -90,7 +90,7 @@ p {
 }
 
 .app-shell {
-  background: #f7f7f7;
+  background: transparent;
 }
 
 .page {
@@ -128,7 +128,7 @@ h1 {
 .sticky-actions {
   margin-top: 32px;
   padding: 16px 0 4px;
-  background: linear-gradient(to bottom, rgba(247, 247, 247, 0), #f7f7f7 20%);
+  background: rgba(250, 246, 237, 0.92);
 }
 
 @media (min-width: 800px) {
@@ -138,7 +138,7 @@ h1 {
     margin: 32px auto;
     border: 0;
     border-radius: 20px;
-    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.06);
+    box-shadow: var(--shadow-raised);
   }
 }
 

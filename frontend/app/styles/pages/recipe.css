@@ -13,7 +13,7 @@
 
 .ingredients p {
   padding-bottom: 12px;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid var(--line);
 }
 
 .ingredient-groups {
@@ -39,7 +39,7 @@
 
 .mini-cards b {
   font-weight: 400;
-  color: #666;
+  color: var(--muted);
 }
 
 .step-list {
@@ -68,7 +68,7 @@
   padding: 17px;
   border: 0;
   border-radius: 12px;
-  background: #f1f1f1;
+  background: var(--butter-soft);
 }
 
 .mini-cards {
@@ -77,8 +77,8 @@
 
 .mini-cards > span {
   border: 0;
-  background: #fff;
-  box-shadow: 0 2px 7px rgba(0, 0, 0, 0.045);
+  background: var(--paper-raised);
+  box-shadow: var(--shadow-soft);
 }
 
 .mini-cards > span {
@@ -108,8 +108,8 @@
   gap: 14px;
   padding: 16px 18px;
   border-radius: 13px;
-  background: #fff;
-  box-shadow: 0 3px 11px rgba(0, 0, 0, 0.055);
+  background: var(--paper-raised);
+  box-shadow: var(--shadow-soft);
 }
 
 .step-preview > span {
@@ -118,11 +118,11 @@
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: #222;
-  color: #fff;
+  background: var(--orange);
+  color: var(--paper-raised);
   font-weight: 700;
 }
 
 .step-preview small {
-  color: #666;
+  color: var(--muted);
 }

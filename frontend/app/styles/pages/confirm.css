@@ -6,7 +6,7 @@
 }
 
 .confirm-item summary span {
-  color: #666;
+  color: var(--muted);
   font-size: 12px;
   font-weight: 400;
 }
@@ -48,8 +48,8 @@
 .confirm-item {
   margin-bottom: 16px;
   border: 0;
-  background: #fff;
-  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
+  background: var(--paper-raised);
+  box-shadow: var(--shadow-soft);
 }
 
 .confirm-item summary {
@@ -64,7 +64,7 @@
 .add-row {
   border: 0;
   border-radius: 12px;
-  background: #ececec;
+  background: var(--butter-soft);
 }
 
 .confirm-item summary {
@@ -112,7 +112,7 @@
   margin: 0;
   padding: 15px 16px;
   border-radius: 13px;
-  background: #fff;
+  background: var(--paper-raised);
 }
 
 .confirm-list .confirm-item .icon-placeholder {
@@ -131,15 +131,15 @@
 
 .confirm-list .confirm-item small {
   margin-top: 5px;
-  color: #666;
+  color: var(--muted);
   font-size: 12px;
   white-space: normal;
 }
 
 .confirm-edit-button {
   padding: 8px 12px;
-  border: 1px solid #999;
-  background: #fff;
+  border: 1px solid var(--line-strong);
+  background: var(--paper-raised);
 }
 
 @media (max-width: 620px) {

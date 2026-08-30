@@ -3,7 +3,7 @@ import "../styles/pages/needs.css";
 import { useApp } from "../context/AppContext";
 import { Choice } from "../components/Choice";
 import { Header } from "../components/Header";
-import { Placeholder } from "../components/Placeholder";
+import { AssetImage } from "../components/AssetImage";
 import { limits } from "../lib/data";
 
 export function NeedsPage() {
@@ -69,7 +69,7 @@ export function NeedsPage() {
                 {member.name}
               </button>
             ))}
-            {membersLoading && <span>成员加载中……</span>}
+            {membersLoading && <span className="member-loading"><AssetImage name="general-loading.png" alt="" />成员加载中……</span>}
             <button onClick={() => openMember("needs")}>＋ 添加成员</button>
           </div>
         </section>
@@ -83,7 +83,16 @@ export function NeedsPage() {
                   key={x}
                   onClick={() => setTaste(x)}
                 >
-                  <Placeholder kind="icon" />
+                  <AssetImage
+                    name={{
+                      "按平时口味": "based-on-usual-taste.png",
+                      "重口过瘾": "bold-and-satisfying.png",
+                      "家常下饭": "home-style-meal.png",
+                      "清淡爽口": "light-and-refreshing.png",
+                      "健康轻食": "healthy-light-meal.png",
+                    }[x]!}
+                    alt=""
+                  />
                   {x}
                 </button>
               ),

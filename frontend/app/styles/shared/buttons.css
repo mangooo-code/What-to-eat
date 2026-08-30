@@ -1,17 +1,17 @@
 .primary {
   width: 100%;
   min-height: 56px;
-  border: 1px solid #111;
+  border: 1px solid var(--orange);
   border-radius: 10px;
-  background: #171717;
-  color: #fff;
+  background: var(--orange);
+  color: var(--paper-raised);
   font-weight: 700;
 }
 
 .primary:disabled {
-  border-color: #aaa;
-  background: #d6d6d6;
-  color: #888;
+  border-color: var(--line);
+  background: var(--disabled);
+  color: var(--disabled-ink);
   cursor: not-allowed;
 }
 
@@ -24,20 +24,30 @@
 }
 
 .danger {
-  background: #111 !important;
-  color: #fff !important;
+  background: var(--danger) !important;
+  color: var(--paper-raised) !important;
 }
 
 .secondary {
   min-height: 44px;
   padding: 10px 18px;
-  border: 1px solid #333;
+  border: 1px solid var(--line-strong);
   border-radius: 8px;
-  background: #fff;
+  background: var(--paper-raised);
+  color: var(--ink);
   font-weight: 700;
 }
 
 .primary,
 .secondary {
   border-radius: 12px;
+}
+
+.primary:not(:disabled):hover {
+  background: var(--orange-hover);
+}
+
+.secondary:not(:disabled):hover {
+  border-color: var(--orange);
+  background: var(--butter-soft);
 }

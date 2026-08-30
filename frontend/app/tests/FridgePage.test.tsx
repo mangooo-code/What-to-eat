@@ -65,16 +65,16 @@ describe("FridgePage", () => {
     vi.spyOn(inventoryService, "list").mockResolvedValueOnce({ ...snapshot, items: [] });
     mockApp({ foods: [], fridgePlace: "冷藏" });
     render(<FridgePage />);
-    expect(await screen.findByText("这里还没有食材")).toBeInTheDocument();
+    expect(await screen.findByText("冰箱里还没记下什么食材。")).toBeInTheDocument();
   });
 
-  it("opens the existing add-food form", async () => {
-    const setFoodModal = vi.fn();
-    mockApp({ foods, setFoodModal });
+  it("opens the ingredient capture flow", async () => {
+    const go = vi.fn();
+    mockApp({ foods, go });
     render(<FridgePage />);
     await screen.findByText("番茄");
     fireEvent.click(screen.getByText("＋ 添加食材"));
-    expect(setFoodModal).toHaveBeenCalledWith("add");
+    expect(go).toHaveBeenCalledWith("capture");
   });
 
   it("opens the summary modal for a tapped food", async () => {
@@ -95,7 +95,7 @@ describe("FridgePage", () => {
     expect(await screen.findByText("存放于：冷藏")).toBeInTheDocument();
     fireEvent.click(screen.getByText("移除食材"));
     expect(setFoodModal).toHaveBeenCalledWith(null);
-    expect(setDialog).toHaveBeenCalledWith("删除这项食材？");
+    expect(setDialog).toHaveBeenCalledWith("要移除这项食材吗？");
   });
 
   it("shows the edit form and returns to the summary on cancel", async () => {

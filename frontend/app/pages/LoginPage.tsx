@@ -1,11 +1,13 @@
 "use client";
+import { useState } from "react";
 import "../styles/pages/login.css";
 import { useApp } from "../context/AppContext";
-import { Placeholder } from "../components/Placeholder";
+import { AssetImage } from "../components/AssetImage";
 import { authService } from "../services/authService";
 import { authToken } from "../services/authToken";
 
 export function LoginPage() {
+  const [submitting, setSubmitting] = useState(false);
   const {
     countryCode,
     setCountryCode,
@@ -27,6 +29,7 @@ export function LoginPage() {
   } = useApp();
   const enabled = phone.trim() && password && agreed;
   const submit = async () => {
+    setSubmitting(true);
     try {
       const token = await authService.login({ phoneNumber: phone.trim(), password });
       authToken.set(token);
@@ -35,14 +38,24 @@ export function LoginPage() {
       go("home");
     } catch (error) {
       setLoginError(error instanceof Error ? error.message : "账号或密码不正确");
+    } finally {
+      setSubmitting(false);
     }
   };
+  if (submitting) {
+    return (
+      <div className="login-loading-state" role="status" aria-live="polite">
+        <AssetImage name="login-loading.png" alt="开饭猫正在登录" className="login-loading-image" />
+        <h1>正在登录中～</h1>
+      </div>
+    );
+  }
   return (
     <div className="login-page">
-      <header>
-        <h1>今天吃什么</h1>
+      <header className="login-logo-header">
+        <AssetImage name="logo-characters.png" alt="开饭猫" className="login-logo" />
       </header>
-      <Placeholder wide />
+      <AssetImage name="login-hero.png" alt="开饭猫欢迎你" className="asset-hero login-hero-image" />
       <p className="login-subtitle">手机号密码登录</p>
       <div className="login-form">
         <label>
@@ -100,7 +113,7 @@ export function LoginPage() {
             <button onClick={() => setLegal("隐私政策")}>《隐私政策》</button>
           </span>
         </label>
-        <button className="primary" disabled={!enabled} onClick={submit}>
+        <button className="primary" disabled={!enabled || submitting} onClick={submit}>
           登录
         </button>
         <p className="other-login-title">其他登录方式</p>
@@ -109,13 +122,13 @@ export function LoginPage() {
             aria-label="微信登录"
             onClick={() => say("该登录方式暂未开放")}
           >
-            <Placeholder kind="icon" />
+            <AssetImage name="wechat-icon.png" alt="" />
           </button>
           <button
             aria-label="Apple 登录"
             onClick={() => say("该登录方式暂未开放")}
           >
-            <Placeholder kind="icon" />
+            <AssetImage name="apple-icon.png" alt="" />
           </button>
         </div>
       </div>

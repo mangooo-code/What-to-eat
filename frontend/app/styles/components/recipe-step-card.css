@@ -5,7 +5,7 @@
 }
 
 .detail-step.is-complete {
-  background: #eee;
+  background: var(--butter-soft);
 }
 
 .step-number {
@@ -14,8 +14,8 @@
   width: 38px;
   height: 38px;
   border-radius: 50%;
-  background: #222;
-  color: #fff;
+  background: var(--orange);
+  color: var(--paper-raised);
   font-weight: 700;
 }
 
@@ -32,7 +32,7 @@
 }
 
 .step-title strong {
-  color: #666;
+  color: var(--muted);
   font-size: 12px;
   white-space: nowrap;
 }
@@ -48,7 +48,7 @@
   gap: 12px;
   margin: 12px 0;
   padding: 9px 11px;
-  background: #eee;
+  background: var(--butter-soft);
 }
 
 .compact-timer b {
@@ -63,8 +63,8 @@
 .compact-timer button,
 .complete-action {
   padding: 7px 10px;
-  border: 1px solid #777;
-  background: #fff;
+  border: 1px solid var(--line-strong);
+  background: var(--paper-raised);
 }
 
 .complete-action {
@@ -90,8 +90,8 @@
 .detail-step {
   border: 0;
   border-radius: 15px;
-  background: #fff;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.055);
+  background: var(--paper-raised);
+  box-shadow: var(--shadow-soft);
 }
 
 .detail-step {

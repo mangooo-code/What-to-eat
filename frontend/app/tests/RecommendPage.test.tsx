@@ -53,7 +53,7 @@ describe("RecommendPage", () => {
     mockApp({ say, setBatch });
     render(<RecommendPage />);
     fireEvent.click(screen.getByText("换一批"));
-    expect(say).toHaveBeenCalledWith("再换几道看看……");
+    expect(say).toHaveBeenCalledWith("没事，我再帮你挑几道。");
     act(() => {
       vi.advanceTimersByTime(800);
     });

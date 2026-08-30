@@ -5,19 +5,27 @@ textarea {
   color: inherit;
 }
 
+input:focus,
+select:focus,
+textarea:focus {
+  outline: 2px solid var(--orange-soft);
+  outline-offset: 1px;
+  border-color: var(--orange);
+}
+
 .block {
   padding-top: 22px;
 }
 
 .recipe-card {
-  border: 1px solid #aaa;
-  background: #fff;
+  border: 1px solid var(--line);
+  background: var(--paper-raised);
 }
 
 .dialog {
   width: min(100%, 420px);
   padding: 22px;
-  background: #fff;
+  background: var(--paper-raised);
 }
 
 input,
@@ -46,8 +54,8 @@ textarea,
 .recipe-card {
   border: 0;
   border-radius: 15px;
-  background: #fff;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.055);
+  background: var(--paper-raised);
+  box-shadow: var(--shadow-soft);
 }
 
 .block {
@@ -65,5 +73,5 @@ textarea,
 .dialog {
   border: 0;
   border-radius: 16px;
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.18);
+  box-shadow: var(--shadow-raised);
 }

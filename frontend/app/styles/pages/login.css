@@ -3,18 +3,28 @@
   margin: 0 auto;
 }
 
-.login-page > header {
-  margin-bottom: 24px;
+.login-logo-header {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  margin-bottom: -18px;
 }
 
-.login-page > header h1 {
-  margin-bottom: 8px;
-  font-size: 34px;
+.login-logo {
+  display: block;
+  width: min(72%, 360px);
+  height: auto;
+  object-fit: contain;
 }
 
 .login-page > .image-placeholder.wide {
   height: 240px;
   border-radius: 18px;
+}
+
+.login-hero-image {
+  width: 95%;
+  margin-inline: auto;
 }
 
 .login-form {
@@ -34,16 +44,16 @@
   display: grid;
   grid-template-columns: auto 1fr;
   overflow: hidden;
-  border: 1px solid #aaa;
+  border: 1px solid var(--line-strong);
   border-radius: 13px;
-  background: #fff;
+  background: var(--paper-raised);
 }
 
 .phone-input b {
   display: grid;
   place-items: center;
   padding: 0 14px;
-  border-right: 1px solid #ddd;
+  border-right: 1px solid var(--line);
 }
 
 .phone-input input,
@@ -62,7 +72,7 @@
   border: 0;
   background: none;
   padding: 0 14px;
-  color: #666;
+  color: var(--muted);
 }
 
 .test-account {
@@ -71,12 +81,12 @@
   flex-wrap: wrap;
   padding: 14px;
   border-radius: 12px;
-  background: #ededed;
+  background: var(--butter-soft);
   font-size: 13px;
 }
 
 .login-error {
-  color: #8b1f1f;
+  color: var(--danger);
   font-size: 13px;
 }
 
@@ -128,7 +138,7 @@
 .login-subtitle {
   margin: 16px 0 0;
   font-size: 16px;
-  color: #555;
+  color: var(--muted);
 }
 
 .phone-input {
@@ -139,9 +149,9 @@
   min-height: 52px;
   padding: 0 34px 0 12px;
   border: 0;
-  border-right: 1px solid #ddd;
+  border-right: 1px solid var(--line);
   border-radius: 0;
-  background: #fff;
+  background: var(--paper-raised);
 }
 
 .other-login {
@@ -157,10 +167,30 @@
   padding: 0;
   border: 0;
   border-radius: 50%;
-  background: #e8e8e8;
+  background: var(--butter-soft);
 }
 
 .other-login .icon-placeholder {
   width: 30px;
   height: 28px;
+}
+
+.login-loading-state {
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 22px;
+  min-height: calc(100vh - 180px);
+  text-align: center;
+}
+
+.login-loading-image {
+  display: block;
+  width: min(72vw, 360px);
+  height: auto;
+  object-fit: contain;
+}
+
+.login-loading-state h1 {
+  margin: 0;
 }

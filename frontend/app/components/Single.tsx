@@ -1,6 +1,6 @@
 "use client";
 import "../styles/components/profile-form.css";
-import { Placeholder } from "./Placeholder";
+import { AssetImage } from "./AssetImage";
 
 export function Single({
   title,
@@ -16,7 +16,7 @@ export function Single({
   return (
     <section className="block">
       <h2>
-        <Placeholder kind="icon" />
+        <AssetImage name={title.includes("口味") ? "preferred-taste.png" : "dietary-preferences.png"} alt="" />
         {title}
         <small className="selection-rule">单选</small>
       </h2>

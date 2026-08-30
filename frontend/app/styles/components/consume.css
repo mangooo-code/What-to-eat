@@ -12,7 +12,7 @@
 .consume input {
   width: 75px;
   padding: 10px;
-  border: 1px solid #999;
+  border: 1px solid var(--line-strong);
 }
 
 @media (min-width: 800px) {
@@ -24,8 +24,8 @@
 .consume {
   border: 0;
   border-radius: 15px;
-  background: #fff;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.055);
+  background: var(--paper-raised);
+  box-shadow: var(--shadow-soft);
 }
 
 .consume-grid {

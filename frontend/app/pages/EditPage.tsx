@@ -64,7 +64,7 @@ export function EditPage() {
         </button>
         <button
           className="danger-link"
-          onClick={() => setDialog("删除这项食材？")}
+          onClick={() => setDialog("要移除这项食材吗？")}
         >
           删除食材
         </button>

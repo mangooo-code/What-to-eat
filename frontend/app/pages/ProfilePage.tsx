@@ -2,7 +2,7 @@
 import "../styles/pages/profile.css";
 import { useApp } from "../context/AppContext";
 import { Header } from "../components/Header";
-import { Placeholder } from "../components/Placeholder";
+import { AssetImage } from "../components/AssetImage";
 
 export function ProfilePage() {
   const { householdMembers, membersLoading, currentUser, openRecipes, openMember, openDiet, setDialog } =
@@ -11,7 +11,7 @@ export function ProfilePage() {
     <>
       <Header title="我的" />
       <div className="person">
-        <Placeholder />
+        <AssetImage name="default-avatar.png" alt="默认头像" className="profile-avatar" />
         <div>
           <h2>
             {currentUser?.displayName || "我"} <span className="profile-tag">主用户</span>
@@ -24,7 +24,7 @@ export function ProfilePage() {
         <h2>我的菜谱</h2>
         <div>
           <button type="button" onClick={() => openRecipes("done")}>
-            <Placeholder kind="icon" />
+            <AssetImage name="recipe-history.png" alt="历史菜谱" />
             <span>
               <strong>历史菜谱</strong>
               <small>8 条做饭记录</small>
@@ -32,7 +32,7 @@ export function ProfilePage() {
             <b>›</b>
           </button>
           <button type="button" onClick={() => openRecipes("liked")}>
-            <Placeholder kind="icon" />
+            <AssetImage name="favorite-recipes.png" alt="喜欢的菜谱" />
             <span>
               <strong>喜欢的菜谱</strong>
               <small>5 道心水菜</small>
@@ -55,7 +55,7 @@ export function ProfilePage() {
           </button>
         </div>
         <div className="profile-list">
-          {membersLoading && <p>成员加载中……</p>}
+          {membersLoading && <div className="inline-state"><AssetImage name="general-loading.png" alt="成员加载中" className="asset-state" /><p>成员加载中……</p></div>}
           {householdMembers.map((member) => {
             return (
               <button

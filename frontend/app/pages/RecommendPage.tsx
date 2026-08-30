@@ -14,7 +14,7 @@ export function RecommendPage() {
     <>
       <Header
         title="今天可以吃这些"
-        sub="按照家里的食材和你刚才的需求，先挑了 3 道。"
+        sub="照着家里的食材和你的想法，我挑了这 3 道。"
         back={() => go("needs")}
       />
       <div className="recipe-grid">
@@ -60,11 +60,11 @@ export function RecommendPage() {
         ))}
       </div>
       <div className="bottom-question">
-        <p>这几道都不太合适？</p>
+        <p>都没看上？</p>
         <button
           className="secondary"
           onClick={() => {
-            say("再换几道看看……");
+            say("没事，我再帮你挑几道。");
             setTimeout(() => setBatch(1), 800);
           }}
         >

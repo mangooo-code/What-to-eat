@@ -6,13 +6,16 @@ import { useApp } from "../context/AppContext";
 import { ExpiryTag } from "../components/ExpiryTag";
 import { Field } from "../components/Field";
 import { Header } from "../components/Header";
-import { Placeholder } from "../components/Placeholder";
+import { AssetImage } from "../components/AssetImage";
+import { FoodEmoji } from "../components/FoodEmoji";
 import { inventoryService, type InventorySnapshot } from "../services/inventoryService";
 import type { Food } from "../lib/types";
 import type { Ingredient } from "../types/domain";
 
 const placeByKey = { fridge: "冷藏", freezer: "冷冻", pantry: "常温" } as const;
 const keyByPlace = { 冷藏: "fridge", 冷冻: "freezer", 常温: "pantry" } as const;
+const tabIconByPlace = { 冷藏: "open-fridge.png", 冷冻: "refrigerator.png", 常温: "pantry.png" } as const;
+const backgroundByPlace = { 冷藏: "refrigerator-background.png", 冷冻: "freezer-background.png", 常温: "pantry-background.png" } as const;
 
 function daysUntil(expiryDate: string | null): number {
   if (!expiryDate) return 0;
@@ -55,6 +58,7 @@ export function FridgePage() {
     setNewFood,
     setDialog,
     say,
+    go,
   } = useApp();
   const [snapshot, setSnapshot] = useState<InventorySnapshot | null>(null);
   const [inventoryFoods, setInventoryFoods] = useState<Food[]>([]);
@@ -98,7 +102,7 @@ export function FridgePage() {
     const locationId = locationsByKey[locationKey];
     const unitTypeId = unitsByName[newFood.unit];
     if (!locationId || !unitTypeId) {
-      say("库存基础数据不完整，请刷新后重试");
+      say("食材信息加载出了点问题，请刷新后重试。");
       return;
     }
     setSaving(true);
@@ -138,8 +142,8 @@ export function FridgePage() {
   return (
     <>
       <Header
-        title="家里还有这些"
-        sub="冷藏、冷冻和常温分开维护，找起来更清楚。"
+        title="家里还有什么？"
+        sub="家里的食材，都帮你整理在这里啦。"
       />
       <div className="storage-toolbar">
         <div className="storage-tabs">
@@ -152,26 +156,27 @@ export function FridgePage() {
                 setFridgePage(0);
               }}
             >
+              <AssetImage name={tabIconByPlace[place as keyof typeof tabIconByPlace]} alt="" className="storage-tab-icon" />
               <strong>{place}</strong>
               <small>{inventoryFoods.filter((f) => f.place === place).length} 种</small>
             </button>
           ))}
         </div>
-        <button className="storage-add" disabled={loading || !snapshot} onClick={() => {
-          setNewFood({ name: "", qty: 1, unit: "个", place: fridgePlace, days: 3 });
-          setFoodModal("add");
-        }}>
+        <button className="storage-add" disabled={loading || !snapshot} onClick={() => go("capture")}>
           ＋ 添加食材
         </button>
       </div>
-      <section className="storage-pane">
+      <section
+        className="storage-pane"
+        style={{ backgroundImage: `url(/assets/${backgroundByPlace[fridgePlace as keyof typeof backgroundByPlace]})` }}
+      >
         <div className="storage-heading">
           <h2>{fridgePlace}</h2>
         </div>
         {loading ? (
-          <div className="empty">库存加载中……</div>
+          <div className="empty"><AssetImage name="general-loading.png" alt="库存加载中" className="asset-state" /><span>正在打开冰箱……</span></div>
         ) : apiError ? (
-          <div className="empty">库存加载失败，请稍后重试</div>
+          <div className="empty"><AssetImage name="loading-failed.png" alt="库存加载失败" className="asset-state" /><span>库存加载失败，请稍后重试</span></div>
         ) : visible.length ? (
           <div className="inventory-grid">
             {visible.map((f) => {
@@ -185,7 +190,7 @@ export function FridgePage() {
                     setFoodModal("summary");
                   }}
                 >
-                  <Placeholder />
+                  <FoodEmoji name={f.name} />
                   <span>
                     <strong>{f.name}</strong>
                     <small>
@@ -198,7 +203,7 @@ export function FridgePage() {
             })}
           </div>
         ) : (
-          <div className="empty">这里还没有食材</div>
+          <div className="empty"><AssetImage name="empty-inventory-state.png" alt="冰箱里还没记下什么食材" className="asset-state" /><span>冰箱里还没记下什么食材。</span></div>
         )}
         <div className="pagination">
           <button
@@ -225,10 +230,7 @@ export function FridgePage() {
         data-tip="添加一些食材吧～"
         aria-label="添加食材"
         disabled={loading || !snapshot}
-        onClick={() => {
-          setNewFood({ name: "", qty: 1, unit: "个", place: fridgePlace, days: 3 });
-          setFoodModal("add");
-        }}
+        onClick={() => go("capture")}
       >
         ＋
       </button>
@@ -244,7 +246,7 @@ export function FridgePage() {
                   ×
                 </button>
                 <div className="modal-food-title">
-                  <Placeholder />
+                  <FoodEmoji name={selected.name} />
                   <span>
                     <h2>{selected.name}</h2>
                     <p>存放于：{selected.place}</p>
@@ -267,16 +269,16 @@ export function FridgePage() {
                     setNewFood({ ...selected });
                     setFoodModal("edit");
                   }}>
-                    <Placeholder kind="icon" />
+                    <span className="ui-icon" aria-hidden="true">✎</span>
                     编辑信息
                   </button>
                   <button
                     onClick={() => {
                       setFoodModal(null);
-                      setDialog("删除这项食材？");
+                      setDialog("要移除这项食材吗？");
                     }}
                   >
-                    <Placeholder kind="icon" />
+                    <span className="ui-icon" aria-hidden="true">⌫</span>
                     移除食材
                   </button>
                 </div>

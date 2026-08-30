@@ -109,7 +109,7 @@ describe("Shell", () => {
     const go = vi.fn();
     vi.spyOn(inventoryService, "remove").mockResolvedValue(undefined);
     mockApp({
-      dialog: "删除这项食材？",
+      dialog: "要移除这项食材吗？",
       setFoods,
       go,
       editIndex: 0,

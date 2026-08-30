@@ -1,1 +1,8 @@
 /* RecipesPage reuses .saved-card (components/recipe-card.css) and .tabs (components/tabs.css); no unique styles of its own. */
+.recipes-empty {
+  display: grid;
+  place-items: center;
+  gap: 12px;
+  min-height: 420px;
+  text-align: center;
+}

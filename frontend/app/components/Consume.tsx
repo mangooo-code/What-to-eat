@@ -2,7 +2,7 @@
 import "../styles/components/consume.css";
 import { useState } from "react";
 import { Header } from "./Header";
-import { Placeholder } from "./Placeholder";
+import { FoodEmoji } from "./FoodEmoji";
 
 export function Consume({ onDone }: { onDone: (t: number, e: number) => void }) {
   const [t, setT] = useState(2),
@@ -19,7 +19,7 @@ export function Consume({ onDone }: { onDone: (t: number, e: number) => void }) 
           ["鸡蛋", e, setE, "个"],
         ].map((x: any) => (
           <label className="consume" key={x[0]}>
-            <Placeholder />
+            <FoodEmoji name={x[0]} />
             <span>
               <strong>{x[0]}</strong>
               <small>

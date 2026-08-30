@@ -18,7 +18,7 @@ export function CookPage() {
   } = useApp();
   return (
     <>
-      <Header title="开始做吧" sub="番茄炒蛋 · 预计 15 分钟" back={recipeBack} />
+      <Header title="一起做吧！" sub="番茄炒蛋 · 预计 15 分钟" back={recipeBack} />
       {recipeOrigin === "recommend" && (
         <button className="link cook-back" onClick={() => go("recommend")}>
           ‹ 看看其他菜谱
