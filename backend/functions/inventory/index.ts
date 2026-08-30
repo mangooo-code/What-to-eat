@@ -1,6 +1,6 @@
 import { AppError } from "../../shared/errors/AppError";
 import { errorResponse, successResponse } from "../../shared/errors/httpResponse";
-import { getDevelopmentUserId } from "../../shared/auth/development";
+import { requireAuth } from "../../shared/auth";
 import {
   createIngredient,
   deleteIngredient,
@@ -51,7 +51,7 @@ function validateSource(value: unknown): "manual" | "recognition" | "import" {
 export async function main(event: HttpEvent = {}): Promise<HttpResponse> {
   try {
     const method = getMethod(event);
-    const userId = getDevelopmentUserId();
+    const userId = requireAuth(event);
     const ingredientId = ingredientIdFromPath(event.path);
 
     if (method === "GET" && !ingredientId) {

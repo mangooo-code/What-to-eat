@@ -8,9 +8,11 @@
     "seed:inventory": "tsc -p scripts/tsconfig.json && node dist-scripts/scripts/seedInventory.js"
   },
   "dependencies": {
+    "jsonwebtoken": "^9.0.3",
     "pg": "^8.16.3"
   },
   "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^20.17.0",
     "@types/pg": "^8.15.5",
     "typescript": "^5.9.3"

@@ -1,6 +1,6 @@
 import { AppError } from "../../shared/errors/AppError";
 import { errorResponse, successResponse } from "../../shared/errors/httpResponse";
-import { getDevelopmentUserId } from "../../shared/auth/development";
+import { requireAuth } from "../../shared/auth";
 import {
   createMember,
   deleteMember,
@@ -41,7 +41,7 @@ function optionalBoolean(value: unknown, field: string, fallback = false): boole
 export async function main(event: HttpEvent = {}): Promise<HttpResponse> {
   try {
     const method = getMethod(event);
-    const ownerUserId = getDevelopmentUserId();
+    const ownerUserId = requireAuth(event);
     const memberId = memberIdFromPath(event.path);
 
     if (method === "GET" && !memberId) {

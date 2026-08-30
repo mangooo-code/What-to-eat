@@ -4,12 +4,15 @@
   "functionRoot": "./backend/functions",
   "functions": [
     {
-      "name": "authentication",
+      "name": "api",
       "runtime": "Nodejs20.19",
-      "handler": "dist/index.main",
+      "handler": "index.main",
       "timeout": 10,
       "memorySize": 256,
-      "installDependency": true
+      "installDependency": false,
+      "envVariables": {
+        "JWT_SECRET": "{{env.JWT_SECRET}}"
+      }
     },
     {
       "name": "inventory",
@@ -21,7 +24,8 @@
       "envVariables": {
         "ENV_ID": "{{env.ENV_ID}}",
         "DEV_USER_ID": "{{env.DEV_USER_ID}}",
-        "CLOUDBASE_API_KEY": "{{env.CLOUDBASE_API_KEY}}"
+        "CLOUDBASE_API_KEY": "{{env.CLOUDBASE_API_KEY}}",
+        "JWT_SECRET": "{{env.JWT_SECRET}}"
       }
     },
     {
@@ -34,15 +38,17 @@
       "envVariables": {
         "ENV_ID": "{{env.ENV_ID}}",
         "DEV_USER_ID": "{{env.DEV_USER_ID}}",
-        "CLOUDBASE_API_KEY": "{{env.CLOUDBASE_API_KEY}}"
+        "CLOUDBASE_API_KEY": "{{env.CLOUDBASE_API_KEY}}",
+        "JWT_SECRET": "{{env.JWT_SECRET}}"
       }
     }
   ],
   "gateway": {
     "routes": [
       {
-        "path": "/authentication",
-        "target": "function:authentication",
+        "path": "/login",
+        "target": "function:api",
+        "enablePathTransmission": true,
         "enableAuth": false
       },
       {

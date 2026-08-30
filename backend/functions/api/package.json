@@ -1,0 +1,22 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "private": true,
+  "main": "index.js",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "esbuild index.ts --bundle --platform=node --target=node20 --outfile=index.js",
+    "prepare": "npm run build"
+  },
+  "dependencies": {
+    "jsonwebtoken": "^9.0.3"
+  },
+  "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^20.17.0",
+    "esbuild": "^0.27.3",
+    "typescript": "^5.9.3"
+  }
+}

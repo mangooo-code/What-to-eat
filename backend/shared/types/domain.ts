@@ -1,10 +1,11 @@
 export interface User {
   id: string;
+  firstName: string;
+  middleName: string | null;
+  lastName: string;
   phoneNumber: string;
-  displayName: string | null;
+  displayName: string;
   avatarFileId: string | null;
-  createdDate: string;
-  updatedDate: string;
 }
 
 export interface HouseholdMember {

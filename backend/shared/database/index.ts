@@ -20,3 +20,7 @@ export {
   listMembers,
   updateMember,
 } from "./memberRepository";
+export {
+  getSalt,
+  verifyCredentials,
+} from "./userRepository";

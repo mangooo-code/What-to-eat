@@ -10,5 +10,5 @@
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true
   },
-  "include": ["shared/**/*.ts", "functions/auth/**/*.ts", "functions/inventory/**/*.ts", "functions/members/**/*.ts", "scripts/**/*.ts"]
+  "include": ["shared/**/*.ts", "functions/api/**/*.ts", "functions/auth/**/*.ts", "functions/inventory/**/*.ts", "functions/members/**/*.ts", "scripts/**/*.ts"]
 }
