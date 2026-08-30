@@ -1,31 +1,30 @@
 import { AppError } from "../../shared/errors/AppError";
-import { errorResponse, successResponse } from "../../shared/errors/httpResponse";
+import { errorResponse } from "../../shared/errors/httpResponse";
 import type { HttpEvent, HttpResponse } from "../../shared/types/api";
-import { getMethod, parseJsonBody, requireString } from "../../shared/validation/http";
-import { authenticate, buildBearerToken } from "./helpers/AuthenticationHelper";
-import type { LoginRequest } from "./contracts";
+import { getMethod } from "../../shared/validation/http";
+import { handleLogin } from "./handlers/login";
+import { handleInventory } from "./handlers/inventory";
+import { handleMembers } from "./handlers/members";
 
 export async function main(event: HttpEvent = {}): Promise<HttpResponse> {
   try {
-    const method = getMethod(event);
-    const path = event.path ?? "/login";
+    const path = event.path ?? "";
 
-    if (method === "POST" && path.endsWith("/login")) {
-      const body = parseJsonBody<LoginRequest>(event);
-      const phoneNumber = requireString(body.phoneNumber, "phoneNumber");
-      const password = requireString(body.password, "password");
-      const user = await authenticate(phoneNumber, password);
-      if (!user) {
-        throw new AppError("INVALID_CREDENTIALS", "Phone number or password is incorrect", 401);
-      }
-      return successResponse(buildBearerToken(user));
+    if (getMethod(event) === "POST" && path.endsWith("/login")) {
+      return await handleLogin(event);
+    }
+
+    if (path.includes("/inventory")) {
+      return await handleInventory(event);
+    }
+
+    if (path.includes("/members")) {
+      return await handleMembers(event);
     }
 
     throw new AppError("ROUTE_NOT_FOUND", "Route not found", 404);
   } catch (error) {
-
     return errorResponse(error);
   }
-
 }
 

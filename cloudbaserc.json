@@ -9,37 +9,11 @@
       "handler": "index.main",
       "timeout": 10,
       "memorySize": 256,
-      "installDependency": false,
-      "envVariables": {
-        "JWT_SECRET": "{{env.JWT_SECRET}}"
-      }
-    },
-    {
-      "name": "inventory",
-      "runtime": "Nodejs20.19",
-      "handler": "index.main",
-      "timeout": 10,
-      "memorySize": 256,
-      "installDependency": false,
+      "installDependency": true,
       "envVariables": {
         "ENV_ID": "{{env.ENV_ID}}",
-        "DEV_USER_ID": "{{env.DEV_USER_ID}}",
-        "CLOUDBASE_API_KEY": "{{env.CLOUDBASE_API_KEY}}",
-        "JWT_SECRET": "{{env.JWT_SECRET}}"
-      }
-    },
-    {
-      "name": "members",
-      "runtime": "Nodejs20.19",
-      "handler": "index.main",
-      "timeout": 10,
-      "memorySize": 256,
-      "installDependency": false,
-      "envVariables": {
-        "ENV_ID": "{{env.ENV_ID}}",
-        "DEV_USER_ID": "{{env.DEV_USER_ID}}",
-        "CLOUDBASE_API_KEY": "{{env.CLOUDBASE_API_KEY}}",
-        "JWT_SECRET": "{{env.JWT_SECRET}}"
+        "JWT_SECRET": "{{env.JWT_SECRET}}",
+        "CLOUDBASE_API_KEY": "{{env.CLOUDBASE_API_KEY}}"
       }
     }
   ],
@@ -53,13 +27,13 @@
       },
       {
         "path": "/inventory",
-        "target": "function:inventory",
+        "target": "function:api",
         "enablePathTransmission": true,
         "enableAuth": false
       },
       {
         "path": "/members",
-        "target": "function:members",
+        "target": "function:api",
         "enablePathTransmission": true,
         "enableAuth": false
       }
