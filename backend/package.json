@@ -4,8 +4,7 @@
   "private": true,
   "scripts": {
     "build": "tsc --noEmit",
-    "test": "tsc -p functions/authentication/tsconfig.json && node --test functions/authentication/dist/index.test.js",
-    "seed:inventory": "tsc -p scripts/tsconfig.json && node dist-scripts/scripts/seedInventory.js"
+    "test": "tsc -p functions/authentication/tsconfig.json && node --test functions/authentication/dist/index.test.js"
   },
   "dependencies": {
     "jsonwebtoken": "^9.0.3",
