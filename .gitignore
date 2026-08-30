@@ -1,2 +1,4 @@
 /infrastructure/terraform.tfvars
 .DS_Store
+.env
+env.dev
