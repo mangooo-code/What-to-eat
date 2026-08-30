@@ -29,6 +29,7 @@ export function LoginPage() {
   } = useApp();
   const enabled = phone.trim() && password && agreed;
   const [displayedError, setDisplayedError] = useState("");
+  const [errorToken, setErrorToken] = useState(0);
   useEffect(() => {
     if (loginError) setDisplayedError(loginError);
   }, [loginError]);
@@ -36,7 +37,7 @@ export function LoginPage() {
     if (!loginError) return;
     const t = setTimeout(() => setLoginError(""), 5000);
     return () => clearTimeout(t);
-  }, [loginError, setLoginError]);
+  }, [loginError, errorToken, setLoginError]);
   const submit = async () => {
     setSubmitting(true);
     try {
@@ -48,6 +49,7 @@ export function LoginPage() {
     } catch (error) {
       await new Promise((resolve) => setTimeout(resolve, 500));
       setLoginError(getLoginErrorMessage(error));
+      setErrorToken((t) => t + 1);
     } finally {
       setSubmitting(false);
     }
@@ -57,7 +59,18 @@ export function LoginPage() {
       <header className="login-logo-header">
         <AssetImage name="logo-characters.png" alt="开饭猫" className="login-logo" />
       </header>
-      <AssetImage name="login-hero.png" alt="开饭猫欢迎你" className="asset-hero login-hero-image" />
+      <div className="login-hero-stage asset-hero login-hero-image">
+        <AssetImage
+          name="login-hero.png"
+          alt="开饭猫欢迎你"
+          className={`login-hero-frame${submitting ? "" : " visible"}`}
+        />
+        <AssetImage
+          name="login-loading.png"
+          alt="开饭猫正在登录"
+          className={`login-hero-frame${submitting ? " visible" : ""}`}
+        />
+      </div>
       <div className="login-form">
         <label>
           手机号
@@ -105,7 +118,7 @@ export function LoginPage() {
         </div>
         <p className={`login-error${loginError ? " visible" : ""}`}>
           {displayedError}
-          <span className="login-error-progress" />
+          <span className="login-error-progress" key={errorToken} />
         </p>
         <label className="agreement">
           <input
