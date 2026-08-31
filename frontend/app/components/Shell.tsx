@@ -79,8 +79,8 @@ export function Shell({
       {withNav && nav}
       {toast && <div className="toast">{toast}</div>}
       {legal && (
-        <div className="overlay">
-          <div className="dialog">
+        <div className="overlay" onClick={() => setLegal("")}>
+          <div className="dialog" onClick={(e) => e.stopPropagation()}>
             <button className="modal-close" onClick={() => setLegal("")}>
               ×
             </button>

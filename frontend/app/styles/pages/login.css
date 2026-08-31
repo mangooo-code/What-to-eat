@@ -51,7 +51,7 @@
     display: grid;
     grid-template-columns: minmax(320px, 460px) 1fr;
     grid-template-areas:
-      "logo form"
+      "logo logo"
       "hero form";
     align-items: start;
     column-gap: 48px;
