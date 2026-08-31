@@ -1,23 +1,7 @@
-.fab {
-  position: fixed;
-  right: 22px;
-  bottom: 96px;
-  border: 1px solid var(--orange);
-  border-radius: 50%;
-  background: var(--orange);
-  color: var(--paper-raised);
-}
-
 .empty {
   padding: 24px;
   color: var(--muted);
   text-align: center;
-}
-
-@media (min-width: 800px) {
-  .fab {
-    right: 60px;
-  }
 }
 
 .storage-tabs {
@@ -261,38 +245,6 @@
 .storage-pane .pagination {
   margin-top: auto;
   padding-top: 28px;
-}
-
-.fab {
-  width: 66px;
-  height: 66px;
-  font-size: 34px;
-}
-
-.fab::before {
-  content: attr(data-tip);
-  position: absolute;
-  right: 76px;
-  top: 50%;
-  width: max-content;
-  padding: 8px 11px;
-  border-radius: 9px;
-  background: var(--orange);
-  color: var(--paper-raised);
-  font-size: 12px;
-  opacity: 0;
-  pointer-events: none;
-  transform: translateY(-50%) translateX(5px);
-  transition: 0.2s ease;
-}
-
-.fab:hover {
-  transform: scale(1.06);
-}
-
-.fab:hover::before {
-  opacity: 1;
-  transform: translateY(-50%) translateX(0);
 }
 
 .pagination button {

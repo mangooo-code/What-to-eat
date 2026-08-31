@@ -68,12 +68,29 @@ describe("FridgePage", () => {
     expect(await screen.findByText("冰箱里还没记下什么食材。")).toBeInTheDocument();
   });
 
-  it("opens the ingredient capture flow", async () => {
+  it("opens the add-method modal and keeps the active storage place", async () => {
+    const go = vi.fn();
+    const setNewFood = vi.fn();
+    const setFoodModal = vi.fn();
+    mockApp({ foods, go, fridgePlace: "冷冻", setNewFood, setFoodModal });
+    render(<FridgePage />);
+    await screen.findByText("猪里脊");
+    fireEvent.click(screen.getByText("＋ 添加食材"));
+    expect(screen.getByRole("dialog", { name: "添加食材方式" })).toBeInTheDocument();
+    expect(screen.getByText("添加到冷冻")).toBeInTheDocument();
+    fireEvent.click(screen.getByText("手动添加"));
+    expect(setNewFood).toHaveBeenCalledWith(expect.objectContaining({ place: "冷冻" }));
+    expect(setFoodModal).toHaveBeenCalledWith("add");
+    expect(go).not.toHaveBeenCalled();
+  });
+
+  it("opens recognition from the add-method modal", async () => {
     const go = vi.fn();
     mockApp({ foods, go });
     render(<FridgePage />);
     await screen.findByText("番茄");
     fireEvent.click(screen.getByText("＋ 添加食材"));
+    fireEvent.click(screen.getByText("帮我识别"));
     expect(go).toHaveBeenCalledWith("capture");
   });
 

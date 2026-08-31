@@ -112,6 +112,16 @@
   padding-right: 38px;
 }
 
+.add-choice-modal > p {
+  margin: 8px 0 20px;
+  color: var(--muted);
+}
+
+.add-choice-modal .modal-actions button {
+  min-height: 88px;
+  font-weight: 700;
+}
+
 .food-modal .modal-edit-actions {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }

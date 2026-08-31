@@ -51,6 +51,11 @@ describe("Field", () => {
     expect(onChange).toHaveBeenCalledWith({ ...food, place: "冷冻" });
   });
 
+  it("can hide the storage field when the entry area is predetermined", () => {
+    render(<Field food={food} onChange={() => {}} showPlace={false} />);
+    expect(screen.queryByLabelText("存放位置")).not.toBeInTheDocument();
+  });
+
   it("floors the days-until-expiry value", () => {
     const onChange = vi.fn();
     render(<Field food={food} onChange={onChange} />);

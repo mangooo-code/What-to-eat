@@ -73,6 +73,7 @@ export function FridgePage() {
   const [loading, setLoading] = useState(true);
   const [apiError, setApiError] = useState("");
   const [saving, setSaving] = useState(false);
+  const [addChoiceOpen, setAddChoiceOpen] = useState(false);
   const locationsByKey = useMemo(
     () => Object.fromEntries((snapshot?.locations ?? []).map((location) => [location.key, location.id])),
     [snapshot],
@@ -170,7 +171,7 @@ export function FridgePage() {
             </button>
           ))}
         </div>
-        <button className="storage-add" disabled={loading || !snapshot} onClick={() => go("capture")}>
+        <button className="storage-add" disabled={loading || !snapshot} onClick={() => setAddChoiceOpen(true)}>
           ＋ 添加食材
         </button>
       </div>
@@ -233,15 +234,30 @@ export function FridgePage() {
           </button>
         </div>
       </section>
-      <button
-        className="fab"
-        data-tip="添加一些食材吧～"
-        aria-label="添加食材"
-        disabled={loading || !snapshot}
-        onClick={() => go("capture")}
-      >
-        ＋
-      </button>
+      {addChoiceOpen && (
+        <div className="overlay">
+          <div className="food-modal add-choice-modal" role="dialog" aria-modal="true" aria-label="添加食材方式">
+            <button className="modal-close" aria-label="关闭" onClick={() => setAddChoiceOpen(false)}>×</button>
+            <h2>添加食材</h2>
+            <p>添加到{fridgePlace}</p>
+            <div className="modal-actions">
+              <button onClick={() => {
+                setNewFood({ name: "", qty: 1, unit: "个", place: fridgePlace, days: 3, source: "manual" });
+                setAddChoiceOpen(false);
+                setFoodModal("add");
+              }}>
+                手动添加
+              </button>
+              <button onClick={() => {
+                setAddChoiceOpen(false);
+                go("capture");
+              }}>
+                帮我识别
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       {foodModal && selected && (
         <div className="overlay">
           <div className="food-modal">
@@ -297,6 +313,7 @@ export function FridgePage() {
                 <Field
                   food={selected}
                   onChange={setNewFood}
+                  showPlace={foodModal !== "add"}
                 />
                 <div className="modal-edit-actions">
                   <button

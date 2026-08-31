@@ -16,16 +16,20 @@ describe("CapturePage", () => {
     mockApp();
   });
 
-  it("shows the camera upload section by default", () => {
+  it("shows the single-photo section by default", () => {
     render(<CapturePage />);
-    expect(screen.getByText("拍下冰箱或食材")).toBeInTheDocument();
+    expect(screen.getByText("添加一张食材照片")).toBeInTheDocument();
+    expect(screen.getByText("0 / 1")).toBeInTheDocument();
+    expect(screen.getByText("拍照识别")).toBeInTheDocument();
+    expect(screen.getByText("语音识别")).toBeInTheDocument();
+    expect(screen.queryByText("从相册选")).not.toBeInTheDocument();
   });
 
   it("switches to the voice tab", () => {
     const setCaptureTab = vi.fn();
     mockApp({ setCaptureTab });
     render(<CapturePage />);
-    fireEvent.click(screen.getByText("语音解析"));
+    fireEvent.click(screen.getByText("语音识别"));
     expect(setCaptureTab).toHaveBeenCalledWith("voice");
   });
 
@@ -46,29 +50,36 @@ describe("CapturePage", () => {
     expect(setListening).toHaveBeenCalledWith(true);
   });
 
-  it("fills in the recognized text and stops listening", () => {
+  it("stops recording and automatically starts recognition", () => {
     const setInput = vi.fn();
     const setListening = vi.fn();
-    mockApp({ captureTab: "voice", listening: true, setInput, setListening });
+    const setFoods = vi.fn();
+    const go = vi.fn();
+    mockApp({ captureTab: "voice", listening: true, setInput, setListening, setFoods, go });
     render(<CapturePage />);
     fireEvent.click(screen.getByRole("button", { name: "完成语音录入" }));
     expect(setInput).toHaveBeenCalledWith("买了西红柿 2 个、鸡蛋 1 盒、牛肉半斤");
     expect(setListening).toHaveBeenCalledWith(false);
+    expect(setFoods).toHaveBeenCalled();
+    expect(go).toHaveBeenCalledWith("recognize");
   });
 
-  it("adds a photo when the capture button is pressed", () => {
-    const setPhotos = vi.fn();
-    mockApp({ captureTab: "camera", photos: { camera: 0, album: 0 }, setPhotos });
+  it("opens a bottom sheet with camera and album choices", () => {
+    mockApp({ captureTab: "camera", photos: { camera: 0, album: 0 } });
     render(<CapturePage />);
-    fireEvent.click(screen.getByText("拍照"));
-    expect(setPhotos).toHaveBeenCalledTimes(1);
+    fireEvent.click(screen.getByText("添加照片"));
+    expect(screen.getByRole("dialog", { name: "选择照片来源" })).toBeInTheDocument();
+    expect(screen.getByText("拍照")).toBeInTheDocument();
+    expect(screen.getByText("从相册选择")).toBeInTheDocument();
   });
 
   it("navigates to recognize once photos are ready", () => {
     const go = vi.fn();
-    mockApp({ captureTab: "camera", go });
+    const setFoods = vi.fn();
+    mockApp({ captureTab: "camera", photos: { camera: 1, album: 0 }, go, setFoods });
     render(<CapturePage />);
     fireEvent.click(screen.getByText("开始识别"));
+    expect(setFoods).toHaveBeenCalled();
     expect(go).toHaveBeenCalledWith("recognize");
   });
 });

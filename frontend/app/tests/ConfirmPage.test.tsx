@@ -1,8 +1,9 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ConfirmPage } from "../pages/ConfirmPage";
 import { useApp } from "../context/AppContext";
 import { createAppState } from "./mockApp";
+import { inventoryService } from "../services/inventoryService";
 
 vi.mock("../context/AppContext", () => ({ useApp: vi.fn() }));
 const mockedUseApp = vi.mocked(useApp);
@@ -16,6 +17,12 @@ const foods = [{ name: "番茄", qty: 2, unit: "个", place: "冷藏", days: 3 }
 describe("ConfirmPage", () => {
   beforeEach(() => {
     mockApp({ foods });
+    vi.spyOn(inventoryService, "list").mockResolvedValue({
+      items: [],
+      locations: [{ id: "location-fridge", key: "fridge", name: "冷藏" }],
+      unitTypes: [{ id: 1, name: "个" }],
+    });
+    vi.spyOn(inventoryService, "create").mockResolvedValue({} as never);
   });
 
   it("lists the detected foods", () => {
@@ -41,13 +48,18 @@ describe("ConfirmPage", () => {
     expect(setConfirmEdit).toHaveBeenCalledWith(-1);
   });
 
-  it("confirms and returns to the fridge", () => {
+  it("writes the confirmed foods to the active area and returns", async () => {
     const say = vi.fn();
     const go = vi.fn();
     mockApp({ foods, say, go });
     render(<ConfirmPage />);
     fireEvent.click(screen.getByText("确认添加"));
-    expect(say).toHaveBeenCalledWith("食材已经添加到冰箱");
+    await waitFor(() => expect(inventoryService.create).toHaveBeenCalledWith(expect.objectContaining({
+      name: "番茄",
+      locationId: "location-fridge",
+      source: "recognition",
+    })));
+    expect(say).toHaveBeenCalledWith("食材已经添加到冷藏");
     expect(go).toHaveBeenCalledWith("fridge");
   });
 
@@ -71,5 +83,6 @@ describe("ConfirmPage", () => {
     render(<ConfirmPage />);
     expect(screen.getByText("新增食材信息")).toBeInTheDocument();
     expect(screen.queryByText("删除")).not.toBeInTheDocument();
+    expect(screen.queryByLabelText("存放位置")).not.toBeInTheDocument();
   });
 });

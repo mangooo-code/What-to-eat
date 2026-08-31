@@ -1,9 +1,9 @@
 "use client";
+import { useEffect, useRef, useState } from "react";
 import "../styles/pages/capture.css";
 import "../styles/components/tabs.css";
 import { useApp } from "../context/AppContext";
 import { Header } from "../components/Header";
-import { Placeholder } from "../components/Placeholder";
 import { AssetImage } from "../components/AssetImage";
 
 export function CapturePage() {
@@ -12,15 +12,45 @@ export function CapturePage() {
     setCaptureTab,
     photos,
     setPhotos,
+    setFoods,
     listening,
     setListening,
     input,
     setInput,
+    fridgePlace,
     go,
   } = useApp();
-  const photoMode =
-      captureTab === "camera" || captureTab === "album" ? captureTab : null,
-    count = photoMode ? photos[photoMode] : 0;
+  const [photoSheetOpen, setPhotoSheetOpen] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState("");
+  const cameraInput = useRef<HTMLInputElement>(null);
+  const albumInput = useRef<HTMLInputElement>(null);
+  const isPhotoTab = captureTab !== "voice";
+  const count = photos.camera + photos.album > 0 ? 1 : 0;
+
+  useEffect(() => () => {
+    if (previewUrl) URL.revokeObjectURL(previewUrl);
+  }, [previewUrl]);
+
+  const recognizedFoods = () => [
+    { name: "番茄", qty: 2, unit: "个", place: fridgePlace, days: 3, source: "recognition" as const },
+    { name: "鸡蛋", qty: 1, unit: "盒", place: fridgePlace, days: 7, source: "recognition" as const },
+  ];
+
+  const choosePhoto = (file: File | undefined, source: "camera" | "album") => {
+    if (!file) return;
+    if (previewUrl) URL.revokeObjectURL(previewUrl);
+    setPreviewUrl(URL.createObjectURL(file));
+    setPhotos({ camera: source === "camera" ? 1 : 0, album: source === "album" ? 1 : 0 });
+    setPhotoSheetOpen(false);
+  };
+
+  const clearPhoto = () => {
+    if (previewUrl) URL.revokeObjectURL(previewUrl);
+    setPreviewUrl("");
+    setPhotos({ camera: 0, album: 0 });
+    if (cameraInput.current) cameraInput.current.value = "";
+    if (albumInput.current) albumInput.current.value = "";
+  };
   return (
     <>
       <Header
@@ -30,91 +60,54 @@ export function CapturePage() {
       />
       <div className="tabs capture-tabs">
         <button
-          className={captureTab === "camera" ? "active" : ""}
+          className={isPhotoTab ? "active" : ""}
           onClick={() => setCaptureTab("camera")}
         >
-          拍一张
-        </button>
-        <button
-          className={captureTab === "album" ? "active" : ""}
-          onClick={() => setCaptureTab("album")}
-        >
-          从相册选
+          拍照识别
         </button>
         <button
           className={captureTab === "voice" ? "active" : ""}
           onClick={() => setCaptureTab("voice")}
         >
-          语音解析
+          语音识别
         </button>
       </div>
-      {photoMode ? (
+      {isPhotoTab ? (
         <section className="upload">
           <div className="upload-dropzone">
-            <AssetImage name={captureTab === "camera" ? "take-photo.png" : "choose-from-album.png"} alt="" className="upload-guide-image" />
-            <h2>
-              {captureTab === "camera"
-                ? "拍下冰箱或食材"
-                : "从相册选照片"}
-            </h2>
-            <p>
-              {captureTab === "camera"
-                ? "尽量拍清楚一点，我会认得更准。"
-                : "一次可以选多张。"}
-            </p>
+            {previewUrl ? (
+              <img src={previewUrl} alt="待识别食材预览" className="photo-preview" />
+            ) : (
+              <AssetImage name="take-photo.png" alt="" className="upload-guide-image" />
+            )}
+            <h2>{previewUrl ? "照片已添加" : "添加一张食材照片"}</h2>
+            <p>MVP 一次最多添加 1 张，尽量拍清楚一点。</p>
           </div>
           <div className="upload-heading">
             <span>已选择图片</span>
-            <p className="upload-count">{count} / 5</p>
+            <p className="upload-count">{count} / 1</p>
           </div>
           {count > 0 && (
             <div className="thumbs">
-              {Array.from({ length: count }).map((_, i) => (
-                <span className="upload-thumb" key={i}>
-                  <Placeholder />
-                  <button
-                    aria-label={`删除第 ${i + 1} 张照片`}
-                    onClick={() =>
-                      setPhotos((a) => ({
-                        ...a,
-                        [photoMode]: Math.max(0, a[photoMode] - 1),
-                      }))
-                    }
-                  >
-                    ×
-                  </button>
-                </span>
-              ))}
+              <span className="upload-thumb">
+                <img src={previewUrl} alt="已选择照片" />
+                <button aria-label="删除照片" onClick={clearPhoto}>×</button>
+              </span>
             </div>
           )}
           <div className="upload-actions">
             <button
               className="secondary"
-              disabled={count >= 5}
-              onClick={() =>
-                setPhotos((a) => ({
-                  ...a,
-                  [photoMode]: Math.min(5, a[photoMode] + 1),
-                }))
-              }
+              onClick={() => setPhotoSheetOpen(true)}
             >
-              {count >= 5
-                ? "已达上限"
-                : captureTab === "camera"
-                  ? count
-                    ? "继续拍照"
-                    : "拍照"
-                  : "浏览相册照片"}
+              {count ? "重新选择" : "添加照片"}
             </button>
             {count > 0 && (
-              <button
-                className="link"
-                onClick={() => setPhotos((a) => ({ ...a, [photoMode]: 0 }))}
-              >
-                {captureTab === "camera" ? "清空重拍" : "清空照片"}
-              </button>
+              <button className="link" onClick={clearPhoto}>删除照片</button>
             )}
           </div>
+          <input ref={cameraInput} className="visually-hidden" type="file" accept="image/*" capture="environment" onChange={(e) => choosePhoto(e.target.files?.[0], "camera")} />
+          <input ref={albumInput} className="visually-hidden" type="file" accept="image/*" onChange={(e) => choosePhoto(e.target.files?.[0], "album")} />
         </section>
       ) : (
         <section className="voice-parse">
@@ -123,46 +116,39 @@ export function CapturePage() {
             aria-label={listening ? "完成语音录入" : "开始语音录入"}
             onClick={() => {
               if (listening) {
-                setInput("买了西红柿 2 个、鸡蛋 1 盒、牛肉半斤");
+                const transcript = "买了西红柿 2 个、鸡蛋 1 盒、牛肉半斤";
+                setInput(transcript);
                 setListening(false);
+                setFoods(recognizedFoods());
+                go("recognize");
               } else setListening(true);
             }}
           >
             <AssetImage name="voice-analysis.png" alt="" className="voice-trigger-image" />
           </button>
           <h2>{listening ? "我在听……" : "轻点麦克风，口述刚刚买的食材"}</h2>
-          <div className="voice-result">
-            <strong>语音解析结果：</strong>
-            <textarea
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder="语音结果会显示在这里，也可以直接修改"
-            />
-            <button
-              className="primary"
-              disabled={!input}
-              onClick={() => go("recognize")}
-            >
-              <span className="ui-icon" aria-hidden="true">✓</span>
-              确认填入食材
-            </button>
-          </div>
+          {input && <p className="voice-transcript">本次识别参考：{input}</p>}
         </section>
       )}
-      {photoMode && (
+      {isPhotoTab && (
         <>
-          <div className="voice-box">
-            <AssetImage name="text-input.png" alt="" className="text-input-icon" />
-            <input
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder="也可以直接告诉我家里有什么……"
-            />
-          </div>
-          <button className="primary sticky" onClick={() => go("recognize")}>
+          <button className="primary sticky" disabled={!count} onClick={() => {
+            setFoods(recognizedFoods());
+            go("recognize");
+          }}>
             开始识别
           </button>
         </>
+      )}
+      {photoSheetOpen && (
+        <div className="photo-sheet-overlay" onClick={() => setPhotoSheetOpen(false)}>
+          <div className="photo-source-sheet" role="dialog" aria-modal="true" aria-label="选择照片来源" onClick={(e) => e.stopPropagation()}>
+            <h2>添加照片</h2>
+            <button onClick={() => cameraInput.current?.click()}>拍照</button>
+            <button onClick={() => albumInput.current?.click()}>从相册选择</button>
+            <button className="link" onClick={() => setPhotoSheetOpen(false)}>取消</button>
+          </div>
+        </div>
       )}
     </>
   );

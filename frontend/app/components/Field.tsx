@@ -6,9 +6,11 @@ import type { Food } from "../lib/types";
 export function Field({
   food,
   onChange,
+  showPlace = true,
 }: {
   food: Food;
   onChange: (f: Food) => void;
+  showPlace?: boolean;
 }) {
   return (
     <div className="food-form">
@@ -46,17 +48,19 @@ export function Field({
           ))}
         </select>
       </label>
-      <label>
-        存放位置
-        <select
-          value={food.place}
-          onChange={(e) => onChange({ ...food, place: e.target.value })}
-        >
-          {["冷藏", "冷冻", "常温"].map((x) => (
-            <option key={x}>{x}</option>
-          ))}
-        </select>
-      </label>
+      {showPlace && (
+        <label>
+          存放位置
+          <select
+            value={food.place}
+            onChange={(e) => onChange({ ...food, place: e.target.value })}
+          >
+            {["冷藏", "冷冻", "常温"].map((x) => (
+              <option key={x}>{x}</option>
+            ))}
+          </select>
+        </label>
+      )}
       <label>
         几天后过期
         <span className="suffix">
