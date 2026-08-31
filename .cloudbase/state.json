@@ -1,0 +1,331 @@
+{
+  "version": 1,
+  "updatedAt": "2026-08-31T04:35:22.910Z",
+  "gitCommit": "02c77b768b2cf4910cd00184f98ee9a8053e7d36",
+  "envId": "kaifanmiao-d4g695xaj0f058d58",
+  "resources": {
+    "hosting": [
+      {
+        "name": "web",
+        "files": {
+          "404.html": {
+            "hash": "f6e845eac41993d2",
+            "size": 8273
+          },
+          "__next.__PAGE__.txt": {
+            "hash": "977b9d420fc6f3e6",
+            "size": 1064
+          },
+          "__next._full.txt": {
+            "hash": "c70b2b33f9f02373",
+            "size": 4557
+          },
+          "__next._head.txt": {
+            "hash": "a461976b2417e315",
+            "size": 885
+          },
+          "__next._index.txt": {
+            "hash": "168b0e9aa0f77404",
+            "size": 2005
+          },
+          "__next._tree.txt": {
+            "hash": "80261fab815e6db6",
+            "size": 298
+          },
+          "_next/static/chunks/03~yq9q893hmn.js": {
+            "hash": "0973c1d64c88adc8",
+            "size": 112594
+          },
+          "_next/static/chunks/04ggmkf2okb19.css": {
+            "hash": "2ee0f894fc5d858b",
+            "size": 36157
+          },
+          "_next/static/chunks/07lhk_q6pmm3r.js": {
+            "hash": "d8957e42e0c2769a",
+            "size": 227537
+          },
+          "_next/static/chunks/0dbhjjzl8qfwv.js": {
+            "hash": "59d6d21868686254",
+            "size": 57909
+          },
+          "_next/static/chunks/0ht900cau6_ur.js": {
+            "hash": "b2b0fb9dbb3e38ab",
+            "size": 17474
+          },
+          "_next/static/chunks/0k6kr~ze-.qya.js": {
+            "hash": "f9e826a3ba4082ff",
+            "size": 533176
+          },
+          "_next/static/chunks/0r8nt2o8muejo.js": {
+            "hash": "d05dd25fd691ea8e",
+            "size": 200373
+          },
+          "_next/static/chunks/15bx1jaq2u5pz.js": {
+            "hash": "bdbc8663e5b81ab8",
+            "size": 57948
+          },
+          "_next/static/chunks/17qci.24l-fy5.css": {
+            "hash": "7552931d0bee54f3",
+            "size": 7524
+          },
+          "_next/static/chunks/turbopack-05c8c~j12fn14.js": {
+            "hash": "9016228a35657c1f",
+            "size": 10547
+          },
+          "_next/static/xA3JAEHst4pVKWnFofnj-/_buildManifest.js": {
+            "hash": "9476e0afd3f9da68",
+            "size": 219
+          },
+          "_next/static/xA3JAEHst4pVKWnFofnj-/_clientMiddlewareManifest.js": {
+            "hash": "5483e3295dc35dfe",
+            "size": 96
+          },
+          "_next/static/xA3JAEHst4pVKWnFofnj-/_ssgManifest.js": {
+            "hash": "678f6ce2cb80b1fe",
+            "size": 80
+          },
+          "_not-found/__next._full.txt": {
+            "hash": "4c3153d997ae2a95",
+            "size": 5332
+          },
+          "_not-found/__next._head.txt": {
+            "hash": "5bc9b42f60ad1306",
+            "size": 936
+          },
+          "_not-found/__next._index.txt": {
+            "hash": "168b0e9aa0f77404",
+            "size": 2005
+          },
+          "_not-found/__next._not-found.__PAGE__.txt": {
+            "hash": "997878ca2d3c1dbf",
+            "size": 1462
+          },
+          "_not-found/__next._not-found.txt": {
+            "hash": "994028f46232d0b0",
+            "size": 445
+          },
+          "_not-found/__next._tree.txt": {
+            "hash": "7226391b0e4fefe2",
+            "size": 319
+          },
+          "_not-found.html": {
+            "hash": "f6e845eac41993d2",
+            "size": 8273
+          },
+          "_not-found.txt": {
+            "hash": "4c3153d997ae2a95",
+            "size": 5332
+          },
+          "assets/ai-decision-loading.png": {
+            "hash": "ae61080447584fbc",
+            "size": 933322
+          },
+          "assets/ai-identifying-ingredients.png": {
+            "hash": "d06b087d0bc60c1f",
+            "size": 1243008
+          },
+          "assets/allergens.png": {
+            "hash": "b426bc74c0eaf1bb",
+            "size": 263811
+          },
+          "assets/apple-icon.png": {
+            "hash": "b427ff483f14eccb",
+            "size": 109927
+          },
+          "assets/average.png": {
+            "hash": "7af9f72e1fdb00c9",
+            "size": 190521
+          },
+          "assets/based-on-usual-taste.png": {
+            "hash": "b76e27f2dee0c6e5",
+            "size": 250706
+          },
+          "assets/bold-and-satisfying.png": {
+            "hash": "c8b8a457b472f0e2",
+            "size": 201503
+          },
+          "assets/choose-from-album.png": {
+            "hash": "bea32c93616b8afa",
+            "size": 956292
+          },
+          "assets/confirm.png": {
+            "hash": "01668fa028986f8b",
+            "size": 222477
+          },
+          "assets/cook-at-your-own-pace.png": {
+            "hash": "ee9e45d4b01a854e",
+            "size": 257153
+          },
+          "assets/default-avatar.png": {
+            "hash": "5b1b9d390771af9e",
+            "size": 1912825
+          },
+          "assets/default-background.png": {
+            "hash": "b548f0300b5c64ae",
+            "size": 1691154
+          },
+          "assets/delete.png": {
+            "hash": "4b76e5cf0b0c91ac",
+            "size": 243546
+          },
+          "assets/delicious.png": {
+            "hash": "7611624ed4763225",
+            "size": 199903
+          },
+          "assets/dietary-preferences.png": {
+            "hash": "09b05095e83279cc",
+            "size": 265454
+          },
+          "assets/dislike.png": {
+            "hash": "2c312dcdab664a15",
+            "size": 187473
+          },
+          "assets/edit.png": {
+            "hash": "c8f72a2ca14ffa9a",
+            "size": 210904
+          },
+          "assets/empty-inventory-state.png": {
+            "hash": "d66b82ef301d33d8",
+            "size": 1091942
+          },
+          "assets/empty-recipes-state.png": {
+            "hash": "95552612c476a67d",
+            "size": 1123983
+          },
+          "assets/favorite-recipes.png": {
+            "hash": "c75b06f1f94598d5",
+            "size": 289208
+          },
+          "assets/foods-to-avoid.png": {
+            "hash": "103aa592c99c4e5e",
+            "size": 328805
+          },
+          "assets/freezer-background.png": {
+            "hash": "8c64db22784c6084",
+            "size": 1595026
+          },
+          "assets/fridge.png": {
+            "hash": "5c46c837f8a643d1",
+            "size": 241207
+          },
+          "assets/general-loading.png": {
+            "hash": "da017015bf2ee2ed",
+            "size": 1005207
+          },
+          "assets/got-it.png": {
+            "hash": "ce51f79789049cb7",
+            "size": 871902
+          },
+          "assets/healthy-light-meal.png": {
+            "hash": "c88a2ffeff2c0740",
+            "size": 277162
+          },
+          "assets/help-me-decide.png": {
+            "hash": "bc2eeb7a71322d2a",
+            "size": 186000
+          },
+          "assets/home-hero.png": {
+            "hash": "f83f6de9bf7ea4fa",
+            "size": 1856797
+          },
+          "assets/home-style-meal.png": {
+            "hash": "d8a0b281c1fc669f",
+            "size": 248005
+          },
+          "assets/light-and-refreshing.png": {
+            "hash": "788901bcc63808c5",
+            "size": 252414
+          },
+          "assets/loading-failed.png": {
+            "hash": "dbeb6ee48799c7ba",
+            "size": 1554452
+          },
+          "assets/login-hero.png": {
+            "hash": "1faeb050894415aa",
+            "size": 893190
+          },
+          "assets/login-loading.png": {
+            "hash": "4b33731c32b0f367",
+            "size": 1341112
+          },
+          "assets/logo-characters.png": {
+            "hash": "7b4bf7c3c0d9f216",
+            "size": 1328909
+          },
+          "assets/my-recipes.png": {
+            "hash": "ecc42da575fe09ca",
+            "size": 295890
+          },
+          "assets/open-fridge.png": {
+            "hash": "5743a95f1edd6338",
+            "size": 298244
+          },
+          "assets/pantry-background.png": {
+            "hash": "1fc9ece1943413d8",
+            "size": 2159364
+          },
+          "assets/pantry.png": {
+            "hash": "6548fd6234b6a3e0",
+            "size": 265935
+          },
+          "assets/preferred-taste.png": {
+            "hash": "5b1431fa97a366a6",
+            "size": 241870
+          },
+          "assets/profile.png": {
+            "hash": "e9324db3a7393314",
+            "size": 254547
+          },
+          "assets/quick-solution.png": {
+            "hash": "67e4d13a3dfa10da",
+            "size": 200662
+          },
+          "assets/recipe-history.png": {
+            "hash": "3e726142a7544282",
+            "size": 327462
+          },
+          "assets/refrigerator-background.png": {
+            "hash": "d00652a79c9fd995",
+            "size": 1624990
+          },
+          "assets/refrigerator.png": {
+            "hash": "cbbd47d07885c8b2",
+            "size": 261544
+          },
+          "assets/take-photo.png": {
+            "hash": "86c0fcd10dca5b20",
+            "size": 1026636
+          },
+          "assets/text-input.png": {
+            "hash": "67a0dfe88eeb6f2a",
+            "size": 207330
+          },
+          "assets/voice-analysis.png": {
+            "hash": "a241c4325c3b7948",
+            "size": 802079
+          },
+          "assets/wechat-icon.png": {
+            "hash": "475931140eb23de2",
+            "size": 145752
+          },
+          "assets/what-to-eat-today.png": {
+            "hash": "884c9273e1896546",
+            "size": 168676
+          },
+          "favicon.svg": {
+            "hash": "e6d2e59b7b5bbb03",
+            "size": 712
+          },
+          "index.html": {
+            "hash": "9a8326fd2729110e",
+            "size": 8679
+          },
+          "index.txt": {
+            "hash": "c70b2b33f9f02373",
+            "size": 4557
+          }
+        }
+      }
+    ]
+  }
+}
