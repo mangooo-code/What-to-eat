@@ -38,7 +38,9 @@ export function MemberPage() {
         <div className="chips relation-options">
           {["伴侣", "家人", "朋友", "其他"].map((x) => (
             <button
+              type="button"
               className={relation === x ? "active" : ""}
+              aria-pressed={relation === x}
               onClick={() => setRelation(x)}
               key={x}
             >

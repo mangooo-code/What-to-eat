@@ -106,7 +106,7 @@ export function LoginPage() {
               placeholder="请输入密码"
               disabled={submitting}
             />
-            <button onClick={() => setShowPassword((v) => !v)} disabled={submitting}>
+            <button onClick={() => setShowPassword((v) => !v)} disabled={submitting} aria-label={showPassword ? "隐藏密码" : "显示密码"}>
               {showPassword ? "隐藏" : "显示"}
             </button>
           </span>
@@ -116,7 +116,7 @@ export function LoginPage() {
           <span>+86 800800</span>
           <span>密码：123456</span>
         </div>
-        <p className={`login-error${loginError ? " visible" : ""}`}>
+        <p className={`login-error${loginError ? " visible" : ""}`} role="alert">
           {displayedError}
           <span className="login-error-progress" key={errorToken} />
         </p>
@@ -129,9 +129,9 @@ export function LoginPage() {
           />
           <span>
             我已阅读并同意 
-            {"\u300A"}<span className="legal-link" onClick={(e) => { e.preventDefault(); e.stopPropagation(); setLegal("用户协议"); }}>用户协议</span>{"\u300B"}
+            {"\u300A"}<button type="button" className="legal-link" onClick={(e) => { e.preventDefault(); e.stopPropagation(); setLegal("用户协议"); }}>用户协议</button>{"\u300B"}
              和 
-            {"\u300A"}<span className="legal-link" onClick={(e) => { e.preventDefault(); e.stopPropagation(); setLegal("隐私政策"); }}>隐私政策</span>{"\u300B"}
+            {"\u300A"}<button type="button" className="legal-link" onClick={(e) => { e.preventDefault(); e.stopPropagation(); setLegal("隐私政策"); }}>隐私政策</button>{"\u300B"}
           </span>
         </label>
         <button className="primary" disabled={!enabled || submitting} onClick={submit}>

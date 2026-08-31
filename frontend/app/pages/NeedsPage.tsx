@@ -56,7 +56,9 @@ export function NeedsPage() {
           <div className="chips member-options">
             {householdMembers.map((member) => (
               <button
+                type="button"
                 className={members.includes(member.memberId) ? "active" : ""}
+                aria-pressed={members.includes(member.memberId)}
                 key={member.memberId}
                 onClick={() =>
                   setMembers((a) =>
@@ -70,7 +72,7 @@ export function NeedsPage() {
               </button>
             ))}
             {membersLoading && <span className="member-loading"><AssetImage name="general-loading.png" alt="" />成员加载中……</span>}
-            <button onClick={() => openMember("needs")}>＋ 添加成员</button>
+            <button type="button" onClick={() => openMember("needs")}>＋ 添加成员</button>
           </div>
         </section>
         <section className="need-card">
@@ -79,7 +81,9 @@ export function NeedsPage() {
             {["按平时口味", "重口过瘾", "家常下饭", "清淡爽口", "健康轻食"].map(
               (x) => (
                 <button
+                  type="button"
                   className={taste === x ? "active" : ""}
+                  aria-pressed={taste === x}
                   key={x}
                   onClick={() => setTaste(x)}
                 >
@@ -110,7 +114,7 @@ export function NeedsPage() {
               checked={prefer}
               onChange={(e) => setPrefer(e.target.checked)}
             />
-            <i className={`switch ${prefer ? "on" : ""}`}>
+            <i className={`switch ${prefer ? "on" : ""}`} aria-hidden="true">
               {prefer ? "ON" : "OFF"}
             </i>
           </label>
@@ -121,7 +125,9 @@ export function NeedsPage() {
             {[...limits, ...chosenLimits.filter((x) => !limits.includes(x))].map(
               (x) => (
                 <button
+                  type="button"
                   className={chosenLimits.includes(x) ? "active" : ""}
+                  aria-pressed={chosenLimits.includes(x)}
                   key={x}
                   onClick={() =>
                     setChosenLimits((a) =>
@@ -134,7 +140,7 @@ export function NeedsPage() {
               ),
             )}
           </div>
-          <button className="link other-limit" onClick={() => setOther(true)}>
+          <button className="link other-limit" type="button" onClick={() => setOther(true)}>
             ＋ 添加其他限制
           </button>
           {other && (
@@ -143,8 +149,10 @@ export function NeedsPage() {
                 value={otherLimit}
                 onChange={(e) => setOtherLimit(e.target.value)}
                 placeholder="输入这顿不吃的食材或要求"
+                aria-label="输入这顿不吃的食材或要求"
               />
               <button
+                type="button"
                 disabled={!otherLimit.trim()}
                 onClick={() => {
                   const v = otherLimit.trim();
@@ -161,7 +169,7 @@ export function NeedsPage() {
       </div>
       <div className="sticky-actions">
         {missing > 0 && (
-          <p className={needError ? "error" : ""}>还有 {missing} 项没有完成</p>
+          <p className={needError ? "error" : ""} role={needError ? "alert" : undefined}>还有 {missing} 项没有完成</p>
         )}
         <button
           className="primary"

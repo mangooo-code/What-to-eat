@@ -68,15 +68,16 @@ export function ConfirmPage() {
         确认添加
       </button>
       {editing && (
-        <div className="overlay">
+        <div className="overlay" role="dialog" aria-modal="true" aria-labelledby="confirm-edit-title">
           <div className="food-modal">
             <button
               className="modal-close"
+              aria-label="关闭"
               onClick={() => setConfirmEdit(null)}
             >
               ×
             </button>
-            <h2>{confirmEdit === -1 ? "新增食材信息" : "编辑食材信息"}</h2>
+            <h2 id="confirm-edit-title">{confirmEdit === -1 ? "新增食材信息" : "编辑食材信息"}</h2>
             <Field
               food={editing}
               onChange={(f) =>

@@ -14,9 +14,11 @@ export function RecipesPage() {
   return (
     <>
       <Header title="我的菜谱" back={() => go("profile")} />
-      <div className="tabs">
+      <div className="tabs" role="tablist">
         <button
           type="button"
+          role="tab"
+          aria-selected={recipeTab === "done"}
           className={recipeTab === "done" ? "active" : ""}
           onClick={() => setRecipeTab("done")}
         >
@@ -24,6 +26,8 @@ export function RecipesPage() {
         </button>
         <button
           type="button"
+          role="tab"
+          aria-selected={recipeTab === "liked"}
           className={recipeTab === "liked" ? "active" : ""}
           onClick={() => setRecipeTab("liked")}
         >
@@ -50,7 +54,7 @@ export function RecipesPage() {
             </span>
           </button>
         ))}
-      </div> : <div className="recipes-empty"><AssetImage name="empty-recipes-state.png" alt="还没有菜谱" className="asset-state" /><h2>{recipeTab === "done" ? "还没有做过的菜谱" : "还没有喜欢的菜谱"}</h2><p>之后的菜谱会出现在这里。</p></div>}
+      </div> : <div className="recipes-empty"><AssetImage name="empty-recipes-state.png" alt="" className="asset-state" /><h2>{recipeTab === "done" ? "还没有做过的菜谱" : "还没有喜欢的菜谱"}</h2><p>之后的菜谱会出现在这里。</p></div>}
     </>
   );
 }

@@ -28,20 +28,29 @@ export function CapturePage() {
         sub="拍给我看，或者直接告诉我都可以。"
         back={() => go("fridge")}
       />
-      <div className="tabs capture-tabs">
+      <div className="tabs capture-tabs" role="tablist">
         <button
+          type="button"
+          role="tab"
+          aria-selected={captureTab === "camera"}
           className={captureTab === "camera" ? "active" : ""}
           onClick={() => setCaptureTab("camera")}
         >
           拍一张
         </button>
         <button
+          type="button"
+          role="tab"
+          aria-selected={captureTab === "album"}
           className={captureTab === "album" ? "active" : ""}
           onClick={() => setCaptureTab("album")}
         >
           从相册选
         </button>
         <button
+          type="button"
+          role="tab"
+          aria-selected={captureTab === "voice"}
           className={captureTab === "voice" ? "active" : ""}
           onClick={() => setCaptureTab("voice")}
         >
@@ -132,11 +141,12 @@ export function CapturePage() {
           </button>
           <h2>{listening ? "我在听……" : "轻点麦克风，口述刚刚买的食材"}</h2>
           <div className="voice-result">
-            <strong>语音解析结果：</strong>
+            <strong id="voice-result-label">语音解析结果：</strong>
             <textarea
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="语音结果会显示在这里，也可以直接修改"
+              aria-labelledby="voice-result-label"
             />
             <button
               className="primary"
@@ -157,6 +167,7 @@ export function CapturePage() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="也可以直接告诉我家里有什么……"
+              aria-label="补充说明"
             />
           </div>
           <button className="primary sticky" onClick={() => go("recognize")}>

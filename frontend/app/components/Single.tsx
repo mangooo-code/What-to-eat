@@ -23,7 +23,9 @@ export function Single({
       <div className="chips">
         {opts.map((x) => (
           <button
+            type="button"
             className={selected === x ? "active" : ""}
+            aria-pressed={selected === x}
             key={x}
             onClick={() => onSelect(x)}
           >

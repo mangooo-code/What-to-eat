@@ -40,19 +40,19 @@ export function RecipeStepCard({
         <p>{data[1]}</p>
         {timer && (
           <div className="compact-timer">
-            <b>
+            <b role="timer" aria-live="off">
               {String(Math.floor(seconds / 60)).padStart(2, "0")}:
               {String(seconds % 60).padStart(2, "0")}
             </b>
             <span>
-              <button onClick={() => setRunning((v) => !v)}>
+              <button type="button" aria-pressed={running} onClick={() => setRunning((v) => !v)}>
                 {running ? "暂停" : seconds === 0 ? "时间到啦" : "开始计时"}
               </button>
-              <button onClick={reset}>清零</button>
+              <button type="button" onClick={reset}>清零</button>
             </span>
           </div>
         )}
-        <button className="complete-action" onClick={toggleComplete}>
+        <button className="complete-action" aria-pressed={complete} onClick={toggleComplete}>
           {complete ? "✓ 已完成 · 重新打开" : "标记已完成"}
         </button>
       </div>

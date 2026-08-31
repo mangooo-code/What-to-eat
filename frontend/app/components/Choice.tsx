@@ -14,7 +14,9 @@ export function Choice({
 }) {
   return (
     <button
+      type="button"
       className={`choice ${selected ? "selected" : ""}`}
+      aria-pressed={selected}
       onClick={onClick}
     >
       <AssetImage

@@ -33,7 +33,9 @@ export function EditableMulti({
       <div className="chips">
         {items.map((x) => (
           <button
+            type="button"
             className={selected.includes(x) ? "active" : ""}
+            aria-pressed={selected.includes(x)}
             key={x}
             onClick={() =>
               onSelect(
@@ -54,8 +56,9 @@ export function EditableMulti({
           value={custom}
           onChange={(e) => setCustom(e.target.value)}
           placeholder={`手动添加${title}`}
+          aria-label={`手动添加${title}`}
         />
-        <button onClick={add}>添加</button>
+        <button type="button" onClick={add}>添加</button>
       </div>
     </section>
   );

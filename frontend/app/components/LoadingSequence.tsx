@@ -13,11 +13,11 @@ export function LoadingSequence({ texts }: { texts: string[] }) {
     return () => clearInterval(t);
   }, [texts.length]);
   return (
-    <div className="center-state loading-state">
-      <span className="spinner" />
+    <div className="center-state loading-state" role="status" aria-live="polite">
+      <span className="spinner" aria-hidden="true" />
       <h1>{texts[i]}</h1>
       <p>快选好啦，再等我一下。</p>
-      <AssetImage name="ai-decision-loading.png" alt="开饭猫正在帮你挑选菜谱" className="asset-state ai-loading-image" />
+      <AssetImage name="ai-decision-loading.png" alt="" className="asset-state ai-loading-image" />
     </div>
   );
 }

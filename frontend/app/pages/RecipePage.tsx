@@ -17,7 +17,7 @@ export function RecipePage() {
           <h1>番茄炒蛋</h1>
           <p>15 分钟｜简单 · 家常｜下饭</p>
         </div>
-        <button className="heart" onClick={() => setLiked(!liked)}>
+        <button className="heart" type="button" aria-pressed={liked} onClick={() => setLiked(!liked)}>
           {liked ? "♥ 已喜欢" : "♡ 喜欢"}
         </button>
       </div>
