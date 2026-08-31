@@ -39,12 +39,19 @@
 }
 
 @media (min-width: 900px) and (orientation: landscape) {
+  .page:has(.login-page) {
+    display: flex;
+    align-items: center;
+    min-height: calc(100vh - 64px);
+    box-sizing: border-box;
+  }
+
   .login-page {
     width: min(100%, 1100px);
     display: grid;
     grid-template-columns: minmax(320px, 460px) 1fr;
     grid-template-areas:
-      "logo logo"
+      "logo form"
       "hero form";
     align-items: start;
     column-gap: 48px;
