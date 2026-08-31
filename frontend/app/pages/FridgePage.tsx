@@ -22,6 +22,14 @@ function daysUntil(expiryDate: string | null): number {
   return Math.max(0, Math.ceil((new Date(expiryDate).getTime() - Date.now()) / 86_400_000));
 }
 
+const FOOD_NAME_CHAR_LIMIT = 8;
+
+function truncateFoodName(name: string): string {
+  return [...name].length > FOOD_NAME_CHAR_LIMIT
+    ? `${[...name].slice(0, FOOD_NAME_CHAR_LIMIT).join("")}...`
+    : name;
+}
+
 function toFood(item: Ingredient, snapshot: InventorySnapshot): Food {
   const location = snapshot.locations.find((entry) => entry.id === item.locationId);
   const unit = snapshot.unitTypes.find((entry) => entry.id === item.unitTypeId);
@@ -192,7 +200,7 @@ export function FridgePage() {
                 >
                   <FoodEmoji name={f.name} />
                   <span>
-                    <strong>{f.name}</strong>
+                    <strong title={f.name}>{truncateFoodName(f.name)}</strong>
                     <small>
                       {f.qty} {f.unit}
                     </small>
