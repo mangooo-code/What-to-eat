@@ -46,10 +46,11 @@ export function CookPage() {
         </button>
       </div>
       {consumeOpen && (
-        <div className="overlay">
+        <div className="overlay" role="dialog" aria-modal="true" aria-label="确认食材消耗">
           <div className="consume-modal">
             <button
               className="modal-close"
+              aria-label="关闭"
               onClick={() => setConsumeOpen(false)}
             >
               ×

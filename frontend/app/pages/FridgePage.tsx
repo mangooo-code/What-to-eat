@@ -155,9 +155,12 @@ export function FridgePage() {
         sub="家里的食材，都帮你整理在这里啦。"
       />
       <div className="storage-toolbar">
-        <div className="storage-tabs">
+        <div className="storage-tabs" role="tablist">
           {["冷藏", "冷冻", "常温"].map((place) => (
             <button
+              type="button"
+              role="tab"
+              aria-selected={fridgePlace === place}
               className={fridgePlace === place ? "active" : ""}
               key={place}
               onClick={() => {
@@ -183,9 +186,9 @@ export function FridgePage() {
           <h2>{fridgePlace}</h2>
         </div>
         {loading ? (
-          <div className="empty"><AssetImage name="general-loading.png" alt="库存加载中" className="asset-state" /><span>正在打开冰箱……</span></div>
+          <div className="empty"><AssetImage name="general-loading.png" alt="" className="asset-state" /><span>正在打开冰箱……</span></div>
         ) : apiError ? (
-          <div className="empty"><AssetImage name="loading-failed.png" alt="库存加载失败" className="asset-state" /><span>库存加载失败，请稍后重试</span></div>
+          <div className="empty"><AssetImage name="loading-failed.png" alt="" className="asset-state" /><span>库存加载失败，请稍后重试</span></div>
         ) : visible.length ? (
           <div className="inventory-grid">
             {visible.map((f) => {
@@ -212,7 +215,7 @@ export function FridgePage() {
             })}
           </div>
         ) : (
-          <div className="empty"><AssetImage name="empty-inventory-state.png" alt="冰箱里还没记下什么食材" className="asset-state" /><span>冰箱里还没记下什么食材。</span></div>
+          <div className="empty"><AssetImage name="empty-inventory-state.png" alt="" className="asset-state" /><span>冰箱里还没记下什么食材。</span></div>
         )}
         <div className="pagination">
           <button
@@ -259,12 +262,13 @@ export function FridgePage() {
         </div>
       )}
       {foodModal && selected && (
-        <div className="overlay">
+        <div className="overlay" role="dialog" aria-modal="true" aria-labelledby="food-modal-title">
           <div className="food-modal">
             {foodModal === "summary" ? (
               <>
                 <button
                   className="modal-close"
+                  aria-label="关闭"
                   onClick={() => setFoodModal(null)}
                 >
                   ×
@@ -272,7 +276,7 @@ export function FridgePage() {
                 <div className="modal-food-title">
                   <FoodEmoji name={selected.name} />
                   <span>
-                    <h2>{selected.name}</h2>
+                    <h2 id="food-modal-title">{selected.name}</h2>
                     <p>存放于：{selected.place}</p>
                   </span>
                 </div>
@@ -309,7 +313,7 @@ export function FridgePage() {
               </>
             ) : (
               <>
-                <h2>{foodModal === "add" ? "新增食材信息" : "编辑食材信息"}</h2>
+                <h2 id="food-modal-title">{foodModal === "add" ? "新增食材信息" : "编辑食材信息"}</h2>
                 <Field
                   food={selected}
                   onChange={setNewFood}

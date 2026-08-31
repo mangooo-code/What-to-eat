@@ -51,26 +51,32 @@ export function Shell({
   const [deleting, setDeleting] = useState(false);
 
   const nav = (
-    <nav className="bottom-nav">
+    <nav className="bottom-nav" aria-label="主导航">
       <button
+        type="button"
         className={page === "fridge" ? "active" : ""}
+        aria-current={page === "fridge" ? "page" : undefined}
         onClick={() => go("fridge")}
       >
-        <AssetImage name="fridge.png" alt="冰箱" />
+        <AssetImage name="fridge.png" alt="" />
         冰箱
       </button>
       <button
+        type="button"
         className={page === "home" ? "active" : ""}
+        aria-current={page === "home" ? "page" : undefined}
         onClick={() => go("home")}
       >
-        <AssetImage name="what-to-eat-today.png" alt="今天吃什么" />
+        <AssetImage name="what-to-eat-today.png" alt="" />
         今天吃什么
       </button>
       <button
+        type="button"
         className={page === "profile" ? "active" : ""}
+        aria-current={page === "profile" ? "page" : undefined}
         onClick={() => go("profile")}
       >
-        <AssetImage name="profile.png" alt="我的" />
+        <AssetImage name="profile.png" alt="" />
         我的
       </button>
     </nav>
@@ -80,27 +86,47 @@ export function Shell({
     <main className="app-shell">
       <section className="page">{children}</section>
       {(withNav ?? NAV_PAGES.has(page)) && nav}
-      {toast && <div className="toast">{toast}</div>}
+      {toast && (
+        <div className="toast" role="status" aria-live="polite">
+          {toast}
+        </div>
+      )}
       {legal && (
-        <div className="overlay" onClick={() => setLegal("")}>
+        <div
+          className="overlay"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="legal-dialog-title"
+          onClick={() => setLegal("")}
+        >
           <div className="dialog" onClick={(e) => e.stopPropagation()}>
-            <button className="modal-close" onClick={() => setLegal("")}>
+            <button
+              className="modal-close"
+              aria-label="关闭"
+              onClick={() => setLegal("")}
+            >
               ×
             </button>
-            <h2>{legal}</h2>
+            <h2 id="legal-dialog-title">{legal}</h2>
             <p>「{legal}」正在开发中</p>
           </div>
         </div>
       )}
       {memberOpen && (
-        <div className="overlay">
+        <div
+          className="overlay"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="member-modal-title"
+        >
           <div className="member-modal">
             <div className="member-modal-head">
-              <h2>
+              <h2 id="member-modal-title">
                 {memberMode === "edit" ? "修改成员档案" : "添加一起吃饭的人"}
               </h2>
               <button
                 className="modal-close"
+                aria-label="关闭"
                 onClick={() => setMemberOpen(false)}
               >
                 ×
@@ -153,9 +179,14 @@ export function Shell({
         </div>
       )}
       {dialog && (
-        <div className="overlay">
+        <div
+          className="overlay"
+          role="alertdialog"
+          aria-modal="true"
+          aria-labelledby="confirm-dialog-title"
+        >
           <div className="dialog">
-            <h2>{dialog}</h2>
+            <h2 id="confirm-dialog-title">{dialog}</h2>
             <p>
               {dialog.includes("退出")
                 ? "退出后将返回登录页，不会删除冰箱、档案和菜谱数据。"

@@ -231,6 +231,11 @@
 }
 
 .legal-link {
+  font: inherit;
+  color: inherit;
+  padding: 0;
+  border: 0;
+  background: none;
   text-decoration: underline;
   font-weight: 700;
   cursor: pointer;

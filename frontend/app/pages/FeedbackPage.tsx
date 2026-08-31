@@ -22,7 +22,9 @@ export function FeedbackPage() {
         <div className="reaction-options">
           {["好吃！", "一般", "不喜欢"].map((x) => (
             <button
+              type="button"
               className={mealReaction === x ? "active" : ""}
+              aria-pressed={mealReaction === x}
               key={x}
               onClick={() => setMealReaction(x)}
             >
@@ -39,7 +41,7 @@ export function FeedbackPage() {
         还有什么想说的？
         <textarea placeholder="很好吃，就是有点甜……" />
       </label>
-      <button className="heart big" onClick={() => setLiked(!liked)}>
+      <button className="heart big" type="button" aria-pressed={liked} onClick={() => setLiked(!liked)}>
         {liked ? "♥ 已加入喜欢" : "♡ 加入喜欢"}
       </button>
       <button
@@ -56,7 +58,7 @@ export function FeedbackPage() {
       </button>
       {success && (
         <div className="success-state">
-          <AssetImage name="got-it.png" alt="开饭猫记住了这次反馈" className="asset-state" />
+          <AssetImage name="got-it.png" alt="" className="asset-state" />
           <h2>记住啦，下次继续帮你挑合适的。</h2>
         </div>
       )}

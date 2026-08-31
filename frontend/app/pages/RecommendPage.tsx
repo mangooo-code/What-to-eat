@@ -25,7 +25,9 @@ export function RecommendPage() {
               <div className="heading">
                 <h2>{r[0]}</h2>
                 <button
+                  type="button"
                   className="heart"
+                  aria-pressed={likedRecipes.includes(r[0])}
                   onClick={() =>
                     setLikedRecipes((a) =>
                       a.includes(r[0])

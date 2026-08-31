@@ -55,7 +55,7 @@ export function ProfilePage() {
           </button>
         </div>
         <div className="profile-list">
-          {membersLoading && <div className="inline-state"><AssetImage name="general-loading.png" alt="成员加载中" className="asset-state" /><p>成员加载中……</p></div>}
+          {membersLoading && <div className="inline-state"><AssetImage name="general-loading.png" alt="" className="asset-state" /><p>成员加载中……</p></div>}
           {householdMembers.map((member) => {
             return (
               <button

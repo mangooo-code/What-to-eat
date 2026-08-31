@@ -58,14 +58,20 @@ export function CapturePage() {
         sub="拍给我看，或者直接告诉我都可以。"
         back={() => go("fridge")}
       />
-      <div className="tabs capture-tabs">
+      <div className="tabs capture-tabs" role="tablist">
         <button
+          type="button"
+          role="tab"
+          aria-selected={isPhotoTab}
           className={isPhotoTab ? "active" : ""}
           onClick={() => setCaptureTab("camera")}
         >
           拍照识别
         </button>
         <button
+          type="button"
+          role="tab"
+          aria-selected={captureTab === "voice"}
           className={captureTab === "voice" ? "active" : ""}
           onClick={() => setCaptureTab("voice")}
         >
@@ -127,12 +133,12 @@ export function CapturePage() {
             <AssetImage name="voice-analysis.png" alt="" className="voice-trigger-image" />
           </button>
           <h2>{listening ? "我在听……" : "轻点麦克风，口述刚刚买的食材"}</h2>
-          {input && <p className="voice-transcript">本次识别参考：{input}</p>}
+          {input && <p className="voice-transcript" aria-live="polite">本次识别参考：{input}</p>}
         </section>
       )}
       {isPhotoTab && (
         <>
-          <button className="primary sticky" disabled={!count} onClick={() => {
+          <button type="button" className="primary sticky" disabled={!count} onClick={() => {
             setFoods(recognizedFoods());
             go("recognize");
           }}>
