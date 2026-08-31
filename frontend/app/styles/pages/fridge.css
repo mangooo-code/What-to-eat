@@ -4,6 +4,11 @@
   text-align: center;
 }
 
+.fridge-modal-overlay {
+  width: 100vw;
+  height: 100dvh;
+}
+
 .storage-tabs {
   position: sticky;
   z-index: 7;
@@ -259,10 +264,6 @@
 }
 
 .storage-toolbar {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: stretch;
-  gap: 12px;
   margin-bottom: 24px;
 }
 
@@ -271,7 +272,8 @@
 }
 
 .storage-add {
-  padding: 0 16px;
+  min-height: 38px;
+  padding: 7px 13px;
   border: 0;
   border-radius: 12px;
   background: var(--orange);
@@ -285,13 +287,7 @@
 }
 
 @media (max-width: 620px) {
-  .storage-toolbar {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 620px) {
   .storage-add {
-    min-height: 44px;
+    min-height: 38px;
   }
 }

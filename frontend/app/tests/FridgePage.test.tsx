@@ -51,14 +51,12 @@ describe("FridgePage", () => {
     expect(screen.queryByText("猪里脊")).not.toBeInTheDocument();
   });
 
-  it("switches storage place and resets the page", () => {
+  it("switches storage place", () => {
     const setFridgePlace = vi.fn();
-    const setFridgePage = vi.fn();
-    mockApp({ foods, setFridgePlace, setFridgePage });
+    mockApp({ foods, setFridgePlace });
     render(<FridgePage />);
     fireEvent.click(screen.getByText("冷冻"));
     expect(setFridgePlace).toHaveBeenCalledWith("冷冻");
-    expect(setFridgePage).toHaveBeenCalledWith(0);
   });
 
   it("shows an empty state when there is nothing in the current place", async () => {
@@ -77,7 +75,9 @@ describe("FridgePage", () => {
     await screen.findByText("猪里脊");
     fireEvent.click(screen.getByText("＋ 添加食材"));
     expect(screen.getByRole("dialog", { name: "添加食材方式" })).toBeInTheDocument();
-    expect(screen.getByText("添加到冷冻")).toBeInTheDocument();
+    expect(screen.getByText("添加食材到“冷冻”")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "手动添加" }).querySelector("img")).toHaveAttribute("src", "/assets/edit.png");
+    expect(screen.getByRole("button", { name: "帮我识别" }).querySelector("img")).toHaveAttribute("src", "/assets/quick-solution.png");
     fireEvent.click(screen.getByText("手动添加"));
     expect(setNewFood).toHaveBeenCalledWith(expect.objectContaining({ place: "冷冻" }));
     expect(setFoodModal).toHaveBeenCalledWith("add");
@@ -120,14 +120,56 @@ describe("FridgePage", () => {
     mockApp({ foods, foodModal: "edit", editIndex: 0, setFoodModal });
     render(<FridgePage />);
     expect(await screen.findByText("编辑食材信息")).toBeInTheDocument();
+    expect(screen.queryByLabelText("存放位置")).not.toBeInTheDocument();
     fireEvent.click(screen.getByText("取消"));
     expect(setFoodModal).toHaveBeenCalledWith("summary");
   });
 
-  it("disables the previous-page button on the first page", () => {
-    mockApp({ foods, fridgePage: 0 });
+  it("keeps the single-page controls visible and disabled", () => {
+    mockApp({ foods });
     render(<FridgePage />);
+    expect(screen.getByText("1 / 1")).toBeInTheDocument();
     expect(screen.getByLabelText("上一页")).toBeDisabled();
+    expect(screen.getByLabelText("下一页")).toBeDisabled();
+  });
+
+  it("shows at most ten ingredients per page", async () => {
+    const pagedFoods = Array.from({ length: 11 }, (_, index) => ({
+      id: `10000000-0000-4000-8000-${String(index + 1).padStart(12, "0")}`,
+      name: `冷藏食材${index + 1}`,
+      qty: 1,
+      unit: "个",
+      place: "冷藏",
+      days: 3,
+    }));
+    vi.spyOn(inventoryService, "list").mockResolvedValueOnce({
+      ...snapshot,
+      items: pagedFoods.map((food) => ({
+        id: food.id,
+        ownerUserId: "20000000-0000-4000-8000-000000000001",
+        name: food.name,
+        normalizedName: food.name,
+        quantity: 1,
+        unitTypeId: 1,
+        locationId: "30000000-0000-4000-8000-000000000001",
+        expiryDate: new Date(Date.now() + 3 * 86_400_000).toISOString(),
+        imageFileId: null,
+        source: "manual",
+        createdDate: new Date().toISOString(),
+        updatedDate: new Date().toISOString(),
+      })),
+    });
+    mockApp({ foods: pagedFoods });
+    render(<FridgePage />);
+
+    expect(await screen.findByText("冷藏食材1")).toBeInTheDocument();
+    expect(screen.queryByText("冷藏食材11")).not.toBeInTheDocument();
+    expect(screen.getByText("1 / 2")).toBeInTheDocument();
+
+    fireEvent.click(screen.getByLabelText("下一页"));
+    expect(await screen.findByText("冷藏食材11")).toBeInTheDocument();
+    expect(screen.getByText("2 / 2")).toBeInTheDocument();
+    expect(screen.getByLabelText("下一页")).toBeDisabled();
   });
 
   it("keeps existing data when inventory loading fails", async () => {

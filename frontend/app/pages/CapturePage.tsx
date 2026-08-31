@@ -15,7 +15,6 @@ export function CapturePage() {
     setFoods,
     listening,
     setListening,
-    input,
     setInput,
     fridgePlace,
     go,
@@ -87,20 +86,8 @@ export function CapturePage() {
               <AssetImage name="take-photo.png" alt="" className="upload-guide-image" />
             )}
             <h2>{previewUrl ? "照片已添加" : "添加一张食材照片"}</h2>
-            <p>MVP 一次最多添加 1 张，尽量拍清楚一点。</p>
+            <p>目前仅支持上传一张照片，尽量拍清楚一点。</p>
           </div>
-          <div className="upload-heading">
-            <span>已选择图片</span>
-            <p className="upload-count">{count} / 1</p>
-          </div>
-          {count > 0 && (
-            <div className="thumbs">
-              <span className="upload-thumb">
-                <img src={previewUrl} alt="已选择照片" />
-                <button aria-label="删除照片" onClick={clearPhoto}>×</button>
-              </span>
-            </div>
-          )}
           <div className="upload-actions">
             <button
               className="secondary"
@@ -133,7 +120,6 @@ export function CapturePage() {
             <AssetImage name="voice-analysis.png" alt="" className="voice-trigger-image" />
           </button>
           <h2>{listening ? "我在听……" : "轻点麦克风，口述刚刚买的食材"}</h2>
-          {input && <p className="voice-transcript" aria-live="polite">本次识别参考：{input}</p>}
         </section>
       )}
       {isPhotoTab && (

@@ -19,7 +19,7 @@ describe("CapturePage", () => {
   it("shows the single-photo section by default", () => {
     render(<CapturePage />);
     expect(screen.getByText("添加一张食材照片")).toBeInTheDocument();
-    expect(screen.getByText("0 / 1")).toBeInTheDocument();
+    expect(screen.getByText("目前仅支持上传一张照片，尽量拍清楚一点。")).toBeInTheDocument();
     expect(screen.getByText("拍照识别")).toBeInTheDocument();
     expect(screen.getByText("语音识别")).toBeInTheDocument();
     expect(screen.queryByText("从相册选")).not.toBeInTheDocument();
@@ -34,12 +34,13 @@ describe("CapturePage", () => {
   });
 
   it("shows the voice-parse section when the voice tab is active", () => {
-    mockApp({ captureTab: "voice" });
+    mockApp({ captureTab: "voice", input: "旧的识别参考" });
     render(<CapturePage />);
     expect(
       screen.getByText("轻点麦克风，口述刚刚买的食材"),
     ).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "开始语音录入" }).querySelector("img")).toHaveAttribute("src", "/assets/voice-analysis.png");
+    expect(screen.queryByText(/本次识别参考/)).not.toBeInTheDocument();
   });
 
   it("starts listening when the mic is tapped", () => {

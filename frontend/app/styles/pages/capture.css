@@ -124,9 +124,9 @@
 .voice-trigger {
   display: grid;
   place-items: center;
-  width: 112px;
-  height: 112px;
-  border: 1px solid var(--line-strong);
+  width: 160px;
+  height: 160px;
+  border: 0;
   border-radius: 50%;
   background: var(--butter-soft);
 }
@@ -363,8 +363,8 @@
 
 .voice-trigger-image {
   display: block;
-  width: 72px;
-  height: 72px;
+  width: 160px;
+  height: 160px;
   object-fit: contain;
 }
 

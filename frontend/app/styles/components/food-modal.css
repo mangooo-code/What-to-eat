@@ -112,14 +112,22 @@
   padding-right: 38px;
 }
 
-.add-choice-modal > p {
-  margin: 8px 0 20px;
-  color: var(--muted);
-}
-
 .add-choice-modal .modal-actions button {
+  display: grid;
+  justify-items: center;
   min-height: 88px;
   font-weight: 700;
+}
+
+.add-choice-modal > h2 {
+  margin-bottom: 24px;
+}
+
+.modal-choice-icon {
+  display: block;
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
 }
 
 .food-modal .modal-edit-actions {

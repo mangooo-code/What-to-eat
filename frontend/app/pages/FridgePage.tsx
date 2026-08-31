@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
+import { createPortal } from "react-dom";
 import "../styles/pages/fridge.css";
 import "../styles/components/food-modal.css";
 import { useApp } from "../context/AppContext";
@@ -23,6 +24,7 @@ function daysUntil(expiryDate: string | null): number {
 }
 
 const FOOD_NAME_CHAR_LIMIT = 8;
+const PAGE_SIZE = 10;
 
 function truncateFoodName(name: string): string {
   return [...name].length > FOOD_NAME_CHAR_LIMIT
@@ -53,11 +55,10 @@ function toFood(item: Ingredient, snapshot: InventorySnapshot): Food {
 
 export function FridgePage() {
   const {
+    foods,
     setFoods,
     fridgePlace,
     setFridgePlace,
-    fridgePage,
-    setFridgePage,
     editIndex,
     setEditIndex,
     foodModal,
@@ -74,6 +75,11 @@ export function FridgePage() {
   const [apiError, setApiError] = useState("");
   const [saving, setSaving] = useState(false);
   const [addChoiceOpen, setAddChoiceOpen] = useState(false);
+  const [pagesByPlace, setPagesByPlace] = useState<Record<string, number>>({
+    冷藏: 0,
+    冷冻: 0,
+    常温: 0,
+  });
   const locationsByKey = useMemo(
     () => Object.fromEntries((snapshot?.locations ?? []).map((location) => [location.key, location.id])),
     [snapshot],
@@ -105,6 +111,10 @@ export function FridgePage() {
     // AppContext action identities are not stable yet; inventory is loaded once per page mount.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (!loading && snapshot) setInventoryFoods(foods);
+  }, [foods, loading, snapshot]);
 
   const saveFood = async () => {
     const locationKey = keyByPlace[newFood.place as keyof typeof keyByPlace];
@@ -145,9 +155,18 @@ export function FridgePage() {
     }
   };
   const all = inventoryFoods.filter((f) => f.place === fridgePlace),
-    totalPages = Math.max(1, Math.ceil(all.length / 20)),
-    visible = all.slice(fridgePage * 20, fridgePage * 20 + 20),
+    totalPages = Math.max(1, Math.ceil(all.length / PAGE_SIZE)),
+    currentPage = Math.min(pagesByPlace[fridgePlace] ?? 0, totalPages - 1),
+    visible = all.slice(currentPage * PAGE_SIZE, currentPage * PAGE_SIZE + PAGE_SIZE),
     selected = foodModal === "add" || foodModal === "edit" ? newFood : inventoryFoods[editIndex];
+
+  useEffect(() => {
+    setPagesByPlace((pages) =>
+      pages[fridgePlace] === currentPage
+        ? pages
+        : { ...pages, [fridgePlace]: currentPage },
+    );
+  }, [currentPage, fridgePlace]);
   return (
     <>
       <Header
@@ -163,10 +182,7 @@ export function FridgePage() {
               aria-selected={fridgePlace === place}
               className={fridgePlace === place ? "active" : ""}
               key={place}
-              onClick={() => {
-                setFridgePlace(place);
-                setFridgePage(0);
-              }}
+              onClick={() => setFridgePlace(place)}
             >
               <AssetImage name={tabIconByPlace[place as keyof typeof tabIconByPlace]} alt="" className="storage-tab-icon" />
               <strong>{place}</strong>
@@ -174,9 +190,6 @@ export function FridgePage() {
             </button>
           ))}
         </div>
-        <button className="storage-add" disabled={loading || !snapshot} onClick={() => setAddChoiceOpen(true)}>
-          ＋ 添加食材
-        </button>
       </div>
       <section
         className="storage-pane"
@@ -184,6 +197,9 @@ export function FridgePage() {
       >
         <div className="storage-heading">
           <h2>{fridgePlace}</h2>
+          <button className="storage-add" disabled={loading || !snapshot} onClick={() => setAddChoiceOpen(true)}>
+            ＋ 添加食材
+          </button>
         </div>
         {loading ? (
           <div className="empty"><AssetImage name="general-loading.png" alt="" className="asset-state" /><span>正在打开冰箱……</span></div>
@@ -220,49 +236,57 @@ export function FridgePage() {
         <div className="pagination">
           <button
             aria-label="上一页"
-            disabled={fridgePage === 0}
-            onClick={() => setFridgePage((x) => x - 1)}
+            disabled={currentPage === 0}
+            onClick={() => setPagesByPlace((pages) => ({
+              ...pages,
+              [fridgePlace]: Math.max(0, currentPage - 1),
+            }))}
           >
             ‹
           </button>
           <span>
-            {fridgePage + 1} / {totalPages}
+            {currentPage + 1} / {totalPages}
           </span>
           <button
             aria-label="下一页"
-            disabled={fridgePage >= totalPages - 1}
-            onClick={() => setFridgePage((x) => x + 1)}
+            disabled={currentPage >= totalPages - 1}
+            onClick={() => setPagesByPlace((pages) => ({
+              ...pages,
+              [fridgePlace]: Math.min(totalPages - 1, currentPage + 1),
+            }))}
           >
             ›
           </button>
         </div>
       </section>
-      {addChoiceOpen && (
-        <div className="overlay">
+      {addChoiceOpen && typeof document !== "undefined" && createPortal(
+        <div className="overlay fridge-modal-overlay">
           <div className="food-modal add-choice-modal" role="dialog" aria-modal="true" aria-label="添加食材方式">
             <button className="modal-close" aria-label="关闭" onClick={() => setAddChoiceOpen(false)}>×</button>
-            <h2>添加食材</h2>
-            <p>添加到{fridgePlace}</p>
+            <h2>添加食材到“{fridgePlace}”</h2>
             <div className="modal-actions">
               <button onClick={() => {
                 setNewFood({ name: "", qty: 1, unit: "个", place: fridgePlace, days: 3, source: "manual" });
                 setAddChoiceOpen(false);
                 setFoodModal("add");
               }}>
+                <AssetImage name="edit.png" alt="" className="modal-choice-icon" />
                 手动添加
               </button>
               <button onClick={() => {
                 setAddChoiceOpen(false);
                 go("capture");
               }}>
+                <AssetImage name="quick-solution.png" alt="" className="modal-choice-icon" />
                 帮我识别
               </button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body,
       )}
-      {foodModal && selected && (
-        <div className="overlay" role="dialog" aria-modal="true" aria-labelledby="food-modal-title">
+      {foodModal && selected && typeof document !== "undefined" && createPortal(
+        <div className="overlay fridge-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="food-modal-title">
           <div className="food-modal">
             {foodModal === "summary" ? (
               <>
@@ -317,7 +341,7 @@ export function FridgePage() {
                 <Field
                   food={selected}
                   onChange={setNewFood}
-                  showPlace={foodModal !== "add"}
+                  showPlace={false}
                 />
                 <div className="modal-edit-actions">
                   <button
@@ -338,7 +362,8 @@ export function FridgePage() {
               </>
             )}
           </div>
-        </div>
+        </div>,
+        document.body,
       )}
     </>
   );
