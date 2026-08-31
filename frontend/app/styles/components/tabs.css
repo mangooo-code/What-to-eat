@@ -4,6 +4,10 @@
   border-bottom: 1px solid var(--line);
 }
 
+.capture-tabs {
+  grid-template-columns: repeat(3, 1fr);
+}
+
 .tabs button {
   padding: 13px;
   border-bottom: 3px solid transparent;
