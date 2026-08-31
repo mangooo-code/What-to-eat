@@ -6,20 +6,20 @@
 .login-logo-header {
   display: flex;
   justify-content: center;
-  margin-top: 20px;
-  margin-bottom: -18px;
+  margin-top: 0;
+  margin-bottom: 20px;
 }
 
 .login-logo {
   display: block;
-  width: min(72%, 360px);
+  width: min(62%, 310px);
   height: auto;
   object-fit: contain;
 }
 
 .login-hero-image {
   position: relative;
-  width: 95%;
+  width: min(72%, 330px);
   aspect-ratio: 1 / 1;
   margin-inline: auto;
 }
@@ -67,14 +67,15 @@
 
 .login-form {
   display: grid;
-  gap: 18px;
-  margin-top: 26px;
-  padding-top: 1em;
+  width: 85%;
+  gap: 12px;
+  margin: 10px auto 0;
+  padding-top: 0;
 }
 
 .login-form > label {
   display: grid;
-  gap: 8px;
+  gap: 5px;
   font-weight: 700;
 }
 
@@ -87,7 +88,7 @@
   border-radius: 13px;
   background: var(--paper-raised);
   box-shadow: 0 0 0 4px rgba(242, 154, 61, 0);
-  transition: border-color 0.75s ease-in-out, box-shadow 0.75s ease-in-out, background-color 0.5s ease-in-out;
+  transition: none;
 }
 
 .phone-input:focus-within,
@@ -121,8 +122,8 @@
 .phone-input input,
 .password-input input {
   min-width: 0;
-  min-height: 52px;
-  padding: 12px;
+  min-height: 46px;
+  padding: 10px 12px;
   border: 0;
 }
 
@@ -147,7 +148,7 @@
   display: flex;
   gap: 10px 18px;
   flex-wrap: wrap;
-  padding: 14px;
+  padding: 10px 12px;
   border-radius: 12px;
   background: var(--butter-soft);
   font-size: 13px;
@@ -212,7 +213,7 @@
   width: 18px;
   height: 18px;
   margin-top: 1px;
-  transition: background-color 0.5s ease-in-out;
+  transition: none;
 }
 
 .agreement button {
@@ -259,7 +260,7 @@
 }
 
 .phone-input select {
-  min-height: 52px;
+  min-height: 46px;
   padding: 0 20px 0 10px;
   border: 0;
   border-right: 1px solid var(--line);
@@ -271,7 +272,34 @@
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23a47b60' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 6px center;
-  transition: background-color 0.5s ease-in-out;
+  transition: none;
+}
+
+.login-form > .primary {
+  min-height: 48px;
+  transition: none;
+}
+
+@media (max-width: 620px) {
+  .login-page {
+    margin-top: 7px;
+  }
+
+  .login-logo-header {
+    margin-bottom: -8px;
+  }
+
+  .login-logo {
+    width: min(58%, 250px);
+  }
+
+  .login-hero-image {
+    width: min(60vw, 250px);
+  }
+
+  .other-login-title {
+    margin-top: 2px;
+  }
 }
 
 .other-login {
@@ -289,5 +317,3 @@
   border-radius: 50%;
   background: var(--butter-soft);
 }
-
-

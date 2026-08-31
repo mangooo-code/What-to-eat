@@ -68,7 +68,7 @@
   padding: 17px;
   border: 0;
   border-radius: 12px;
-  background: var(--butter-soft);
+  background: var(--cream-white);
 }
 
 .mini-cards {
@@ -77,7 +77,7 @@
 
 .mini-cards > span {
   border: 0;
-  background: var(--paper-raised);
+  background: var(--butter);
   box-shadow: var(--shadow-soft);
 }
 
@@ -95,6 +95,12 @@
 .mini-cards .icon-placeholder {
   width: 27px;
   height: 25px;
+}
+
+.mini-cards .food-emoji {
+  width: 28px;
+  height: 28px;
+  font-size: 21px;
 }
 
 .mini-cards em {

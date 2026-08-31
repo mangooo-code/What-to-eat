@@ -13,7 +13,7 @@
 .tags span {
   border: 1px solid var(--line-strong);
   border-radius: 99px;
-  background: var(--paper-raised);
+  background: var(--butter);
 }
 
 .recipe-body {
@@ -49,6 +49,15 @@
 .recipe-body .secondary {
   width: 100%;
   margin-top: 17px;
+  border-color: var(--orange);
+  background: var(--orange);
+  color: var(--cream-white);
+}
+
+.recipe-body .secondary:not(:disabled):hover {
+  border-color: var(--orange-hover);
+  background: var(--orange-hover);
+  color: var(--cream-white);
 }
 
 .saved-card {

@@ -87,11 +87,13 @@
 
 .need-card .choice,
 .need-card .chips button {
+  border: 1px solid var(--line-strong);
   background: var(--cream-white);
 }
 
 .need-card .choice.selected,
 .need-card .chips button.active {
+  border-color: var(--orange);
   background: var(--butter);
 }
 

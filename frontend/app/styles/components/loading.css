@@ -20,7 +20,16 @@
 }
 
 .loading-state {
+  width: 100%;
+  min-height: calc(100dvh - 152px);
+  justify-items: center;
   gap: 10px;
+}
+
+.loading-state h1,
+.loading-state p {
+  margin-inline: auto;
+  text-align: center;
 }
 
 .loading-state .image-placeholder.wide {
