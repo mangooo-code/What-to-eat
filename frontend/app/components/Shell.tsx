@@ -7,9 +7,12 @@ import { AssetImage } from "./AssetImage";
 import { ProfileForm } from "./ProfileForm";
 import { inventoryService } from "../services/inventoryService";
 
+// Pages that show the persistent bottom tab bar.
+const NAV_PAGES = new Set(["home", "fridge", "profile"]);
+
 export function Shell({
   children,
-  withNav = false,
+  withNav,
 }: {
   children: ReactNode;
   withNav?: boolean;
@@ -76,7 +79,7 @@ export function Shell({
   return (
     <main className="app-shell">
       <section className="page">{children}</section>
-      {withNav && nav}
+      {(withNav ?? NAV_PAGES.has(page)) && nav}
       {toast && <div className="toast">{toast}</div>}
       {legal && (
         <div className="overlay" onClick={() => setLegal("")}>

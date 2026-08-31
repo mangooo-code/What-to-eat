@@ -6,6 +6,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import { initialFoods } from "../lib/data";
 import type { Food, Page, ProfileData } from "../lib/types";
 import type { HouseholdMember, User } from "../types/domain";
@@ -13,9 +14,32 @@ import { memberService } from "../services/memberService";
 import { userService } from "../services/userService";
 import { authToken } from "../services/authToken";
 
+// Maps each logical app `Page` to its real URL route (drives useRouter/usePathname below).
+const pageToPath: Record<Page, string> = {
+  login: "/login",
+  home: "/",
+  fridge: "/fridge",
+  edit: "/edit",
+  capture: "/capture",
+  recognize: "/recognize",
+  confirm: "/confirm",
+  needs: "/needs",
+  member: "/member",
+  "recommend-loading": "/recommend-loading",
+  recommend: "/recommend",
+  recipe: "/recipe",
+  cook: "/cook",
+  feedback: "/feedback",
+  profile: "/profile",
+  diet: "/diet",
+  recipes: "/recipes",
+};
+const pathToPage: Record<string, Page> = Object.fromEntries(
+  Object.entries(pageToPath).map(([p, path]) => [path, p as Page]),
+);
+
 interface AppContextValue {
   page: Page;
-  setPage: (p: Page) => void;
   go: (p: Page) => void;
   countryCode: string;
   setCountryCode: (v: string) => void;
@@ -139,7 +163,9 @@ interface AppContextValue {
 const AppContext = createContext<AppContextValue | null>(null);
 
 export function AppProvider({ children }: { children: ReactNode }) {
-  const [page, setPage] = useState<Page>("login");
+  const router = useRouter();
+  const pathname = usePathname();
+  const page = pathToPage[pathname] ?? "login";
   const [countryCode, setCountryCode] = useState("+86");
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
@@ -225,7 +251,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [success, setSuccess] = useState(false);
 
   const go = (p: Page) => {
-    setPage(p);
+    router.push(pageToPath[p]);
     window.scrollTo(0, 0);
   };
   const say = (s: string) => {
@@ -281,11 +307,12 @@ export function AppProvider({ children }: { children: ReactNode }) {
   };
   useEffect(() => {
     if (authToken.get()) {
-      setPage("home");
       loadCurrentUser();
       loadMembers();
+      if (pathname === "/login") go("home");
     } else {
       setMembersLoading(false);
+      if (pathname !== "/login") go("login");
     }
   }, []);
 
@@ -357,8 +384,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   };
   const openRecipes = (tab: "done" | "liked") => {
     setRecipeTab(tab);
-    setPage("recipes");
-    window.scrollTo(0, 0);
+    go("recipes");
   };
   const openDiet = (memberId: string) => {
     const member = householdMembers.find((item) => item.memberId === memberId);
@@ -417,7 +443,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     authToken.clear();
     setCurrentUser(null);
     setDialog("");
-    setPage("login");
+    go("login");
   };
   const recipeBack = () => {
     if (recipeOrigin === "recommend") go("recommend");
@@ -429,7 +455,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   const value: AppContextValue = {
     page,
-    setPage,
     go,
     countryCode,
     setCountryCode,

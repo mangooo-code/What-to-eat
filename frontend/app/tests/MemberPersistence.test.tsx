@@ -4,6 +4,10 @@ import { AppProvider, useApp } from "../context/AppContext";
 import { memberService } from "../services/memberService";
 import type { HouseholdMember } from "../types/domain";
 
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({ push: vi.fn() }),
+  usePathname: () => "/",
+}));
 vi.mock("../services/memberService", () => ({
   memberService: {
     list: vi.fn(),

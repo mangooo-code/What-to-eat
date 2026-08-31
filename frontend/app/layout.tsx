@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import { AppProvider } from './context/AppContext';
+import { Shell } from './components/Shell';
 
 export const metadata: Metadata = {
   title: '今天吃什么｜低保真交互原型',
@@ -13,7 +15,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="zh-CN" suppressHydrationWarning>
-      <body suppressHydrationWarning>{children}</body>
+      <body suppressHydrationWarning>
+        <AppProvider>
+          <Shell>{children}</Shell>
+        </AppProvider>
+      </body>
     </html>
   );
 }
