@@ -29,12 +29,12 @@ describe("HomePage", () => {
     expect(go).toHaveBeenCalledWith("fridge");
   });
 
-  it("navigates to needs when there are foods", () => {
+  it("navigates to findrecipes when there are foods", () => {
     const go = vi.fn();
     mockApp({ go, foods: [{ name: "番茄", qty: 1, unit: "个", place: "冷藏", days: 3 }] });
     render(<HomePage />);
     fireEvent.click(screen.getByText("帮我决定"));
-    expect(go).toHaveBeenCalledWith("needs");
+    expect(go).toHaveBeenCalledWith("findrecipes");
   });
 
   it("shows a dialog instead when the fridge is empty", () => {

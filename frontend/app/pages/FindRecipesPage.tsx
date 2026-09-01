@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import "../styles/pages/needs.css";
+import "../styles/pages/findrecipes.css";
 import { useApp } from "../context/AppContext";
 import { Choice } from "../components/Choice";
 import { Header } from "../components/Header";
@@ -10,7 +10,15 @@ import { limits } from "../lib/data";
 import { memberService } from "../services/memberService";
 import type { HouseholdMember } from "../types/domain";
 
-export function NeedsPage() {
+const tasteImages: Record<string, string> = {
+  "按平时口味": "based-on-usual-taste.png",
+  "重口过瘾": "bold-and-satisfying.png",
+  "家常下饭": "home-style-meal.png",
+  "清淡爽口": "light-and-refreshing.png",
+  "健康轻食": "healthy-light-meal.png",
+};
+
+export function FindRecipesPage() {
   const {
     time,
     setTime,
@@ -22,17 +30,15 @@ export function NeedsPage() {
     setPrefer,
     chosenLimits,
     setChosenLimits,
-    other,
-    setOther,
     otherLimit,
     setOtherLimit,
-    needError,
-    setNeedError,
     go,
   } = useApp();
   const [visibleMemberIds, setVisibleMemberIds] = useState<string[]>([]);
   const [memberPickerOpen, setMemberPickerOpen] = useState(false);
   const [pickerMembers, setPickerMembers] = useState<HouseholdMember[]>([]);
+  const [timeInvalid, setTimeInvalid] = useState(false);
+  const [tasteInvalid, setTasteInvalid] = useState(false);
   useEffect(() => {
     memberService.list({ excludeOwner: true }).then(setPickerMembers).catch(() => {});
   }, []);
@@ -42,7 +48,12 @@ export function NeedsPage() {
   const pickableMembers = pickerMembers.filter(
     (member) => !visibleMemberIds.includes(member.memberId),
   );
-  const missing = time ? 0 : 1;
+  const addOtherLimit = () => {
+    const v = otherLimit.trim();
+    if (!v) return;
+    setChosenLimits((a) => (a.includes(v) ? a : [...a, v]));
+    setOtherLimit("");
+  };
   return (
     <>
       <Header
@@ -50,16 +61,42 @@ export function NeedsPage() {
         sub="告诉我今天的需求，我来帮你缩小选择范围。"
         back={() => go("home")}
       />
-      <div className="needs-layout">
-        <section className="need-card">
-          <h2>今天有多少时间？</h2>
+      <form
+        className="findrecipes-layout"
+        onSubmit={(e) => {
+          e.preventDefault();
+          const missingTime = !time;
+          const missingTaste = !taste;
+          if (missingTime || missingTaste) {
+            setTimeInvalid(missingTime);
+            setTasteInvalid(missingTaste);
+            return;
+          }
+          const submission = {
+            timePreference: time,
+            memberIds: members,
+            tastePreference: taste,
+            preferLikedRecipes: prefer,
+            dietaryExclusions: chosenLimits,
+          };
+          // TODO: POST `submission` to the backend once the find-recipes endpoint exists
+          console.log("findrecipes submission", submission);
+          go("recommend-loading");
+        }}
+      >
+        <section className={`need-card${timeInvalid ? " invalid" : ""}`}>
+          <h2>今天有多少时间？<span className="required-mark">*</span></h2>
           <div className="option-grid">
             {["快速解决（15–30 分钟）", "慢慢做饭（30 分钟以上）"].map((x) => (
               <Choice
                 key={x}
                 label={x}
                 selected={time === x}
-                onClick={() => setTime(x)}
+                onClick={() => {
+                  const next = time === x ? "" : x;
+                  setTime(next);
+                  if (next) setTimeInvalid(false);
+                }}
               />
             ))}
           </div>
@@ -107,14 +144,16 @@ export function NeedsPage() {
             onClick={() => setMemberPickerOpen(false)}
           >
             <div className="dialog member-picker" onClick={(e) => e.stopPropagation()}>
-              <button
-                className="modal-close"
-                aria-label="关闭"
-                onClick={() => setMemberPickerOpen(false)}
-              >
-                ×
-              </button>
-              <h2 id="member-picker-title">选择就餐人</h2>
+              <div className="member-picker-head">
+                <h2 id="member-picker-title">挑选就餐人</h2>
+                <button
+                  className="modal-close"
+                  aria-label="关闭"
+                  onClick={() => setMemberPickerOpen(false)}
+                >
+                  ×
+                </button>
+              </div>
               <div className="member-picker-list">
                 {pickableMembers.map((member) => (
                   <button
@@ -132,16 +171,13 @@ export function NeedsPage() {
                   <p className="member-empty">没有更多成员了</p>
                 )}
               </div>
-              <div className="actions">
-                <button onClick={() => setMemberPickerOpen(false)}>完成</button>
-              </div>
             </div>
           </div>,
           document.body,
         )}
-        <section className="need-card full">
+        <section className={`need-card full${tasteInvalid ? " invalid" : ""}`}>
           <div className="card-header-row">
-            <h2>今天想吃什么口味？</h2>
+            <h2>今天想吃什么口味？<span className="required-mark">*</span></h2>
             <label className="toggle-row">
               <span>
                 <strong>优先喜欢过的菜谱</strong>
@@ -164,16 +200,14 @@ export function NeedsPage() {
                   className={taste === x ? "active" : ""}
                   aria-pressed={taste === x}
                   key={x}
-                  onClick={() => setTaste(x)}
+                  onClick={() => {
+                    const next = taste === x ? "" : x;
+                    setTaste(next);
+                    if (next) setTasteInvalid(false);
+                  }}
                 >
                   <AssetImage
-                    name={{
-                      "按平时口味": "based-on-usual-taste.png",
-                      "重口过瘾": "bold-and-satisfying.png",
-                      "家常下饭": "home-style-meal.png",
-                      "清淡爽口": "light-and-refreshing.png",
-                      "健康轻食": "healthy-light-meal.png",
-                    }[x]!}
+                    name={tasteImages[x]!}
                     alt=""
                   />
                   {x}
@@ -183,7 +217,7 @@ export function NeedsPage() {
           </div>
         </section>
         <section className="need-card full">
-          <h2>这顿有什么不吃的</h2>
+          <h2>这顿有什么不吃的？</h2>
           <div className="chips option-cards">
             {[...limits, ...chosenLimits.filter((x) => !limits.includes(x))].map(
               (x) => (
@@ -203,47 +237,34 @@ export function NeedsPage() {
               ),
             )}
           </div>
-          <button className="link other-limit" type="button" onClick={() => setOther(true)}>
-            ＋ 添加其他限制
-          </button>
-          {other && (
-            <div className="other-limit-input">
-              <input
-                value={otherLimit}
-                onChange={(e) => setOtherLimit(e.target.value)}
-                placeholder="输入这顿不吃的食材或要求"
-                aria-label="输入这顿不吃的食材或要求"
-              />
-              <button
-                type="button"
-                disabled={!otherLimit.trim()}
-                onClick={() => {
-                  const v = otherLimit.trim();
-                  setChosenLimits((a) => (a.includes(v) ? a : [...a, v]));
-                  setOtherLimit("");
-                  setOther(false);
-                }}
-              >
-                确认添加
-              </button>
-            </div>
-          )}
+          <div className="other-limit-input">
+            <input
+              value={otherLimit}
+              onChange={(e) => setOtherLimit(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key !== "Enter") return;
+                e.preventDefault();
+                addOtherLimit();
+              }}
+              placeholder="输入这顿不吃的食材或要求"
+              aria-label="输入这顿不吃的食材或要求"
+            />
+            <button
+              type="button"
+              disabled={!otherLimit.trim()}
+              onClick={addOtherLimit}
+            >
+              确认添加
+            </button>
+          </div>
         </section>
-      </div>
-      <div className="sticky-actions">
-        {missing > 0 && (
-          <p className={needError ? "error" : ""} role={needError ? "alert" : undefined}>还有 {missing} 项没有完成</p>
-        )}
         <button
-          className="primary"
-          disabled={missing > 0}
-          onClick={() =>
-            missing ? setNeedError(true) : go("recommend-loading")
-          }
+          type="submit"
+          className="primary findrecipes-submit"
         >
           帮我挑一挑
         </button>
-      </div>
+      </form>
     </>
   );
 }

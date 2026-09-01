@@ -61,11 +61,11 @@ describe("RecommendPage", () => {
     vi.useRealTimers();
   });
 
-  it("returns to the needs page to adjust requirements", () => {
+  it("returns to the findrecipes page to adjust requirements", () => {
     const go = vi.fn();
     mockApp({ go });
     render(<RecommendPage />);
     fireEvent.click(screen.getByText("调整需求"));
-    expect(go).toHaveBeenCalledWith("needs");
+    expect(go).toHaveBeenCalledWith("findrecipes");
   });
 });

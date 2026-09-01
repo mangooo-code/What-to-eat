@@ -5,8 +5,33 @@
   gap: 8px;
 }
 
+.required-mark {
+  color: var(--danger);
+}
+
+.need-card.invalid {
+  border-color: var(--danger);
+  box-shadow: 0 0 12px 2px color-mix(in srgb, var(--danger) 50%, transparent);
+}
+
 .member-picker {
   position: relative;
+}
+
+.member-picker-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.member-picker-head h2 {
+  margin: 0;
+}
+
+.member-picker-head .modal-close {
+  position: static;
+  font-size: 36px;
 }
 
 .member-picker-list {
@@ -62,8 +87,12 @@
   color: var(--danger);
 }
 
-.needs-layout {
+.findrecipes-layout {
   display: grid;
+}
+
+.findrecipes-submit {
+  grid-column: 1/-1;
 }
 
 .need-card h2 {
@@ -156,7 +185,7 @@
 }
 
 @media (min-width: 800px) {
-  .needs-layout {
+  .findrecipes-layout {
     grid-template-columns: 1fr 1fr;
   }
 }
@@ -168,17 +197,18 @@
 }
 
 .need-card {
-  border: 0;
+  border: 2px solid transparent;
   border-radius: 15px;
   background: var(--paper-raised);
   box-shadow: var(--shadow-soft);
+  transition: border-color 0.5s ease, box-shadow 0.5s ease;
 }
 
 .need-card {
   padding: 20px;
 }
 
-.needs-layout {
+.findrecipes-layout {
   gap: 24px;
 }
 
@@ -237,7 +267,7 @@
 }
 
 @media (min-width: 800px) {
-  .needs-layout {
+  .findrecipes-layout {
     gap: 26px;
   }
 }

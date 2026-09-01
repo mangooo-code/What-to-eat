@@ -6,7 +6,7 @@ export type Page =
   | "capture"
   | "recognize"
   | "confirm"
-  | "needs"
+  | "findrecipes"
   | "member"
   | "recommend-loading"
   | "recommend"
