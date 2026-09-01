@@ -14,7 +14,9 @@
             "envVariables": {
                 "ENV_ID": "{{env.ENV_ID}}",
                 "JWT_SECRET": "{{env.JWT_SECRET}}",
-                "CLOUDBASE_API_KEY": "{{env.CLOUDBASE_API_KEY}}"
+                "CLOUDBASE_API_KEY": "{{env.CLOUDBASE_API_KEY}}",
+                "ALIYUN_API_KEY": "{{env.ALIYUN_API_KEY}}",
+                "ALIYUN_BASE_URL": "{{env.ALIYUN_BASE_URL}}"
             }
         }
     ],
