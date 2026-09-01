@@ -8,7 +8,7 @@ import { ProfileForm } from "./ProfileForm";
 import { inventoryService } from "../services/inventoryService";
 
 // Pages that show the persistent bottom tab bar.
-const NAV_PAGES = new Set(["home", "fridge", "profile"]);
+const NAV_PAGES = new Set(["home", "fridge", "profile", "findrecipes", "recommend"]);
 
 export function Shell({
   children,
@@ -20,6 +20,7 @@ export function Shell({
   const {
     page,
     authChecked,
+    findRecipesSubmitting,
     go,
     toast,
     legal,
@@ -50,6 +51,7 @@ export function Shell({
     editIndex,
   } = useApp();
   const [deleting, setDeleting] = useState(false);
+  const homeActive = page === "home" || page === "findrecipes" || page === "recommend";
 
   const nav = (
     <nav className="bottom-nav" aria-label="主导航">
@@ -64,8 +66,8 @@ export function Shell({
       </button>
       <button
         type="button"
-        className={page === "home" ? "active" : ""}
-        aria-current={page === "home" ? "page" : undefined}
+        className={homeActive ? "active" : ""}
+        aria-current={homeActive ? "page" : undefined}
         onClick={() => go("home")}
       >
         <AssetImage name="what-to-eat-today.png" alt="" />
@@ -88,7 +90,10 @@ export function Shell({
       <section className="page">
         {authChecked ? children : <div className="center-state" aria-hidden="true" />}
       </section>
-      {(withNav ?? NAV_PAGES.has(page)) && authChecked && nav}
+      {(withNav ?? NAV_PAGES.has(page)) &&
+        authChecked &&
+        !(page === "findrecipes" && findRecipesSubmitting) &&
+        nav}
       {toast && (
         <div className="toast" role="status" aria-live="polite">
           {toast}

@@ -152,6 +152,8 @@ interface AppContextValue {
   setNeedError: (v: boolean) => void;
   success: boolean;
   setSuccess: (v: boolean) => void;
+  findRecipesSubmitting: boolean;
+  setFindRecipesSubmitting: (v: boolean) => void;
   saveMember: () => Promise<boolean>;
   saveDietProfile: () => Promise<boolean>;
   deleteProfileMember: () => Promise<boolean>;
@@ -263,6 +265,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [mealReaction, setMealReaction] = useState("");
   const [needError, setNeedError] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [findRecipesSubmitting, setFindRecipesSubmitting] = useState(false);
   const [authChecked, setAuthChecked] = useState(false);
 
   const go = (p: Page) => {
@@ -580,6 +583,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setNeedError,
     success,
     setSuccess,
+    findRecipesSubmitting,
+    setFindRecipesSubmitting,
     saveMember,
     saveDietProfile,
     deleteProfileMember,

@@ -14,6 +14,7 @@ function mockApp(overrides: Partial<ReturnType<typeof useApp>> = {}) {
   mockedUseApp.mockReturnValue({
     page: "home",
     authChecked: true,
+    findRecipesSubmitting: false,
     go: vi.fn(),
     toast: "",
     legal: "",

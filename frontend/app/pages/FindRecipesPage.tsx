@@ -44,13 +44,14 @@ export function FindRecipesPage() {
     setRecommendedRecipes,
     go,
     say,
+    findRecipesSubmitting: submitting,
+    setFindRecipesSubmitting: setSubmitting,
   } = useApp();
   const [visibleMemberIds, setVisibleMemberIds] = useState<string[]>([]);
   const [memberPickerOpen, setMemberPickerOpen] = useState(false);
   const [pickerMembers, setPickerMembers] = useState<HouseholdMember[]>([]);
   const [timeInvalid, setTimeInvalid] = useState(false);
   const [tasteInvalid, setTasteInvalid] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
   const [checking, setChecking] = useState(false);
   const [formError, setFormError] = useState("");
   const [displayedFormError, setDisplayedFormError] = useState("");
