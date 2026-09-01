@@ -31,7 +31,7 @@ export function HomePage() {
           type="button"
           className="featured"
           onClick={() =>
-            foods.length ? go("needs") : setDialog("冰箱还是空空的，先放点食材进来吧。")
+            foods.length ? go("findrecipes") : setDialog("冰箱还是空空的，先放点食材进来吧。")
           }
         >
           <AssetImage name="help-me-decide.png" alt="帮我决定" />

@@ -30,7 +30,7 @@ describe("MemberPage", () => {
     expect(setRelation).toHaveBeenCalledWith("家人");
   });
 
-  it("saves the new member and navigates back to needs", () => {
+  it("saves the new member and navigates back to findrecipes", () => {
     const saveMember = vi.fn().mockResolvedValue(true);
     const go = vi.fn();
     mockApp({
@@ -44,11 +44,11 @@ describe("MemberPage", () => {
     expect(saveMember).toHaveBeenCalledTimes(1);
   });
 
-  it("goes back to needs via the header back button", () => {
+  it("goes back to findrecipes via the header back button", () => {
     const go = vi.fn();
     mockApp({ go });
     render(<MemberPage />);
     fireEvent.click(screen.getByRole("button", { name: /返回/ }));
-    expect(go).toHaveBeenCalledWith("needs");
+    expect(go).toHaveBeenCalledWith("findrecipes");
   });
 });

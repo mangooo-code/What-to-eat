@@ -145,7 +145,7 @@ export function createAppState(overrides: Partial<AppState> = {}): AppState {
     memberOpen: false,
     setMemberOpen: vi.fn(),
     memberMode: "add",
-    memberFrom: "needs",
+    memberFrom: "findrecipes",
     newMemberName: "",
     setNewMemberName: vi.fn(),
     relation: "",

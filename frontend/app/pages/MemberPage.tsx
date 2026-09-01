@@ -1,5 +1,5 @@
 "use client";
-import "../styles/pages/needs.css";
+import "../styles/pages/findrecipes.css";
 import { useApp } from "../context/AppContext";
 import { Header } from "../components/Header";
 import { ProfileForm } from "../components/ProfileForm";
@@ -24,7 +24,7 @@ export function MemberPage() {
   } = useApp();
   return (
     <>
-      <Header title="添加一起吃饭的人" back={() => go("needs")} />
+      <Header title="添加一起吃饭的人" back={() => go("findrecipes")} />
       <label className="label">
         姓名 / 昵称
         <input
@@ -62,7 +62,7 @@ export function MemberPage() {
         className="primary sticky"
         disabled={!newMemberName.trim() || !relation || memberSaving}
         onClick={async () => {
-          if (await saveMember()) go("needs");
+          if (await saveMember()) go("findrecipes");
         }}
       >
         {memberSaving ? "保存中……" : "保存"}

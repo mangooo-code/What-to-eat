@@ -15,7 +15,7 @@ export function RecommendPage() {
       <Header
         title="今天可以吃这些"
         sub="照着家里的食材和你的想法，我挑了这 3 道。"
-        back={() => go("needs")}
+        back={() => go("findrecipes")}
       />
       <div className="recipe-grid">
         {rs.map((r, i) => (
@@ -72,7 +72,7 @@ export function RecommendPage() {
         >
           换一批
         </button>
-        <button className="link" onClick={() => go("needs")}>
+        <button className="link" onClick={() => go("findrecipes")}>
           调整需求
         </button>
       </div>

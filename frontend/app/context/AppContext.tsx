@@ -23,7 +23,7 @@ const pageToPath: Record<Page, string> = {
   capture: "/capture",
   recognize: "/recognize",
   confirm: "/confirm",
-  needs: "/needs",
+  findrecipes: "/findrecipes",
   member: "/member",
   "recommend-loading": "/recommend-loading",
   recommend: "/recommend",
@@ -118,7 +118,7 @@ interface AppContextValue {
   memberOpen: boolean;
   setMemberOpen: (v: boolean) => void;
   memberMode: "add" | "edit";
-  memberFrom: "needs" | "profile";
+  memberFrom: "findrecipes" | "profile";
   newMemberName: string;
   setNewMemberName: (v: string) => void;
   relation: string;
@@ -152,7 +152,7 @@ interface AppContextValue {
   saveMember: () => Promise<boolean>;
   saveDietProfile: () => Promise<boolean>;
   deleteProfileMember: () => Promise<boolean>;
-  openMember: (from: "needs" | "profile") => void;
+  openMember: (from: "findrecipes" | "profile") => void;
   editMember: (memberId: string) => void;
   openRecipes: (tab: "done" | "liked") => void;
   openDiet: (name: string) => void;
@@ -197,7 +197,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [listening, setListening] = useState(false);
   const [input, setInput] = useState("");
   const [time, setTime] = useState("");
-  const [taste, setTaste] = useState("按平时口味");
+  const [taste, setTaste] = useState("");
   const [people, setPeople] = useState(["我", "阳", "妈妈"]);
   const [householdMembers, setHouseholdMembers] = useState<HouseholdMember[]>([]);
   const [membersLoading, setMembersLoading] = useState(true);
@@ -231,7 +231,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [draftAllergens, setDraftAllergens] = useState<string[]>([]);
   const [memberOpen, setMemberOpen] = useState(false);
   const [memberMode, setMemberMode] = useState<"add" | "edit">("add");
-  const [memberFrom, setMemberFrom] = useState<"needs" | "profile">("needs");
+  const [memberFrom, setMemberFrom] = useState<"findrecipes" | "profile">("findrecipes");
   const [newMemberName, setNewMemberName] = useState("");
   const [relation, setRelation] = useState("");
   const [chosenLimits, setChosenLimits] = useState<string[]>([]);
@@ -336,7 +336,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       setHouseholdMembers((items) => memberMode === "edit"
         ? items.map((item) => item.memberId === saved.memberId ? saved : item)
         : [...items, saved]);
-      if (memberFrom === "needs") {
+      if (memberFrom === "findrecipes") {
         setMembers((ids) => ids.includes(saved.memberId) ? ids : [...ids, saved.memberId]);
       }
       setNewMemberName("");
@@ -355,7 +355,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       setMemberSaving(false);
     }
   };
-  const openMember = (from: "needs" | "profile") => {
+  const openMember = (from: "findrecipes" | "profile") => {
     setMemberMode("add");
     setMemberFrom(from);
     setNewMemberName("");
