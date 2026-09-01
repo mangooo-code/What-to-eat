@@ -132,7 +132,9 @@ export function FridgePage() {
         quantity: Number(newFood.qty),
         unitTypeId,
         locationId,
-        expiryDate: new Date(Date.now() + newFood.days * 86_400_000).toISOString(),
+        expiryDate: foodModal === "add" && newFood.days === 0
+          ? null
+          : new Date(Date.now() + newFood.days * 86_400_000).toISOString(),
         imageFileId: newFood.imageFileId ?? null,
         source: newFood.source ?? "manual" as const,
       };
@@ -266,7 +268,7 @@ export function FridgePage() {
             <h2>添加食材到“{fridgePlace}”</h2>
             <div className="modal-actions">
               <button onClick={() => {
-                setNewFood({ name: "", qty: 1, unit: "个", place: fridgePlace, days: 3, source: "manual" });
+                setNewFood({ name: "", qty: 1, unit: "个", place: fridgePlace, days: 0, source: "manual" });
                 setAddChoiceOpen(false);
                 setFoodModal("add");
               }}>
@@ -342,6 +344,7 @@ export function FridgePage() {
                   food={selected}
                   onChange={setNewFood}
                   showPlace={false}
+                  useOptionalExpiry={foodModal === "add"}
                 />
                 <div className="modal-edit-actions">
                   <button

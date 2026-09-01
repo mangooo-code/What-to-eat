@@ -31,9 +31,11 @@ export function CapturePage() {
   }, [previewUrl]);
 
   const recognizedFoods = () => [
-    { name: "番茄", qty: 2, unit: "个", place: fridgePlace, days: 3, source: "recognition" as const },
-    { name: "鸡蛋", qty: 1, unit: "盒", place: fridgePlace, days: 7, source: "recognition" as const },
+    { name: "番茄", qty: 2, unit: "个", place: fridgePlace, source: "recognition" as const },
+    { name: "鸡蛋", qty: 1, unit: "盒", place: fridgePlace, source: "recognition" as const },
   ];
+
+  const prepareRecognizedFoods = () => recognizedFoods().map((food) => ({ ...food, days: 0 }));
 
   const choosePhoto = (file: File | undefined, source: "camera" | "album") => {
     if (!file) return;
@@ -112,7 +114,7 @@ export function CapturePage() {
                 const transcript = "买了西红柿 2 个、鸡蛋 1 盒、牛肉半斤";
                 setInput(transcript);
                 setListening(false);
-                setFoods(recognizedFoods());
+                setFoods(prepareRecognizedFoods());
                 go("recognize");
               } else setListening(true);
             }}
@@ -125,7 +127,7 @@ export function CapturePage() {
       {isPhotoTab && (
         <>
           <button type="button" className="primary sticky" disabled={!count} onClick={() => {
-            setFoods(recognizedFoods());
+            setFoods(prepareRecognizedFoods());
             go("recognize");
           }}>
             开始识别
