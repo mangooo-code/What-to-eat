@@ -26,7 +26,6 @@ const pageToPath: Record<Page, string> = {
   confirm: "/confirm",
   findrecipes: "/findrecipes",
   member: "/member",
-  "recommend-loading": "/recommend-loading",
   recommend: "/recommend",
   recipe: "/recipe",
   cook: "/cook",
@@ -276,10 +275,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (page === "recognize") {
       const t = setTimeout(() => go("confirm"), 2000);
-      return () => clearTimeout(t);
-    }
-    if (page === "recommend-loading") {
-      const t = setTimeout(() => go("recommend"), 4200);
       return () => clearTimeout(t);
     }
   }, [page]);

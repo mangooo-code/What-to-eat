@@ -230,16 +230,6 @@
   font-weight: 700;
 }
 
-.button-spinner {
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  border: 3px solid rgba(255, 255, 255, 0.4);
-  border-top-color: currentColor;
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-}
-
 @media (min-width: 800px) {
   .findrecipes-layout {
     grid-template-columns: 1fr 1fr;

@@ -8,7 +8,6 @@ export type Page =
   | "confirm"
   | "findrecipes"
   | "member"
-  | "recommend-loading"
   | "recommend"
   | "recipe"
   | "cook"

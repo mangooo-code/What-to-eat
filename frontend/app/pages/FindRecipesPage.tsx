@@ -6,6 +6,7 @@ import { useApp } from "../context/AppContext";
 import { Choice } from "../components/Choice";
 import { Header } from "../components/Header";
 import { AssetImage } from "../components/AssetImage";
+import { LoadingSequence } from "../components/LoadingSequence";
 import { limits } from "../lib/data";
 import { memberService } from "../services/memberService";
 import { findRecipesService } from "../services/findRecipesService";
@@ -18,6 +19,13 @@ const tasteImages: Record<string, string> = {
   "清淡爽口": "light-and-refreshing.png",
   "健康轻食": "healthy-light-meal.png",
 };
+
+const loadingTexts = [
+  "让我想想今天吃什么好……",
+  "先看看家里有什么能用的",
+  "不爱吃的，我都帮你避开",
+  "再挑几道今天最合适的",
+];
 
 export function FindRecipesPage() {
   const {
@@ -70,18 +78,16 @@ export function FindRecipesPage() {
     setOtherLimit("");
   };
   const handleSubmit = async () => {
-    setSubmitting(true);
-    await new Promise((resolve) => setTimeout(resolve, 500));
     const missingTime = !time;
     const missingTaste = !taste;
     if (missingTime || missingTaste) {
       setTimeInvalid(missingTime);
       setTasteInvalid(missingTaste);
-      setSubmitting(false);
       setFormError("还有必填项没有选择，请检查后重试。");
       setFormErrorToken((t) => t + 1);
       return;
     }
+    setSubmitting(true);
     const submission = {
       timePreference: time,
       memberIds: members,
@@ -90,15 +96,20 @@ export function FindRecipesPage() {
       dietaryExclusions: chosenLimits,
     };
     try {
-      const recipes = await findRecipesService.submit(submission);
+      const [recipes] = await Promise.all([
+        findRecipesService.submit(submission),
+        new Promise((resolve) => setTimeout(resolve, 4200)),
+      ]);
       setRecommendedRecipes(recipes);
-      go("recommend-loading");
+      go("recommend");
     } catch (error) {
-      say(`提交失败：${error instanceof Error ? error.message : "请稍后重试"}`);
-    } finally {
       setSubmitting(false);
+      say(`提交失败：${error instanceof Error ? error.message : "请稍后重试"}`);
     }
   };
+  if (submitting) {
+    return <LoadingSequence texts={loadingTexts} />;
+  }
   return (
     <>
       <Header
@@ -291,10 +302,9 @@ export function FindRecipesPage() {
         <button
           type="button"
           className="primary findrecipes-submit"
-          disabled={submitting}
           onClick={handleSubmit}
         >
-          {submitting ? <span className="button-spinner" role="status" aria-label="提交中" /> : "帮我挑一挑"}
+          帮我挑一挑
         </button>
       </form>
     </>

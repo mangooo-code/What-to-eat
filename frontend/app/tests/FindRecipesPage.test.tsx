@@ -2,10 +2,13 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { FindRecipesPage } from "../pages/FindRecipesPage";
 import { useApp } from "../context/AppContext";
+import { findRecipesService } from "../services/findRecipesService";
 import { createAppState } from "./mockApp";
 
 vi.mock("../context/AppContext", () => ({ useApp: vi.fn() }));
+vi.mock("../services/findRecipesService", () => ({ findRecipesService: { submit: vi.fn() } }));
 const mockedUseApp = vi.mocked(useApp);
+const mockedSubmit = vi.mocked(findRecipesService.submit);
 
 function mockApp(overrides: Parameters<typeof createAppState>[0] = {}) {
   mockedUseApp.mockReturnValue(createAppState(overrides));
@@ -98,11 +101,22 @@ describe("FindRecipesPage", () => {
     expect(screen.getByRole("button", { name: "帮我挑一挑" })).toBeDisabled();
   });
 
-  it("proceeds to recommend-loading once time is chosen", () => {
+  it("proceeds to recommend once time and taste are chosen", async () => {
+    vi.useFakeTimers();
+    mockedSubmit.mockResolvedValue([]);
     const go = vi.fn();
-    mockApp({ time: "快速解决（15–30 分钟）", go });
+    const setRecommendedRecipes = vi.fn();
+    mockApp({
+      time: "快速解决（15–30 分钟）",
+      taste: "重口过瘾",
+      go,
+      setRecommendedRecipes,
+    });
     render(<FindRecipesPage />);
     fireEvent.click(screen.getByRole("button", { name: "帮我挑一挑" }));
-    expect(go).toHaveBeenCalledWith("recommend-loading");
+    await vi.advanceTimersByTimeAsync(4200);
+    expect(setRecommendedRecipes).toHaveBeenCalledWith([]);
+    expect(go).toHaveBeenCalledWith("recommend");
+    vi.useRealTimers();
   });
 });
