@@ -21,16 +21,16 @@ describe("LoadingSequence", () => {
   it("advances to the next text after the hold and transition", () => {
     render(<LoadingSequence texts={texts} />);
     act(() => {
-      vi.advanceTimersByTime(1500);
+      vi.advanceTimersByTime(4000);
     });
     expect(screen.getByText(texts[1])).toBeInTheDocument();
   });
 
-  it("stops advancing once the last text is reached", () => {
+  it("loops back to the first text after the last one", () => {
     render(<LoadingSequence texts={texts} />);
     act(() => {
-      vi.advanceTimersByTime(10000);
+      vi.advanceTimersByTime(4000 * texts.length);
     });
-    expect(screen.getByText(texts[texts.length - 1])).toBeInTheDocument();
+    expect(screen.getByText(texts[0])).toBeInTheDocument();
   });
 });

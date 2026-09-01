@@ -132,7 +132,8 @@ function parseAiRecipes(raw: string): AiGeneratedRecipe[] {
   let parsed: unknown;
   try {
     parsed = JSON.parse(cleaned);
-  } catch {
+  } catch (error) {
+    console.error("parseAiRecipes: response was not valid JSON", error, raw);
     return [];
   }
   if (!Array.isArray(parsed)) return [];
@@ -157,6 +158,33 @@ function toAiDto(recipe: AiGeneratedRecipe): RecipeDto {
   };
 }
 
+const AI_CALL_TIMEOUT_MS = 55_000;
+const AI_MAX_ATTEMPTS = 1;
+
+// Aliyun DashScope (this account's MaaS deployment) has been observed to take a long time to
+// respond rather than erroring quickly, so retries don't help - just give the single call room.
+async function callAiForRecipes(promptText: string): Promise<string> {
+  let lastError: unknown;
+  for (let attempt = 1; attempt <= AI_MAX_ATTEMPTS; attempt++) {
+    try {
+      return await generateWithAliyun(
+        [
+          {
+            role: "system",
+            content: [{ text: "你是一个菜谱推荐助手。只返回 JSON 数组，不要包含任何解释文字或 Markdown 代码块标记。" }],
+          },
+          { role: "user", content: [{ text: promptText }] },
+        ],
+        { model: "qwen3.8-max", timeoutMs: AI_CALL_TIMEOUT_MS },
+      );
+    } catch (error) {
+      lastError = error;
+      console.error(`Aliyun recipe generation attempt ${attempt}/${AI_MAX_ATTEMPTS} failed`, error);
+    }
+  }
+  throw lastError;
+}
+
 // Fills any spots not covered by the user's favorited recipes by asking Aliyun DashScope
 // to generate new recipe ideas from the user's current fridge contents and preferences.
 async function generateRecipesWithAi(
@@ -179,19 +207,11 @@ async function generateRecipesWithAi(
   });
 
   try {
-    const raw = await generateWithAliyun(
-      [
-        {
-          role: "system",
-          content: [{ text: "你是一个菜谱推荐助手。只返回 JSON 数组，不要包含任何解释文字或 Markdown 代码块标记。" }],
-        },
-        { role: "user", content: [{ text: promptText }] },
-      ],
-      { model: "qwen3.8-max" },
-    );
+    const raw = await callAiForRecipes(promptText);
     return parseAiRecipes(raw).slice(0, count).map(toAiDto);
-  } catch {
+  } catch (error) {
     // Best-effort top-up: favorites results should still be returned if AI generation fails.
+    console.error("generateRecipesWithAi: giving up", error);
     return [];
   }
 }

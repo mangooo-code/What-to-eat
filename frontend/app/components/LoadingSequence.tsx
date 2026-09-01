@@ -3,8 +3,8 @@ import "../styles/components/loading.css";
 import { AssetImage } from "./AssetImage";
 import { useEffect, useState } from "react";
 
-const HOLD_MS = 1000;
-const TRANSITION_MS = 500;
+const HOLD_MS = 3000;
+const TRANSITION_MS = 1000;
 
 export function LoadingSequence({ texts }: { texts: string[] }) {
   const [i, setI] = useState(0);
@@ -16,13 +16,13 @@ export function LoadingSequence({ texts }: { texts: string[] }) {
     let index = 0;
     const timers: ReturnType<typeof setTimeout>[] = [];
     const scheduleNext = () => {
-      if (index >= texts.length - 1) return;
+      if (texts.length <= 1) return;
       timers.push(setTimeout(() => {
         if (cancelled) return;
         setVisible(false);
         timers.push(setTimeout(() => {
           if (cancelled) return;
-          index = Math.min(index + 1, texts.length - 1);
+          index = (index + 1) % texts.length;
           setI(index);
           setVisible(true);
           scheduleNext();

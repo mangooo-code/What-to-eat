@@ -8,7 +8,7 @@
             "name": "api",
             "runtime": "Nodejs20.19",
             "handler": "index.main",
-            "timeout": 30,
+            "timeout": 60,
             "memorySize": 256,
             "installDependency": true,
             "envVariables": {
