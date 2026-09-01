@@ -40,6 +40,7 @@ const pathToPage: Record<string, Page> = Object.fromEntries(
 
 interface AppContextValue {
   page: Page;
+  authChecked: boolean;
   go: (p: Page) => void;
   countryCode: string;
   setCountryCode: (v: string) => void;
@@ -262,6 +263,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [mealReaction, setMealReaction] = useState("");
   const [needError, setNeedError] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [authChecked, setAuthChecked] = useState(false);
 
   const go = (p: Page) => {
     router.push(pageToPath[p]);
@@ -309,16 +311,27 @@ export function AppProvider({ children }: { children: ReactNode }) {
       setMembersLoading(false);
     }
   };
+  // Runs once per redirect until the page settles on the route matching auth state,
+  // so protected content never flashes before an unauthenticated user reaches /login.
   useEffect(() => {
-    if (authToken.get()) {
+    if (authChecked) return;
+    const authed = !!authToken.get();
+    if (authed) {
       loadCurrentUser();
       loadMembers();
-      if (pathname === "/login") go("home");
+      if (pathname === "/login") {
+        go("home");
+        return;
+      }
     } else {
       setMembersLoading(false);
-      if (pathname !== "/login") go("login");
+      if (pathname !== "/login") {
+        go("login");
+        return;
+      }
     }
-  }, []);
+    setAuthChecked(true);
+  }, [pathname, authChecked]);
 
 
   const saveMember = async (): Promise<boolean> => {
@@ -508,6 +521,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setPeople,
     householdMembers,
     membersLoading,
+    authChecked,
     currentUser,
     currentUserLoading,
     loadCurrentUser,

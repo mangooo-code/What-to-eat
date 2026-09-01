@@ -19,6 +19,7 @@ export function Shell({
 }) {
   const {
     page,
+    authChecked,
     go,
     toast,
     legal,
@@ -84,8 +85,10 @@ export function Shell({
 
   return (
     <main className="app-shell">
-      <section className="page">{children}</section>
-      {(withNav ?? NAV_PAGES.has(page)) && nav}
+      <section className="page">
+        {authChecked ? children : <div className="center-state" aria-hidden="true" />}
+      </section>
+      {(withNav ?? NAV_PAGES.has(page)) && authChecked && nav}
       {toast && (
         <div className="toast" role="status" aria-live="polite">
           {toast}

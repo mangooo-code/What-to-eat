@@ -50,6 +50,7 @@ export function createAppState(overrides: Partial<AppState> = {}): AppState {
   ];
   return {
     page: "home",
+    authChecked: true,
     go: vi.fn(),
     countryCode: "+86",
     setCountryCode: vi.fn(),

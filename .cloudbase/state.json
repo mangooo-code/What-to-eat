@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-01T10:23:01.889Z",
-  "gitCommit": "fdd413d9ea9c860a69f45e5e2bf29b7288c91ee8",
+  "updatedAt": "2026-09-01T11:08:47.555Z",
+  "gitCommit": "dbb9e86f8b3d22d415a5d8728cbc19680e7fd743",
   "envId": "kaifanmiao-d4g695xaj0f058d58",
   "resources": {
     "hosting": [
@@ -9,112 +9,264 @@
         "name": "web",
         "files": {
           "404.html": {
-            "hash": "f6e845eac41993d2",
-            "size": 8273
+            "hash": "e73d18c1577df152",
+            "size": 9029
           },
           "__next.__PAGE__.txt": {
-            "hash": "977b9d420fc6f3e6",
-            "size": 1064
+            "hash": "701968e9f838649e",
+            "size": 1344
           },
           "__next._full.txt": {
-            "hash": "c70b2b33f9f02373",
-            "size": 4557
+            "hash": "59af7ba3ec9a574e",
+            "size": 5907
           },
           "__next._head.txt": {
-            "hash": "a461976b2417e315",
-            "size": 885
+            "hash": "909aff1b5abf2b05",
+            "size": 965
           },
           "__next._index.txt": {
-            "hash": "168b0e9aa0f77404",
-            "size": 2005
+            "hash": "7f6dfeab2ce6377a",
+            "size": 2680
           },
           "__next._tree.txt": {
-            "hash": "80261fab815e6db6",
-            "size": 298
+            "hash": "4760dd87630876bd",
+            "size": 406
+          },
+          "_next/static/chunks/0-rgvty.k3srq.css": {
+            "hash": "8a78177631243130",
+            "size": 307
+          },
+          "_next/static/chunks/0.jn11~he~vld.js": {
+            "hash": "3aef29d3b0d53e7a",
+            "size": 4396
+          },
+          "_next/static/chunks/00ex34sq6k59u.css": {
+            "hash": "315af3872fd4a2e0",
+            "size": 92
+          },
+          "_next/static/chunks/00wftfwo1ap71.css": {
+            "hash": "c69684f3549a6773",
+            "size": 4706
+          },
+          "_next/static/chunks/026l_5phz0jpw.css": {
+            "hash": "0df3bef38bff0cda",
+            "size": 10278
+          },
+          "_next/static/chunks/02i7dfk78~t~2.js": {
+            "hash": "e4f0fa52acb0a9bd",
+            "size": 53149
+          },
+          "_next/static/chunks/03hg_o_8o5f_0.css": {
+            "hash": "33e501428b44cc15",
+            "size": 1194
           },
           "_next/static/chunks/03~yq9q893hmn.js": {
             "hash": "0973c1d64c88adc8",
             "size": 112594
           },
-          "_next/static/chunks/04ggmkf2okb19.css": {
-            "hash": "2ee0f894fc5d858b",
-            "size": 36157
+          "_next/static/chunks/04m0w-2rjnnzl.js": {
+            "hash": "f04e85769067333a",
+            "size": 11037
+          },
+          "_next/static/chunks/068qn49xw7o04.css": {
+            "hash": "41c6d1b41a006f5c",
+            "size": 663
+          },
+          "_next/static/chunks/073qucydqxfoi.js": {
+            "hash": "9ce641f83e49ed57",
+            "size": 7230
+          },
+          "_next/static/chunks/079oext27-yce.css": {
+            "hash": "e9db2035f2bd4b69",
+            "size": 1242
+          },
+          "_next/static/chunks/079pqj53c.v_g.js": {
+            "hash": "bd4f0aee7d4b9c34",
+            "size": 3327
           },
           "_next/static/chunks/07lhk_q6pmm3r.js": {
             "hash": "d8957e42e0c2769a",
             "size": 227537
           },
+          "_next/static/chunks/07qzc-40y05at.js": {
+            "hash": "63c421326a969497",
+            "size": 2452
+          },
+          "_next/static/chunks/07vuo0por.fz-.js": {
+            "hash": "7d9458f23dc677b8",
+            "size": 1583
+          },
+          "_next/static/chunks/08ids1o5bkbh3.css": {
+            "hash": "99823f6ab49a99dc",
+            "size": 1743
+          },
+          "_next/static/chunks/0__x_7n4_p.vo.css": {
+            "hash": "13ba44299bca219b",
+            "size": 1573
+          },
+          "_next/static/chunks/0a1-8shj8fs~-.css": {
+            "hash": "ef0619452b21ffd6",
+            "size": 86
+          },
           "_next/static/chunks/0dbhjjzl8qfwv.js": {
             "hash": "59d6d21868686254",
             "size": 57909
           },
-          "_next/static/chunks/0ht900cau6_ur.js": {
-            "hash": "b2b0fb9dbb3e38ab",
-            "size": 17474
+          "_next/static/chunks/0f5yo9gj0tldv.css": {
+            "hash": "d3a2bd2e50dcbf59",
+            "size": 49
           },
-          "_next/static/chunks/0k6kr~ze-.qya.js": {
-            "hash": "f9e826a3ba4082ff",
-            "size": 533176
+          "_next/static/chunks/0fbo3vv3zdldl.js": {
+            "hash": "2bd56513a413734b",
+            "size": 7613
           },
-          "_next/static/chunks/0r8nt2o8muejo.js": {
-            "hash": "d05dd25fd691ea8e",
-            "size": 200373
+          "_next/static/chunks/0h9mrc.or0u5d.css": {
+            "hash": "67a2e2d6811cbec3",
+            "size": 2877
           },
-          "_next/static/chunks/15bx1jaq2u5pz.js": {
-            "hash": "bdbc8663e5b81ab8",
-            "size": 57948
+          "_next/static/chunks/0h_yw8d6-jzvs.css": {
+            "hash": "659f5155be8319ee",
+            "size": 4850
           },
-          "_next/static/chunks/17qci.24l-fy5.css": {
-            "hash": "7552931d0bee54f3",
-            "size": 7524
+          "_next/static/chunks/0jteo1mheam7g.css": {
+            "hash": "5810f6fa4d52a65e",
+            "size": 57
           },
-          "_next/static/chunks/turbopack-05c8c~j12fn14.js": {
-            "hash": "9016228a35657c1f",
-            "size": 10547
+          "_next/static/chunks/0k_m093u36yty.js": {
+            "hash": "35e36cec27442bdc",
+            "size": 3694
           },
-          "_next/static/xA3JAEHst4pVKWnFofnj-/_buildManifest.js": {
+          "_next/static/chunks/0lsj_zruymm43.css": {
+            "hash": "27646b04c5c1df1d",
+            "size": 3439
+          },
+          "_next/static/chunks/0m3namj9x3pka.js": {
+            "hash": "0aea755338d1ce86",
+            "size": 143749
+          },
+          "_next/static/chunks/0ne98-wzrn.a_.js": {
+            "hash": "7f5679cc7de692a6",
+            "size": 537908
+          },
+          "_next/static/chunks/0qj8-zysx76mk.css": {
+            "hash": "f4fe421f33d4347a",
+            "size": 957
+          },
+          "_next/static/chunks/0qlddpk-nw3qs.js": {
+            "hash": "0546a97462e7ebb2",
+            "size": 3970
+          },
+          "_next/static/chunks/0ssrmthuxf6l8.css": {
+            "hash": "f4af2bb3965f4100",
+            "size": 641
+          },
+          "_next/static/chunks/0sy.nliat9ig1.js": {
+            "hash": "f10aef682ce4848c",
+            "size": 1909
+          },
+          "_next/static/chunks/0u-n~hpo36aw9.js": {
+            "hash": "e6a299879799a0d3",
+            "size": 21063
+          },
+          "_next/static/chunks/0v-73uv3hi3rq.css": {
+            "hash": "b95ae2602b5230d8",
+            "size": 1626
+          },
+          "_next/static/chunks/0v.agpr4krxp0.js": {
+            "hash": "7ea9418698bcf1ad",
+            "size": 2105
+          },
+          "_next/static/chunks/0wuifoxwqwvsu.css": {
+            "hash": "e493194dc5d51395",
+            "size": 718
+          },
+          "_next/static/chunks/0zgm_zqetih4b.js": {
+            "hash": "74a2de6d91e5d188",
+            "size": 15361
+          },
+          "_next/static/chunks/10es28fz_qveg.css": {
+            "hash": "2b5eeecfaa65252a",
+            "size": 3741
+          },
+          "_next/static/chunks/118fuzdnr~30-.js": {
+            "hash": "270ea33a459db5ae",
+            "size": 4208
+          },
+          "_next/static/chunks/11k6wkb1_3k53.js": {
+            "hash": "1eae0aa2e974ff08",
+            "size": 2277
+          },
+          "_next/static/chunks/14hem_uhutnjs.css": {
+            "hash": "c60826d1f2008100",
+            "size": 650
+          },
+          "_next/static/chunks/14u9kpz6cf0ry.js": {
+            "hash": "951b588466596678",
+            "size": 4346
+          },
+          "_next/static/chunks/14y_x19fxf45h.js": {
+            "hash": "bc7b64da5f594585",
+            "size": 1684
+          },
+          "_next/static/chunks/15f324u5n39io.js": {
+            "hash": "37194b262b06f46a",
+            "size": 569
+          },
+          "_next/static/chunks/16e6f9sg.v4js.css": {
+            "hash": "ae14e28f88c2d64d",
+            "size": 1776
+          },
+          "_next/static/chunks/16xpp9qgxmt2..css": {
+            "hash": "16606d664149da4c",
+            "size": 5187
+          },
+          "_next/static/chunks/turbopack-01_aapkryes8s.js": {
+            "hash": "5a5e9b6e4aa58837",
+            "size": 10580
+          },
+          "_next/static/uLFksQyYWvUpFEjd_3Iaq/_buildManifest.js": {
             "hash": "9476e0afd3f9da68",
             "size": 219
           },
-          "_next/static/xA3JAEHst4pVKWnFofnj-/_clientMiddlewareManifest.js": {
+          "_next/static/uLFksQyYWvUpFEjd_3Iaq/_clientMiddlewareManifest.js": {
             "hash": "5483e3295dc35dfe",
             "size": 96
           },
-          "_next/static/xA3JAEHst4pVKWnFofnj-/_ssgManifest.js": {
+          "_next/static/uLFksQyYWvUpFEjd_3Iaq/_ssgManifest.js": {
             "hash": "678f6ce2cb80b1fe",
             "size": 80
           },
           "_not-found/__next._full.txt": {
-            "hash": "4c3153d997ae2a95",
-            "size": 5332
+            "hash": "012cef8d8a20d7b1",
+            "size": 6510
           },
           "_not-found/__next._head.txt": {
-            "hash": "5bc9b42f60ad1306",
-            "size": 936
+            "hash": "7d797a24ca1a538f",
+            "size": 1016
           },
           "_not-found/__next._index.txt": {
-            "hash": "168b0e9aa0f77404",
-            "size": 2005
+            "hash": "7f6dfeab2ce6377a",
+            "size": 2680
           },
           "_not-found/__next._not-found.__PAGE__.txt": {
-            "hash": "997878ca2d3c1dbf",
-            "size": 1462
+            "hash": "a928d941a68168fe",
+            "size": 1502
           },
           "_not-found/__next._not-found.txt": {
-            "hash": "994028f46232d0b0",
-            "size": 445
+            "hash": "133655faac6e8fae",
+            "size": 525
           },
           "_not-found/__next._tree.txt": {
-            "hash": "7226391b0e4fefe2",
-            "size": 319
+            "hash": "f21be214c944fb06",
+            "size": 373
           },
           "_not-found.html": {
-            "hash": "f6e845eac41993d2",
-            "size": 8273
+            "hash": "e73d18c1577df152",
+            "size": 9029
           },
           "_not-found.txt": {
-            "hash": "4c3153d997ae2a95",
-            "size": 5332
+            "hash": "012cef8d8a20d7b1",
+            "size": 6510
           },
           "assets/ai-decision-loading.png": {
             "hash": "ae61080447584fbc",
@@ -312,17 +464,497 @@
             "hash": "884c9273e1896546",
             "size": 168676
           },
+          "capture/__next._full.txt": {
+            "hash": "80e0a61995cc9d39",
+            "size": 6536
+          },
+          "capture/__next._head.txt": {
+            "hash": "909aff1b5abf2b05",
+            "size": 965
+          },
+          "capture/__next._index.txt": {
+            "hash": "7f6dfeab2ce6377a",
+            "size": 2680
+          },
+          "capture/__next._tree.txt": {
+            "hash": "709f6dabe3a83839",
+            "size": 531
+          },
+          "capture/__next.capture.__PAGE__.txt": {
+            "hash": "bb3c5b8dfc113850",
+            "size": 1503
+          },
+          "capture/__next.capture.txt": {
+            "hash": "133655faac6e8fae",
+            "size": 525
+          },
+          "capture.html": {
+            "hash": "42633851686e14c9",
+            "size": 9391
+          },
+          "capture.txt": {
+            "hash": "80e0a61995cc9d39",
+            "size": 6536
+          },
+          "confirm/__next._full.txt": {
+            "hash": "8f784da88cb29fe7",
+            "size": 6745
+          },
+          "confirm/__next._head.txt": {
+            "hash": "909aff1b5abf2b05",
+            "size": 965
+          },
+          "confirm/__next._index.txt": {
+            "hash": "7f6dfeab2ce6377a",
+            "size": 2680
+          },
+          "confirm/__next._tree.txt": {
+            "hash": "5b0c2712338ae4ff",
+            "size": 585
+          },
+          "confirm/__next.confirm.__PAGE__.txt": {
+            "hash": "00a43b02d94b8742",
+            "size": 1664
+          },
+          "confirm/__next.confirm.txt": {
+            "hash": "133655faac6e8fae",
+            "size": 525
+          },
+          "confirm.html": {
+            "hash": "fa1b21a8088e480a",
+            "size": 9709
+          },
+          "confirm.txt": {
+            "hash": "8f784da88cb29fe7",
+            "size": 6745
+          },
+          "cook/__next._full.txt": {
+            "hash": "4206163c13f4f36b",
+            "size": 6531
+          },
+          "cook/__next._head.txt": {
+            "hash": "909aff1b5abf2b05",
+            "size": 965
+          },
+          "cook/__next._index.txt": {
+            "hash": "7f6dfeab2ce6377a",
+            "size": 2680
+          },
+          "cook/__next._tree.txt": {
+            "hash": "0d15e17023a0492c",
+            "size": 528
+          },
+          "cook/__next.cook.__PAGE__.txt": {
+            "hash": "e51015e4265dfe1c",
+            "size": 1504
+          },
+          "cook/__next.cook.txt": {
+            "hash": "133655faac6e8fae",
+            "size": 525
+          },
+          "cook.html": {
+            "hash": "4104eeb2a6cd0222",
+            "size": 9386
+          },
+          "cook.txt": {
+            "hash": "4206163c13f4f36b",
+            "size": 6531
+          },
+          "diet/__next._full.txt": {
+            "hash": "bd531e5e17c260e6",
+            "size": 6323
+          },
+          "diet/__next._head.txt": {
+            "hash": "909aff1b5abf2b05",
+            "size": 965
+          },
+          "diet/__next._index.txt": {
+            "hash": "7f6dfeab2ce6377a",
+            "size": 2680
+          },
+          "diet/__next._tree.txt": {
+            "hash": "9083972d9b8ddf84",
+            "size": 474
+          },
+          "diet/__next.diet.__PAGE__.txt": {
+            "hash": "dd03e791135283f7",
+            "size": 1344
+          },
+          "diet/__next.diet.txt": {
+            "hash": "133655faac6e8fae",
+            "size": 525
+          },
+          "diet.html": {
+            "hash": "f302adf92546d2ec",
+            "size": 9069
+          },
+          "diet.txt": {
+            "hash": "bd531e5e17c260e6",
+            "size": 6323
+          },
+          "edit/__next._full.txt": {
+            "hash": "8a265b41bea44228",
+            "size": 6323
+          },
+          "edit/__next._head.txt": {
+            "hash": "909aff1b5abf2b05",
+            "size": 965
+          },
+          "edit/__next._index.txt": {
+            "hash": "7f6dfeab2ce6377a",
+            "size": 2680
+          },
+          "edit/__next._tree.txt": {
+            "hash": "f3d0a826584d40b8",
+            "size": 474
+          },
+          "edit/__next.edit.__PAGE__.txt": {
+            "hash": "58fa32f16cf4e457",
+            "size": 1344
+          },
+          "edit/__next.edit.txt": {
+            "hash": "133655faac6e8fae",
+            "size": 525
+          },
+          "edit.html": {
+            "hash": "395fc9abd47efa17",
+            "size": 9069
+          },
+          "edit.txt": {
+            "hash": "8a265b41bea44228",
+            "size": 6323
+          },
           "favicon.svg": {
             "hash": "e6d2e59b7b5bbb03",
             "size": 712
           },
+          "feedback/__next._full.txt": {
+            "hash": "5613bee21b9af7a4",
+            "size": 6331
+          },
+          "feedback/__next._head.txt": {
+            "hash": "909aff1b5abf2b05",
+            "size": 965
+          },
+          "feedback/__next._index.txt": {
+            "hash": "7f6dfeab2ce6377a",
+            "size": 2680
+          },
+          "feedback/__next._tree.txt": {
+            "hash": "d107f9c2412e82df",
+            "size": 478
+          },
+          "feedback/__next.feedback.__PAGE__.txt": {
+            "hash": "9b903e82164c2fe2",
+            "size": 1344
+          },
+          "feedback/__next.feedback.txt": {
+            "hash": "133655faac6e8fae",
+            "size": 525
+          },
+          "feedback.html": {
+            "hash": "3a6b4f7208b835ce",
+            "size": 9077
+          },
+          "feedback.txt": {
+            "hash": "5613bee21b9af7a4",
+            "size": 6331
+          },
+          "findrecipes/__next._full.txt": {
+            "hash": "bc4438aa44ba6769",
+            "size": 6545
+          },
+          "findrecipes/__next._head.txt": {
+            "hash": "909aff1b5abf2b05",
+            "size": 965
+          },
+          "findrecipes/__next._index.txt": {
+            "hash": "7f6dfeab2ce6377a",
+            "size": 2680
+          },
+          "findrecipes/__next._tree.txt": {
+            "hash": "b28d87eb73eca5f3",
+            "size": 535
+          },
+          "findrecipes/__next.findrecipes.__PAGE__.txt": {
+            "hash": "9016d82245227f33",
+            "size": 1504
+          },
+          "findrecipes/__next.findrecipes.txt": {
+            "hash": "133655faac6e8fae",
+            "size": 525
+          },
+          "findrecipes.html": {
+            "hash": "524d807f6ef5b562",
+            "size": 9400
+          },
+          "findrecipes.txt": {
+            "hash": "bc4438aa44ba6769",
+            "size": 6545
+          },
+          "fridge/__next._full.txt": {
+            "hash": "4689ad6fb2c1286b",
+            "size": 6950
+          },
+          "fridge/__next._head.txt": {
+            "hash": "909aff1b5abf2b05",
+            "size": 965
+          },
+          "fridge/__next._index.txt": {
+            "hash": "7f6dfeab2ce6377a",
+            "size": 2680
+          },
+          "fridge/__next._tree.txt": {
+            "hash": "d10a49b63fa1f3d0",
+            "size": 638
+          },
+          "fridge/__next.fridge.__PAGE__.txt": {
+            "hash": "5d3d50f1529aae7b",
+            "size": 1823
+          },
+          "fridge/__next.fridge.txt": {
+            "hash": "133655faac6e8fae",
+            "size": 525
+          },
+          "fridge.html": {
+            "hash": "2d682c5cbe8db5c4",
+            "size": 10023
+          },
+          "fridge.txt": {
+            "hash": "4689ad6fb2c1286b",
+            "size": 6950
+          },
           "index.html": {
-            "hash": "9a8326fd2729110e",
-            "size": 8679
+            "hash": "d6ff9f39be7ecf32",
+            "size": 8587
           },
           "index.txt": {
-            "hash": "c70b2b33f9f02373",
-            "size": 4557
+            "hash": "59af7ba3ec9a574e",
+            "size": 5907
+          },
+          "login/__next._full.txt": {
+            "hash": "bdb0d24248b620c1",
+            "size": 6117
+          },
+          "login/__next._head.txt": {
+            "hash": "909aff1b5abf2b05",
+            "size": 965
+          },
+          "login/__next._index.txt": {
+            "hash": "7f6dfeab2ce6377a",
+            "size": 2680
+          },
+          "login/__next._tree.txt": {
+            "hash": "a734cf3ad4d887b9",
+            "size": 421
+          },
+          "login/__next.login.__PAGE__.txt": {
+            "hash": "6830050c7a0af4ea",
+            "size": 1184
+          },
+          "login/__next.login.txt": {
+            "hash": "133655faac6e8fae",
+            "size": 525
+          },
+          "login.html": {
+            "hash": "2053d96cd01eb5a7",
+            "size": 8754
+          },
+          "login.txt": {
+            "hash": "bdb0d24248b620c1",
+            "size": 6117
+          },
+          "member/__next._full.txt": {
+            "hash": "e9650deeb81df188",
+            "size": 6326
+          },
+          "member/__next._head.txt": {
+            "hash": "909aff1b5abf2b05",
+            "size": 965
+          },
+          "member/__next._index.txt": {
+            "hash": "7f6dfeab2ce6377a",
+            "size": 2680
+          },
+          "member/__next._tree.txt": {
+            "hash": "866dcb4955fdb600",
+            "size": 476
+          },
+          "member/__next.member.__PAGE__.txt": {
+            "hash": "77d47af54431ffdf",
+            "size": 1343
+          },
+          "member/__next.member.txt": {
+            "hash": "133655faac6e8fae",
+            "size": 525
+          },
+          "member.html": {
+            "hash": "471056fa144528cd",
+            "size": 9072
+          },
+          "member.txt": {
+            "hash": "e9650deeb81df188",
+            "size": 6326
+          },
+          "profile/__next._full.txt": {
+            "hash": "865fe7aa75198c82",
+            "size": 6328
+          },
+          "profile/__next._head.txt": {
+            "hash": "909aff1b5abf2b05",
+            "size": 965
+          },
+          "profile/__next._index.txt": {
+            "hash": "7f6dfeab2ce6377a",
+            "size": 2680
+          },
+          "profile/__next._tree.txt": {
+            "hash": "4ab7a0589117e6c2",
+            "size": 477
+          },
+          "profile/__next.profile.__PAGE__.txt": {
+            "hash": "e5261ea08538db3a",
+            "size": 1343
+          },
+          "profile/__next.profile.txt": {
+            "hash": "133655faac6e8fae",
+            "size": 525
+          },
+          "profile.html": {
+            "hash": "5b09d4d870ecf564",
+            "size": 9074
+          },
+          "profile.txt": {
+            "hash": "865fe7aa75198c82",
+            "size": 6328
+          },
+          "recipe/__next._full.txt": {
+            "hash": "2117478d8d47f070",
+            "size": 6327
+          },
+          "recipe/__next._head.txt": {
+            "hash": "909aff1b5abf2b05",
+            "size": 965
+          },
+          "recipe/__next._index.txt": {
+            "hash": "7f6dfeab2ce6377a",
+            "size": 2680
+          },
+          "recipe/__next._tree.txt": {
+            "hash": "e7ea5b4cbfa3996b",
+            "size": 476
+          },
+          "recipe/__next.recipe.__PAGE__.txt": {
+            "hash": "3fdd1e7350dcbb89",
+            "size": 1344
+          },
+          "recipe/__next.recipe.txt": {
+            "hash": "133655faac6e8fae",
+            "size": 525
+          },
+          "recipe.html": {
+            "hash": "b2045675a5548d93",
+            "size": 9073
+          },
+          "recipe.txt": {
+            "hash": "2117478d8d47f070",
+            "size": 6327
+          },
+          "recipes/__next._full.txt": {
+            "hash": "e12fe11b298dfce2",
+            "size": 6745
+          },
+          "recipes/__next._head.txt": {
+            "hash": "909aff1b5abf2b05",
+            "size": 965
+          },
+          "recipes/__next._index.txt": {
+            "hash": "7f6dfeab2ce6377a",
+            "size": 2680
+          },
+          "recipes/__next._tree.txt": {
+            "hash": "cb7e132119647bd3",
+            "size": 585
+          },
+          "recipes/__next.recipes.__PAGE__.txt": {
+            "hash": "0f9fe5dc2e2d9b24",
+            "size": 1664
+          },
+          "recipes/__next.recipes.txt": {
+            "hash": "133655faac6e8fae",
+            "size": 525
+          },
+          "recipes.html": {
+            "hash": "7fbdd9d646ce54b7",
+            "size": 9709
+          },
+          "recipes.txt": {
+            "hash": "e12fe11b298dfce2",
+            "size": 6745
+          },
+          "recognize/__next._full.txt": {
+            "hash": "1d380029b0d8da6c",
+            "size": 6125
+          },
+          "recognize/__next._head.txt": {
+            "hash": "909aff1b5abf2b05",
+            "size": 965
+          },
+          "recognize/__next._index.txt": {
+            "hash": "7f6dfeab2ce6377a",
+            "size": 2680
+          },
+          "recognize/__next._tree.txt": {
+            "hash": "665650578a4a215e",
+            "size": 425
+          },
+          "recognize/__next.recognize.__PAGE__.txt": {
+            "hash": "0e1569e5e569d310",
+            "size": 1184
+          },
+          "recognize/__next.recognize.txt": {
+            "hash": "133655faac6e8fae",
+            "size": 525
+          },
+          "recognize.html": {
+            "hash": "31697dd8421b95b4",
+            "size": 8762
+          },
+          "recognize.txt": {
+            "hash": "1d380029b0d8da6c",
+            "size": 6125
+          },
+          "recommend/__next._full.txt": {
+            "hash": "7875002585ed6c5a",
+            "size": 6541
+          },
+          "recommend/__next._head.txt": {
+            "hash": "909aff1b5abf2b05",
+            "size": 965
+          },
+          "recommend/__next._index.txt": {
+            "hash": "7f6dfeab2ce6377a",
+            "size": 2680
+          },
+          "recommend/__next._tree.txt": {
+            "hash": "564ff93675713c5b",
+            "size": 533
+          },
+          "recommend/__next.recommend.__PAGE__.txt": {
+            "hash": "7ea979a5837e13d0",
+            "size": 1504
+          },
+          "recommend/__next.recommend.txt": {
+            "hash": "133655faac6e8fae",
+            "size": 525
+          },
+          "recommend.html": {
+            "hash": "668dae5d4924174a",
+            "size": 9396
+          },
+          "recommend.txt": {
+            "hash": "7875002585ed6c5a",
+            "size": 6541
           }
         }
       }

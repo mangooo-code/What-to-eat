@@ -13,6 +13,7 @@ const mockedUseApp = vi.mocked(useApp);
 function mockApp(overrides: Partial<ReturnType<typeof useApp>> = {}) {
   mockedUseApp.mockReturnValue({
     page: "home",
+    authChecked: true,
     go: vi.fn(),
     toast: "",
     legal: "",
