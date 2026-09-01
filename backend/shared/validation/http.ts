@@ -5,6 +5,12 @@ export function getMethod(event: HttpEvent): string {
   return (event.httpMethod ?? event.requestContext?.httpMethod ?? "").toUpperCase();
 }
 
+export function getQueryParams(event: HttpEvent): URLSearchParams {
+  const path = event.path ?? "";
+  const queryIndex = path.indexOf("?");
+  return new URLSearchParams(queryIndex >= 0 ? path.slice(queryIndex + 1) : "");
+}
+
 export function parseJsonBody<T>(event: HttpEvent): T {
   if (event.body === null || event.body === undefined) {
     throw new AppError("INVALID_REQUEST", "Request body is required");

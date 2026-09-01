@@ -1,17 +1,19 @@
 "use client";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import "../styles/pages/needs.css";
 import { useApp } from "../context/AppContext";
 import { Choice } from "../components/Choice";
 import { Header } from "../components/Header";
 import { AssetImage } from "../components/AssetImage";
 import { limits } from "../lib/data";
+import { memberService } from "../services/memberService";
+import type { HouseholdMember } from "../types/domain";
 
 export function NeedsPage() {
   const {
     time,
     setTime,
-    householdMembers,
-    membersLoading,
     members,
     setMembers,
     taste,
@@ -28,6 +30,18 @@ export function NeedsPage() {
     setNeedError,
     go,
   } = useApp();
+  const [visibleMemberIds, setVisibleMemberIds] = useState<string[]>([]);
+  const [memberPickerOpen, setMemberPickerOpen] = useState(false);
+  const [pickerMembers, setPickerMembers] = useState<HouseholdMember[]>([]);
+  useEffect(() => {
+    memberService.list({ excludeOwner: true }).then(setPickerMembers).catch(() => {});
+  }, []);
+  const visibleMembers = pickerMembers.filter((member) =>
+    visibleMemberIds.includes(member.memberId),
+  );
+  const pickableMembers = pickerMembers.filter(
+    (member) => !visibleMemberIds.includes(member.memberId),
+  );
   const missing = time ? 0 : 1;
   return (
     <>
@@ -51,28 +65,80 @@ export function NeedsPage() {
           </div>
         </section>
         <section className="need-card">
-          <h2>今天为谁下厨？</h2>
+          <div className="card-header-row">
+            <h2>今天还有谁一起吃？</h2>
+            <button
+              type="button"
+              className="add-diner"
+              aria-label="添加就餐人"
+              onClick={() => setMemberPickerOpen(true)}
+            >
+              <strong>＋</strong>
+            </button>
+          </div>
           <div className="chips member-options">
-            {householdMembers.map((member) => (
-              <button
-                type="button"
-                className={members.includes(member.memberId) ? "active" : ""}
-                aria-pressed={members.includes(member.memberId)}
-                key={member.memberId}
-                onClick={() =>
-                  setMembers((a) =>
-                    a.includes(member.memberId)
-                      ? a.filter((id) => id !== member.memberId)
-                      : [...a, member.memberId],
-                  )
-                }
-              >
-                {member.name}
-              </button>
+            {visibleMembers.map((member) => (
+              <span className="member-chip active" key={member.memberId}>
+                <span className="member-chip-name">{member.name}</span>
+                <button
+                  type="button"
+                  className="member-chip-remove"
+                  aria-label={`移除${member.name}`}
+                  onClick={() => {
+                    setVisibleMemberIds((ids) => ids.filter((id) => id !== member.memberId));
+                    setMembers((a) => a.filter((id) => id !== member.memberId));
+                  }}
+                >
+                  ×
+                </button>
+              </span>
             ))}
-            {membersLoading && <span className="member-loading"><AssetImage name="general-loading.png" alt="" />成员加载中……</span>}
+            {visibleMembers.length === 0 && (
+              <p className="member-empty">目前只有我们！</p>
+            )}
           </div>
         </section>
+        {memberPickerOpen && typeof document !== "undefined" && createPortal(
+          <div
+            className="overlay"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="member-picker-title"
+            onClick={() => setMemberPickerOpen(false)}
+          >
+            <div className="dialog member-picker" onClick={(e) => e.stopPropagation()}>
+              <button
+                className="modal-close"
+                aria-label="关闭"
+                onClick={() => setMemberPickerOpen(false)}
+              >
+                ×
+              </button>
+              <h2 id="member-picker-title">选择就餐人</h2>
+              <div className="member-picker-list">
+                {pickableMembers.map((member) => (
+                  <button
+                    type="button"
+                    key={member.memberId}
+                    onClick={() => {
+                      setVisibleMemberIds((ids) => [...ids, member.memberId]);
+                      setMembers((a) => (a.includes(member.memberId) ? a : [...a, member.memberId]));
+                    }}
+                  >
+                    {member.name}
+                  </button>
+                ))}
+                {pickableMembers.length === 0 && (
+                  <p className="member-empty">没有更多成员了</p>
+                )}
+              </div>
+              <div className="actions">
+                <button onClick={() => setMemberPickerOpen(false)}>完成</button>
+              </div>
+            </div>
+          </div>,
+          document.body,
+        )}
         <section className="need-card full">
           <div className="card-header-row">
             <h2>今天想吃什么口味？</h2>

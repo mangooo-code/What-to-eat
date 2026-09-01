@@ -14,7 +14,10 @@ export interface CreateMemberInput {
 export type UpdateMemberInput = Partial<CreateMemberInput>;
 
 export const memberService = {
-  list: () => apiClient.get<HouseholdMember[]>("/members"),
+  list: (options?: { excludeOwner?: boolean }) =>
+    apiClient.get<HouseholdMember[]>("/members", {
+      query: options?.excludeOwner ? { excludeOwner: true } : undefined,
+    }),
   create: (input: CreateMemberInput) => apiClient.post<HouseholdMember, CreateMemberInput>("/members", input),
   update: (memberId: string, input: UpdateMemberInput) => apiClient.patch<HouseholdMember, UpdateMemberInput>(`/members/${encodeURIComponent(memberId)}`, input),
   remove: (memberId: string) => apiClient.delete<void>(`/members/${encodeURIComponent(memberId)}`),
