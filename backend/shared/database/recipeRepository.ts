@@ -93,3 +93,64 @@ export async function listRecipeIngredients(recipeId: string): Promise<RecipeIng
   });
   return rows.map(mapRecipeIngredient);
 }
+
+export interface RecipeTimeRange {
+  /** Match recipes with time <= this value, in minutes. */
+  maxMinutes?: number;
+  /** Match recipes with time > this value, in minutes. */
+  minMinutesExclusive?: number;
+}
+
+// Finds the user's favorited recipes whose time fits the given range and whose non-optional
+// ingredients (matched by name, since RecipeIngredients.nameSnapshot is decoupled from any
+// specific user's inventory row) are all present in the user's current fridge/pantry inventory.
+export async function findMatchingFavoriteRecipeIds(
+  userId: string,
+  timeRange: RecipeTimeRange = {},
+): Promise<string[]> {
+  const favorites = await postgrestRequest<Array<{ recipeId: string }>>("RecipeFavorites", {
+    query: { select: "recipeId", userId: `eq.${userId}` },
+  });
+  const favoriteIds = favorites.map((row) => row.recipeId);
+  if (!favoriteIds.length) return [];
+
+  const timeFilter: Record<string, string> = {};
+  if (timeRange.maxMinutes !== undefined) timeFilter.time = `lte.${timeRange.maxMinutes}`;
+  if (timeRange.minMinutesExclusive !== undefined) timeFilter.time = `gt.${timeRange.minMinutesExclusive}`;
+
+  const candidates = await postgrestRequest<Array<{ id: string }>>("Recipes", {
+    query: { select: "id", id: `in.(${favoriteIds.join(",")})`, ...timeFilter },
+  });
+  const candidateIds = candidates.map((row) => row.id);
+  if (!candidateIds.length) return [];
+
+  const [requiredIngredients, inventory] = await Promise.all([
+    postgrestRequest<Array<{ recipeId: string; nameSnapshot: string | null }>>("RecipeIngredients", {
+      query: {
+        select: "recipeId,nameSnapshot",
+        recipeId: `in.(${candidateIds.join(",")})`,
+        isOptional: "is.false",
+      },
+    }),
+    postgrestRequest<Array<{ name: string; normalizedName: string | null }>>("Ingredients", {
+      query: { select: "name,normalizedName", userId: `eq.${userId}` },
+    }),
+  ]);
+
+  const availableNames = new Set(
+    inventory.map((item) => (item.normalizedName ?? item.name).trim().toLowerCase()),
+  );
+
+  const requiredNamesByRecipe = new Map<string, string[]>();
+  for (const row of requiredIngredients) {
+    if (!row.nameSnapshot) continue;
+    const names = requiredNamesByRecipe.get(row.recipeId) ?? [];
+    names.push(row.nameSnapshot.trim().toLowerCase());
+    requiredNamesByRecipe.set(row.recipeId, names);
+  }
+
+  return candidateIds.filter((id) => {
+    const requiredNames = requiredNamesByRecipe.get(id) ?? [];
+    return requiredNames.every((name) => availableNames.has(name));
+  });
+}

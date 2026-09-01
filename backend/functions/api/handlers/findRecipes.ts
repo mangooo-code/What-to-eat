@@ -44,6 +44,7 @@ export async function handleFindRecipes(event: HttpEvent): Promise<HttpResponse>
       throw new AppError("VALIDATION_ERROR", "One or more memberIds do not belong to the requesting user");
     }
     const submission = {
+      userId: ownerUserId,
       timePreference: requireString(body.timePreference, "timePreference"),
       memberIds,
       tastePreference: requireString(body.tastePreference, "tastePreference"),

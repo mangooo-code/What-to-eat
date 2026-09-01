@@ -27,7 +27,9 @@ export {
   verifyCredentials,
 } from "./userRepository";
 export {
+  findMatchingFavoriteRecipeIds,
   getRecipeById,
   listRecipeIngredients,
   listRecipes,
+  type RecipeTimeRange,
 } from "./recipeRepository";

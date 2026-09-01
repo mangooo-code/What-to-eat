@@ -1,6 +1,8 @@
 import type { Recipe } from "../../../shared/types/domain";
+import { findMatchingFavoriteRecipeIds, getRecipeById, type RecipeTimeRange } from "../../../shared/database";
 
 export interface FindRecipesSubmission {
+  userId: string;
   timePreference: string;
   memberIds: string[];
   tastePreference: string;
@@ -22,6 +24,24 @@ type MockRecipe = Pick<Recipe, "id" | "name" | "description" | "difficulty" | "t
 function formatCookTime(minutes: number | null): string {
   if (minutes === null) return "时间待定";
   return minutes >= 60 ? `${Math.round(minutes / 60)} 小时` : `${minutes} 分钟`;
+}
+
+function toDto(recipe: Recipe, matchSummary: string): RecipeDto {
+  return {
+    id: recipe.id,
+    name: recipe.name,
+    description: recipe.description,
+    difficulty: recipe.difficulty,
+    tags: recipe.tags,
+    cookTime: formatCookTime(recipe.time),
+    matchSummary,
+  };
+}
+
+// Matches the two fixed timePreference options surfaced by the frontend
+// ("快速解决（15–30 分钟）" and "慢慢做饭（30 分钟以上）"); unrecognized values fall back to the fast bracket.
+function parseTimeRange(timePreference: string): RecipeTimeRange {
+  return timePreference.includes("以上") ? { minMinutesExclusive: 30 } : { maxMinutes: 30 };
 }
 
 const mockRecipes: MockRecipe[] = [
@@ -54,11 +74,27 @@ const mockRecipes: MockRecipe[] = [
   },
 ];
 
-// Placeholder for the real AI recipe lookup; currently returns fixed mock data regardless of input.
-export async function search(_submission: FindRecipesSubmission): Promise<RecipeDto[]> {
+function searchMock(): RecipeDto[] {
   return mockRecipes.map(({ time, matchSummary, ...recipe }) => ({
     ...recipe,
     cookTime: formatCookTime(time),
     matchSummary,
   }));
+}
+
+// Placeholder for the real AI recipe lookup; falls back to fixed mock data unless
+// preferLikedRecipes narrows the results down to the user's own favorited recipes.
+export async function search(submission: FindRecipesSubmission): Promise<RecipeDto[]> {
+  if (!submission.preferLikedRecipes) return searchMock();
+
+  const matchingIds = await findMatchingFavoriteRecipeIds(
+    submission.userId,
+    parseTimeRange(submission.timePreference),
+  );
+  if (!matchingIds.length) return searchMock();
+
+  const recipes = await Promise.all(matchingIds.map((id) => getRecipeById(id)));
+  return recipes
+    .filter((recipe): recipe is Recipe => recipe !== null)
+    .map((recipe) => toDto(recipe, "已收藏 · 现有食材可以直接做"));
 }
