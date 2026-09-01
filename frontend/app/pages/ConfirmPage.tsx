@@ -46,7 +46,7 @@ export function ConfirmPage() {
               <strong>{f.name || "未命名食材"}</strong>
               <small>
                 {f.qty} {f.unit}
-                {f.days > 0 && (
+                {f.days !== null && f.days > 0 && (
                   <button
                     type="button"
                     className="confirm-expiry-value"
@@ -59,7 +59,7 @@ export function ConfirmPage() {
                   </button>
                 )}
               </small>
-              {f.days <= 0 && expiryEditor !== i && (
+              {f.days === null && expiryEditor !== i && (
                 <button
                   type="button"
                   className="confirm-expiry-add"
@@ -98,7 +98,7 @@ export function ConfirmPage() {
                   <button
                     type="button"
                     onClick={() => {
-                      setFoods((items) => items.map((item, index) => index === i ? { ...item, days: 0 } : item));
+                      setFoods((items) => items.map((item, index) => index === i ? { ...item, days: null } : item));
                       setExpiryEditor(null);
                       setCustomExpiryEditor(null);
                     }}
@@ -114,7 +114,7 @@ export function ConfirmPage() {
                       min="1"
                       step="1"
                       inputMode="numeric"
-                      value={f.days > 0 ? f.days : 1}
+                      value={f.days !== null && f.days > 0 ? f.days : 1}
                       onChange={(event) => {
                         const days = Math.max(1, Math.floor(Number(event.target.value) || 1));
                         setFoods((items) => items.map((item, index) => index === i ? { ...item, days } : item));
@@ -140,7 +140,7 @@ export function ConfirmPage() {
       <button
         className="add-row"
         onClick={() => {
-          setNewFood({ name: "", qty: 1, unit: "个", place: fridgePlace, days: 0, source: "recognition" });
+          setNewFood({ name: "", qty: 1, unit: "个", place: fridgePlace, days: null, source: "recognition" });
           setConfirmEdit(-1);
         }}
       >
@@ -165,7 +165,7 @@ export function ConfirmPage() {
                 quantity: Number(food.qty),
                 unitTypeId,
                 locationId,
-                expiryDate: food.days > 0
+                expiryDate: food.days !== null && food.days > 0
                   ? new Date(Date.now() + food.days * 86_400_000).toISOString()
                   : null,
                 imageFileId: food.imageFileId ?? null,

@@ -18,8 +18,8 @@ const keyByPlace = { 冷藏: "fridge", 冷冻: "freezer", 常温: "pantry" } as 
 const tabIconByPlace = { 冷藏: "open-fridge.png", 冷冻: "refrigerator.png", 常温: "pantry.png" } as const;
 const backgroundByPlace = { 冷藏: "refrigerator-background.png", 冷冻: "freezer-background.png", 常温: "pantry-background.png" } as const;
 
-function daysUntil(expiryDate: string | null): number {
-  if (!expiryDate) return 0;
+function daysUntil(expiryDate: string | null): number | null {
+  if (!expiryDate) return null;
   return Math.max(0, Math.ceil((new Date(expiryDate).getTime() - Date.now()) / 86_400_000));
 }
 
@@ -132,7 +132,7 @@ export function FridgePage() {
         quantity: Number(newFood.qty),
         unitTypeId,
         locationId,
-        expiryDate: newFood.days === 0
+        expiryDate: newFood.days === null
           ? null
           : new Date(Date.now() + newFood.days * 86_400_000).toISOString(),
         imageFileId: newFood.imageFileId ?? null,
@@ -268,7 +268,7 @@ export function FridgePage() {
             <h2>添加食材到“{fridgePlace}”</h2>
             <div className="modal-actions">
               <button onClick={() => {
-                setNewFood({ name: "", qty: 1, unit: "个", place: fridgePlace, days: 0, source: "manual" });
+                setNewFood({ name: "", qty: 1, unit: "个", place: fridgePlace, days: null, source: "manual" });
                 setAddChoiceOpen(false);
                 setFoodModal("add");
               }}>

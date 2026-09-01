@@ -39,7 +39,9 @@ export function EditPage() {
                 quantity: Number(draft.qty),
                 unitTypeId,
                 locationId,
-                expiryDate: new Date(Date.now() + draft.days * 86_400_000).toISOString(),
+                expiryDate: draft.days === null
+                  ? null
+                  : new Date(Date.now() + draft.days * 86_400_000).toISOString(),
                 imageFileId: draft.imageFileId ?? null,
                 source: draft.source ?? "manual",
               });

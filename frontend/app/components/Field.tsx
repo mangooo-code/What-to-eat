@@ -17,7 +17,7 @@ export function Field({
   showExpiry?: boolean;
   useOptionalExpiry?: boolean;
 }) {
-  const initialExpiryOption = food.days === 0
+  const initialExpiryOption = food.days === null
     ? "none"
     : [3, 7, 14].includes(food.days)
       ? String(food.days)
@@ -83,7 +83,7 @@ export function Field({
               setExpiryOption(option);
               onChange({
                 ...food,
-                days: option === "none" ? 0 : option === "custom" ? Math.max(1, food.days) : Number(option),
+                days: option === "none" ? null : option === "custom" ? Math.max(1, food.days ?? 1) : Number(option),
               });
             }}
           >
@@ -101,7 +101,7 @@ export function Field({
                 min="1"
                 step="1"
                 inputMode="numeric"
-                value={Math.max(1, food.days)}
+                value={Math.max(1, food.days ?? 1)}
                 onChange={(e) =>
                   onChange({
                     ...food,
@@ -121,7 +121,7 @@ export function Field({
               type="number"
               step="1"
               inputMode="numeric"
-              value={food.days}
+              value={food.days ?? ""}
               onChange={(e) =>
                 onChange({
                   ...food,

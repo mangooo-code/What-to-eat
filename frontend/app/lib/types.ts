@@ -22,7 +22,7 @@ export type Food = {
   qty: number | string;
   unit: string;
   place: string;
-  days: number;
+  days: number | null;
   normalizedName?: string | null;
   unitTypeId?: number;
   locationId?: string;
