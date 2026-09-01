@@ -158,7 +158,7 @@ function toAiDto(recipe: AiGeneratedRecipe): RecipeDto {
   };
 }
 
-const AI_CALL_TIMEOUT_MS = 55_000;
+const AI_CALL_TIMEOUT_MS = 110_000;
 const AI_MAX_ATTEMPTS = 1;
 
 // Aliyun DashScope (this account's MaaS deployment) has been observed to take a long time to
