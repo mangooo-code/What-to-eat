@@ -39,3 +39,14 @@ export interface FindRecipesRequest {
   preferLikedRecipes?: boolean;
   dietaryExclusions?: string[];
 }
+
+export interface RecognizedIngredientCandidate {
+  name: string;
+  normalizedName: string | null;
+  quantity: number | null;
+  unit: string | null;
+}
+
+export interface RecognizeIngredientsResponse {
+  items: RecognizedIngredientCandidate[];
+}

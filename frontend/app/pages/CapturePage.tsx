@@ -6,6 +6,7 @@ import "../styles/components/tabs.css";
 import { useApp } from "../context/AppContext";
 import { Header } from "../components/Header";
 import { AssetImage } from "../components/AssetImage";
+import { getRecognitionErrorMessage, recognitionService } from "../services/recognitionService";
 
 export function CapturePage() {
   const {
@@ -13,6 +14,9 @@ export function CapturePage() {
     setCaptureTab,
     photos,
     setPhotos,
+    recognitionImageFile,
+    recognitionImagePreviewUrl,
+    setRecognitionImage,
     setFoods,
     listening,
     setListening,
@@ -21,18 +25,14 @@ export function CapturePage() {
     say,
     go,
   } = useApp();
-  const [previewUrl, setPreviewUrl] = useState("");
+  const [recognizing, setRecognizing] = useState(false);
   const [cameraOpen, setCameraOpen] = useState(false);
   const cameraInput = useRef<HTMLInputElement>(null);
   const albumInput = useRef<HTMLInputElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const isPhotoTab = captureTab !== "voice";
-  const hasPhoto = Boolean(previewUrl);
-
-  useEffect(() => () => {
-    if (previewUrl) URL.revokeObjectURL(previewUrl);
-  }, [previewUrl]);
+  const hasPhoto = recognitionImageFile !== null;
 
   useEffect(() => () => {
     streamRef.current?.getTracks().forEach((track) => track.stop());
@@ -43,11 +43,10 @@ export function CapturePage() {
     { name: "鸡蛋", qty: 1, unit: "盒", place: fridgePlace, source: "recognition" as const },
   ];
 
-  const prepareRecognizedFoods = () => recognizedFoods().map((food) => ({ ...food, days: 0 }));
+  const prepareRecognizedFoods = () => recognizedFoods().map((food) => ({ ...food, days: null }));
 
-  const acceptPhoto = (blob: Blob, source: "camera" | "album") => {
-    if (previewUrl) URL.revokeObjectURL(previewUrl);
-    setPreviewUrl(URL.createObjectURL(blob));
+  const acceptPhoto = (file: File, source: "camera" | "album") => {
+    setRecognitionImage(file);
     setPhotos({ camera: source === "camera" ? 1 : 0, album: source === "album" ? 1 : 0 });
   };
 
@@ -96,7 +95,9 @@ export function CapturePage() {
     if (!ctx) return;
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
     canvas.toBlob((blob) => {
-      if (blob) acceptPhoto(blob, "camera");
+      if (blob) {
+        acceptPhoto(new File([blob], `camera-${Date.now()}.jpg`, { type: "image/jpeg" }), "camera");
+      }
       closeCamera();
     }, "image/jpeg", 0.92);
   };
@@ -108,8 +109,7 @@ export function CapturePage() {
   };
 
   const clearPhoto = () => {
-    if (previewUrl) URL.revokeObjectURL(previewUrl);
-    setPreviewUrl("");
+    setRecognitionImage(null);
     setPhotos({ camera: 0, album: 0 });
     if (cameraInput.current) cameraInput.current.value = "";
     if (albumInput.current) albumInput.current.value = "";
@@ -161,12 +161,12 @@ export function CapturePage() {
       {isPhotoTab ? (
         <section className="upload">
           <div className="upload-dropzone">
-            {previewUrl ? (
-              <img src={previewUrl} alt="待识别食材预览" className="photo-preview" />
+            {recognitionImagePreviewUrl ? (
+              <img src={recognitionImagePreviewUrl} alt="待识别食材预览" className="photo-preview" />
             ) : (
               <AssetImage name="take-photo.png" alt="" className="upload-guide-image" />
             )}
-            <h2>{previewUrl ? "照片已添加" : "添加一张食材照片"}</h2>
+            <h2>{recognitionImagePreviewUrl ? "照片已添加" : "添加一张食材照片"}</h2>
             <p>目前仅支持上传一张照片，尽量拍清楚一点。</p>
           </div>
           <div className="upload-actions">
@@ -205,9 +205,26 @@ export function CapturePage() {
       )}
       {isPhotoTab && (
         <>
-          <button type="button" className="primary sticky" disabled={!hasPhoto} onClick={() => {
-            setFoods(prepareRecognizedFoods());
-            go("recognize");
+          <button type="button" className="primary sticky" disabled={!hasPhoto || recognizing} onClick={async () => {
+            if (!recognitionImageFile || recognizing) return;
+            setRecognizing(true);
+            try {
+              const result = await recognitionService.recognizeIngredients(recognitionImageFile);
+              setFoods(result.items.map((item) => ({
+                name: item.name,
+                normalizedName: item.normalizedName,
+                qty: item.quantity ?? 1,
+                unit: item.unit ?? "个",
+                place: fridgePlace,
+                days: null,
+                source: "recognition" as const,
+              })));
+              go("recognize");
+            } catch (error) {
+              say(getRecognitionErrorMessage(error));
+            } finally {
+              setRecognizing(false);
+            }
           }}>
             开始识别
           </button>

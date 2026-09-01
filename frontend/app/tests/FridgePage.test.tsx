@@ -129,7 +129,7 @@ describe("FridgePage", () => {
     const itemWithoutExpiry = { ...snapshot.items[0], expiryDate: null };
     vi.spyOn(inventoryService, "list").mockResolvedValueOnce({ ...snapshot, items: [itemWithoutExpiry] });
     mockApp({
-      foods: [{ ...foods[0], days: 0, expiryDate: null }],
+      foods: [{ ...foods[0], days: null, expiryDate: null }],
       foodModal: "summary",
       editIndex: 0,
     });
@@ -139,9 +139,9 @@ describe("FridgePage", () => {
     view.unmount();
 
     mockApp({
-      foods: [{ ...foods[0], days: 0, expiryDate: null }],
+      foods: [{ ...foods[0], days: null, expiryDate: null }],
       foodModal: "edit",
-      newFood: { ...foods[0], days: 0, expiryDate: null },
+      newFood: { ...foods[0], days: null, expiryDate: null },
     });
     render(<FridgePage />);
     expect(await screen.findByLabelText("过期时间（选填）")).toHaveValue("none");
@@ -153,9 +153,9 @@ describe("FridgePage", () => {
       expiryDate: null,
     });
     mockApp({
-      foods: [{ ...foods[0], days: 0, expiryDate: null }],
+      foods: [{ ...foods[0], days: null, expiryDate: null }],
       foodModal: "edit",
-      newFood: { ...foods[0], days: 0, expiryDate: null },
+      newFood: { ...foods[0], days: null, expiryDate: null },
     });
     render(<FridgePage />);
     await screen.findByLabelText("过期时间（选填）");

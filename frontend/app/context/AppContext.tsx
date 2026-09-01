@@ -1,8 +1,10 @@
 "use client";
 import {
+  useCallback,
   createContext,
   useContext,
   useEffect,
+  useRef,
   useState,
   type ReactNode,
 } from "react";
@@ -80,6 +82,9 @@ interface AppContextValue {
   setPhotos: React.Dispatch<
     React.SetStateAction<{ camera: number; album: number }>
   >;
+  recognitionImageFile: File | null;
+  recognitionImagePreviewUrl: string;
+  setRecognitionImage: (file: File | null) => void;
   listening: boolean;
   setListening: (v: boolean) => void;
   input: string;
@@ -209,6 +214,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
     "camera",
   );
   const [photos, setPhotos] = useState({ camera: 0, album: 0 });
+  const [recognitionImageFile, setRecognitionImageFile] = useState<File | null>(null);
+  const [recognitionImagePreviewUrl, setRecognitionImagePreviewUrl] = useState("");
+  const recognitionImagePreviewUrlRef = useRef("");
   const [listening, setListening] = useState(false);
   const [input, setInput] = useState("");
   const [time, setTime] = useState("");
@@ -267,6 +275,23 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [success, setSuccess] = useState(false);
   const [findRecipesSubmitting, setFindRecipesSubmitting] = useState(false);
   const [authChecked, setAuthChecked] = useState(false);
+
+  const setRecognitionImage = useCallback((file: File | null) => {
+    if (recognitionImagePreviewUrlRef.current) {
+      URL.revokeObjectURL(recognitionImagePreviewUrlRef.current);
+    }
+    const nextPreviewUrl = file ? URL.createObjectURL(file) : "";
+    recognitionImagePreviewUrlRef.current = nextPreviewUrl;
+    setRecognitionImageFile(file);
+    setRecognitionImagePreviewUrl(nextPreviewUrl);
+  }, []);
+
+  useEffect(() => () => {
+    if (recognitionImagePreviewUrlRef.current) {
+      URL.revokeObjectURL(recognitionImagePreviewUrlRef.current);
+      recognitionImagePreviewUrlRef.current = "";
+    }
+  }, []);
 
   const go = (p: Page) => {
     router.push(pageToPath[p]);
@@ -515,6 +540,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setCaptureTab,
     photos,
     setPhotos,
+    recognitionImageFile,
+    recognitionImagePreviewUrl,
+    setRecognitionImage,
     listening,
     setListening,
     input,

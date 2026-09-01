@@ -1,9 +1,9 @@
 "use client";
 import "../styles/components/expiry-tag.css";
 
-export function ExpiryTag({ days, expiryDate }: { days: number; expiryDate?: string | null }) {
+export function ExpiryTag({ days, expiryDate }: { days: number | null; expiryDate?: string | null }) {
   const state =
-    expiryDate === null
+    expiryDate === null || days === null
       ? ["未知", "expired"]
       : days < 0
       ? ["已过期", "expired"]

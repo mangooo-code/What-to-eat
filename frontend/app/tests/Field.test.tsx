@@ -66,7 +66,7 @@ describe("Field", () => {
 
   it("supports an optional preset expiry for manual entry", () => {
     const onChange = vi.fn();
-    const unsetFood = { ...food, days: 0 };
+    const unsetFood = { ...food, days: null };
     render(<Field food={unsetFood} onChange={onChange} useOptionalExpiry />);
 
     const expirySelect = screen.getByLabelText("过期时间（选填）");
@@ -79,7 +79,7 @@ describe("Field", () => {
 
   it("only shows a positive day input for a custom expiry", () => {
     const onChange = vi.fn();
-    const unsetFood = { ...food, days: 0 };
+    const unsetFood = { ...food, days: null };
     render(<Field food={unsetFood} onChange={onChange} useOptionalExpiry />);
 
     fireEvent.change(screen.getByLabelText("过期时间（选填）"), {

@@ -42,18 +42,22 @@ export class ApiClient {
   }
 
   post<TResponse, TBody = unknown>(path: string, body?: TBody, options?: RequestOptions): Promise<TResponse> {
+    return this.request<TResponse>("POST", path, body === undefined ? undefined : JSON.stringify(body), options, "application/json");
+  }
+
+  postFormData<TResponse>(path: string, body: FormData, options?: RequestOptions): Promise<TResponse> {
     return this.request<TResponse>("POST", path, body, options);
   }
 
   patch<TResponse, TBody = unknown>(path: string, body?: TBody, options?: RequestOptions): Promise<TResponse> {
-    return this.request<TResponse>("PATCH", path, body, options);
+    return this.request<TResponse>("PATCH", path, body === undefined ? undefined : JSON.stringify(body), options, "application/json");
   }
 
   delete<T>(path: string, options?: RequestOptions): Promise<T> {
     return this.request<T>("DELETE", path, undefined, options);
   }
 
-  private async request<T>(method: string, path: string, body?: unknown, options: RequestOptions = {}): Promise<T> {
+  private async request<T>(method: string, path: string, body?: BodyInit, options: RequestOptions = {}, contentType?: string): Promise<T> {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), options.timeoutMs ?? this.timeoutMs);
     const abort = () => controller.abort();
@@ -63,8 +67,8 @@ export class ApiClient {
       const authHeaders = (await this.getAuthHeaders?.()) ?? {};
       const response = await fetch(this.buildUrl(path, options.query), {
         method,
-        headers: { "content-type": "application/json", ...authHeaders },
-        body: body === undefined ? undefined : JSON.stringify(body),
+        headers: { ...(contentType ? { "content-type": contentType } : {}), ...authHeaders },
+        body,
         signal: controller.signal,
       });
       const payload = (await response.json().catch(() => null)) as ApiResponse<T> | null;

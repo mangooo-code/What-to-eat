@@ -7,6 +7,7 @@ import { handleInventory } from "./handlers/inventory";
 import { handleMembers } from "./handlers/members";
 import { handleUser } from "./handlers/user";
 import { handleFindRecipes } from "./handlers/findRecipes";
+import { handleRecognizeIngredients } from "./handlers/recognizeIngredients";
 
 export async function main(event: HttpEvent = {}): Promise<HttpResponse> {
   const method = getMethod(event);
@@ -37,9 +38,12 @@ export async function main(event: HttpEvent = {}): Promise<HttpResponse> {
       return await handleFindRecipes(event);
     }
 
+    if (path.includes("/recognize/ingredients")) {
+      return await handleRecognizeIngredients(event);
+    }
+
     throw new AppError("ROUTE_NOT_FOUND", "Route not found", 404);
   } catch (error) {
     return errorResponse(error);
   }
 }
-

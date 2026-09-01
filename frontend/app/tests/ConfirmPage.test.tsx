@@ -13,7 +13,7 @@ function mockApp(overrides: Parameters<typeof createAppState>[0] = {}) {
 }
 
 const foods = [{ name: "番茄", qty: 2, unit: "个", place: "冷藏", days: 3 }];
-const foodsWithoutExpiry = [{ name: "番茄", qty: 2, unit: "个", place: "冷藏", days: 0 }];
+const foodsWithoutExpiry = [{ name: "番茄", qty: 2, unit: "个", place: "冷藏", days: null }];
 
 describe("ConfirmPage", () => {
   beforeEach(() => {
@@ -103,7 +103,7 @@ describe("ConfirmPage", () => {
     mockApp({
       foods,
       confirmEdit: -1,
-      newFood: { name: "青椒", qty: 1, unit: "个", place: "冷藏", days: 0 },
+      newFood: { name: "青椒", qty: 1, unit: "个", place: "冷藏", days: null },
     });
     render(<ConfirmPage />);
     expect(screen.getByText("新增食材信息")).toBeInTheDocument();

@@ -1,11 +1,20 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { CapturePage } from "../pages/CapturePage";
 import { useApp } from "../context/AppContext";
 import { createAppState } from "./mockApp";
+import { recognitionService } from "../services/recognitionService";
 
 vi.mock("../context/AppContext", () => ({ useApp: vi.fn() }));
+vi.mock("../services/recognitionService", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("../services/recognitionService")>();
+  return {
+    ...actual,
+    recognitionService: { recognizeIngredients: vi.fn() },
+  };
+});
 const mockedUseApp = vi.mocked(useApp);
+const mockedRecognizeIngredients = vi.mocked(recognitionService.recognizeIngredients);
 
 function mockApp(overrides: Parameters<typeof createAppState>[0] = {}) {
   mockedUseApp.mockReturnValue(createAppState(overrides));
@@ -14,6 +23,7 @@ function mockApp(overrides: Parameters<typeof createAppState>[0] = {}) {
 describe("CapturePage", () => {
   beforeEach(() => {
     mockApp();
+    mockedRecognizeIngredients.mockReset();
     vi.stubGlobal("URL", {
       ...URL,
       createObjectURL: vi.fn((file: File) => `blob:${file.name}`),
@@ -71,43 +81,86 @@ describe("CapturePage", () => {
     expect(go).toHaveBeenCalledWith("recognize");
   });
 
-  it("uses one preview and lets a new source replace the current photo", () => {
+  it("stores camera and album files in the shared image state", () => {
     const setPhotos = vi.fn();
-    mockApp({ captureTab: "camera", photos: { camera: 0, album: 0 }, setPhotos });
+    const setRecognitionImage = vi.fn();
+    mockApp({ captureTab: "camera", setPhotos, setRecognitionImage });
     render(<CapturePage />);
-    const recognize = screen.getByRole("button", { name: "开始识别" });
-    expect(recognize).toBeDisabled();
 
+    const cameraFile = new File(["camera"], "camera.png", { type: "image/png" });
     fireEvent.change(screen.getByLabelText("拍照文件输入"), {
-      target: { files: [new File(["camera"], "camera.png", { type: "image/png" })] },
+      target: { files: [cameraFile] },
     });
-    expect(screen.getByAltText("待识别食材预览")).toHaveAttribute("src", "blob:camera.png");
+    expect(setRecognitionImage).toHaveBeenLastCalledWith(cameraFile);
     expect(setPhotos).toHaveBeenLastCalledWith({ camera: 1, album: 0 });
-    expect(recognize).toBeEnabled();
 
+    const albumFile = new File(["album"], "album.png", { type: "image/png" });
     fireEvent.change(screen.getByLabelText("相册文件输入"), {
-      target: { files: [new File(["album"], "album.png", { type: "image/png" })] },
+      target: { files: [albumFile] },
     });
-    expect(screen.getByAltText("待识别食材预览")).toHaveAttribute("src", "blob:album.png");
-    expect(screen.getAllByAltText("待识别食材预览")).toHaveLength(1);
+    expect(setRecognitionImage).toHaveBeenLastCalledWith(albumFile);
     expect(setPhotos).toHaveBeenLastCalledWith({ camera: 0, album: 1 });
-
-    fireEvent.click(screen.getByRole("button", { name: "删除照片" }));
-    expect(screen.queryByAltText("待识别食材预览")).not.toBeInTheDocument();
-    expect(setPhotos).toHaveBeenLastCalledWith({ camera: 0, album: 0 });
-    expect(recognize).toBeDisabled();
   });
 
-  it("navigates to recognize once photos are ready", () => {
+  it("shows and clears the shared image preview", () => {
+    const setPhotos = vi.fn();
+    const setRecognitionImage = vi.fn();
+    mockApp({
+      recognitionImageFile: new File(["image"], "kept.png", { type: "image/png" }),
+      recognitionImagePreviewUrl: "blob:kept.png",
+      setPhotos,
+      setRecognitionImage,
+    });
+    render(<CapturePage />);
+    expect(screen.getByAltText("待识别食材预览")).toHaveAttribute("src", "blob:kept.png");
+    fireEvent.click(screen.getByRole("button", { name: "删除照片" }));
+    expect(setRecognitionImage).toHaveBeenCalledWith(null);
+    expect(setPhotos).toHaveBeenLastCalledWith({ camera: 0, album: 0 });
+  });
+
+  it("uploads the real image and enters the confirm flow with API items", async () => {
     const go = vi.fn();
     const setFoods = vi.fn();
-    mockApp({ captureTab: "camera", photos: { camera: 0, album: 0 }, go, setFoods });
-    render(<CapturePage />);
-    fireEvent.change(screen.getByLabelText("相册文件输入"), {
-      target: { files: [new File(["album"], "album.png", { type: "image/png" })] },
+    const image = new File(["real image bytes"], "album.png", { type: "image/png" });
+    mockApp({
+      captureTab: "camera",
+      recognitionImageFile: image,
+      recognitionImagePreviewUrl: "blob:album.png",
+      go,
+      setFoods,
     });
+    mockedRecognizeIngredients.mockResolvedValue({
+      items: [
+        { name: "番茄", normalizedName: "番茄", quantity: 2, unit: "个" },
+        { name: "鸡蛋", normalizedName: "鸡蛋", quantity: 1, unit: "盒" },
+      ],
+    });
+    render(<CapturePage />);
     fireEvent.click(screen.getByText("开始识别"));
-    expect(setFoods).toHaveBeenCalled();
+    await waitFor(() => expect(mockedRecognizeIngredients).toHaveBeenCalledWith(image));
+    expect(setFoods).toHaveBeenCalledWith([
+      { name: "番茄", normalizedName: "番茄", qty: 2, unit: "个", place: "冷藏", days: null, source: "recognition" },
+      { name: "鸡蛋", normalizedName: "鸡蛋", qty: 1, unit: "盒", place: "冷藏", days: null, source: "recognition" },
+    ]);
     expect(go).toHaveBeenCalledWith("recognize");
+  });
+
+  it("shows an understandable error, retains the image, and does not navigate", async () => {
+    const go = vi.fn();
+    const say = vi.fn();
+    const image = new File(["image"], "kept.png", { type: "image/png" });
+    mockApp({
+      go,
+      say,
+      recognitionImageFile: image,
+      recognitionImagePreviewUrl: "blob:kept.png",
+    });
+    mockedRecognizeIngredients.mockRejectedValue(new Error("server unavailable"));
+    render(<CapturePage />);
+    fireEvent.click(screen.getByText("开始识别"));
+
+    await waitFor(() => expect(say).toHaveBeenCalledWith("图片识别失败，请稍后直接重试。"));
+    expect(screen.getByAltText("待识别食材预览")).toHaveAttribute("src", "blob:kept.png");
+    expect(go).not.toHaveBeenCalledWith("recognize");
   });
 });
