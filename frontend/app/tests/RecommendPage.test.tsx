@@ -25,11 +25,13 @@ describe("RecommendPage", () => {
     mockApp({
       recommendedRecipes: [
         {
+          id: "c1a1a1a1-1a1a-4a1a-8a1a-a1a1a1a1a1a1",
           name: "可乐鸡翅",
           cookTime: "30 分钟",
           difficulty: "简单",
           matchSummary: "缺少 2 种主要食材",
           description: "换一批后的固定推荐结果。",
+          tags: [],
         },
       ],
     });

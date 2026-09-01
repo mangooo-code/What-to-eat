@@ -21,8 +21,8 @@ export function RecommendPage() {
         back={() => go("findrecipes")}
       />
       <div className="recipe-grid">
-        {recommendedRecipes.map((r, i) => (
-          <article className="recipe-card" key={r.name}>
+        {recommendedRecipes.map((r) => (
+          <article className="recipe-card" key={r.id}>
             <Placeholder wide />
             <div className="recipe-body">
               <div className="heading">
@@ -30,25 +30,28 @@ export function RecommendPage() {
                 <button
                   type="button"
                   className="heart"
-                  aria-pressed={likedRecipes.includes(r.name)}
+                  aria-pressed={likedRecipes.includes(r.id)}
                   onClick={() =>
                     setLikedRecipes((a) =>
-                      a.includes(r.name)
-                        ? a.filter((x) => x !== r.name)
-                        : [...a, r.name],
+                      a.includes(r.id)
+                        ? a.filter((x) => x !== r.id)
+                        : [...a, r.id],
                     )
                   }
                 >
-                  {likedRecipes.includes(r.name) ? "♥ 已喜欢" : "♡ 喜欢"}
+                  {likedRecipes.includes(r.id) ? "♥ 已喜欢" : "♡ 喜欢"}
                 </button>
               </div>
               <p>
                 {r.cookTime} ｜ {r.difficulty}
               </p>
-              <div className="tags">
-                <span>家常</span>
-                <span>{i === 2 ? "热乎" : "下饭"}</span>
-              </div>
+              {r.tags.length > 0 && (
+                <div className="tags">
+                  {r.tags.map((tag) => (
+                    <span key={tag}>{tag}</span>
+                  ))}
+                </div>
+              )}
               <strong className="match">{r.matchSummary}</strong>
               <p>{r.description}</p>
               <button

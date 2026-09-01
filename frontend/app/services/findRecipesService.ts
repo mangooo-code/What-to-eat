@@ -9,11 +9,13 @@ export interface FindRecipesInput {
 }
 
 export interface RecipeDto {
+  id: string;
   name: string;
   cookTime: string;
   difficulty: string;
   matchSummary: string;
   description: string;
+  tags: string[];
 }
 
 export const findRecipesService = {
