@@ -8,6 +8,7 @@ import {
 } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { initialFoods } from "../lib/data";
+import type { RecipeDto } from "../services/findRecipesService";
 import type { Food, Page, ProfileData } from "../lib/types";
 import type { HouseholdMember, User } from "../types/domain";
 import { memberService } from "../services/memberService";
@@ -133,6 +134,8 @@ interface AppContextValue {
   setOtherLimit: (v: string) => void;
   batch: number;
   setBatch: (v: number) => void;
+  recommendedRecipes: RecipeDto[];
+  setRecommendedRecipes: (v: RecipeDto[]) => void;
   liked: boolean;
   setLiked: (v: boolean) => void;
   likedRecipes: string[];
@@ -249,6 +252,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [other, setOther] = useState(false);
   const [otherLimit, setOtherLimit] = useState("");
   const [batch, setBatch] = useState(0);
+  const [recommendedRecipes, setRecommendedRecipes] = useState<RecipeDto[]>([]);
   const [liked, setLiked] = useState(false);
   const [likedRecipes, setLikedRecipes] = useState<string[]>([]);
   const [recipeTab, setRecipeTab] = useState<"done" | "liked">("done");
@@ -549,6 +553,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setOtherLimit,
     batch,
     setBatch,
+    recommendedRecipes,
+    setRecommendedRecipes,
     liked,
     setLiked,
     likedRecipes,

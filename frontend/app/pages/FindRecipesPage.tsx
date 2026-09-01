@@ -33,6 +33,7 @@ export function FindRecipesPage() {
     setChosenLimits,
     otherLimit,
     setOtherLimit,
+    setRecommendedRecipes,
     go,
     say,
   } = useApp();
@@ -89,7 +90,8 @@ export function FindRecipesPage() {
       dietaryExclusions: chosenLimits,
     };
     try {
-      await findRecipesService.submit(submission);
+      const recipes = await findRecipesService.submit(submission);
+      setRecommendedRecipes(recipes);
       go("recommend-loading");
     } catch (error) {
       say(`提交失败：${error instanceof Error ? error.message : "请稍后重试"}`);

@@ -1,15 +1,18 @@
 "use client";
+import { useEffect } from "react";
 import "../styles/pages/recommend.css";
 import "../styles/components/recipe-card.css";
 import { useApp } from "../context/AppContext";
 import { Header } from "../components/Header";
 import { Placeholder } from "../components/Placeholder";
-import { recipesA, recipesB } from "../lib/data";
 
 export function RecommendPage() {
-  const { batch, setBatch, likedRecipes, setLikedRecipes, setRecipeOrigin, go, say } =
+  const { recommendedRecipes, setBatch, likedRecipes, setLikedRecipes, setRecipeOrigin, go, say } =
     useApp();
-  const rs = batch ? recipesB : recipesA;
+  useEffect(() => {
+    if (recommendedRecipes.length === 0) go("findrecipes");
+  }, [recommendedRecipes, go]);
+  if (recommendedRecipes.length === 0) return null;
   return (
     <>
       <Header
@@ -18,36 +21,36 @@ export function RecommendPage() {
         back={() => go("findrecipes")}
       />
       <div className="recipe-grid">
-        {rs.map((r, i) => (
-          <article className="recipe-card" key={r[0]}>
+        {recommendedRecipes.map((r, i) => (
+          <article className="recipe-card" key={r.name}>
             <Placeholder wide />
             <div className="recipe-body">
               <div className="heading">
-                <h2>{r[0]}</h2>
+                <h2>{r.name}</h2>
                 <button
                   type="button"
                   className="heart"
-                  aria-pressed={likedRecipes.includes(r[0])}
+                  aria-pressed={likedRecipes.includes(r.name)}
                   onClick={() =>
                     setLikedRecipes((a) =>
-                      a.includes(r[0])
-                        ? a.filter((x) => x !== r[0])
-                        : [...a, r[0]],
+                      a.includes(r.name)
+                        ? a.filter((x) => x !== r.name)
+                        : [...a, r.name],
                     )
                   }
                 >
-                  {likedRecipes.includes(r[0]) ? "♥ 已喜欢" : "♡ 喜欢"}
+                  {likedRecipes.includes(r.name) ? "♥ 已喜欢" : "♡ 喜欢"}
                 </button>
               </div>
               <p>
-                {r[1]} ｜ {r[2]}
+                {r.cookTime} ｜ {r.difficulty}
               </p>
               <div className="tags">
                 <span>家常</span>
                 <span>{i === 2 ? "热乎" : "下饭"}</span>
               </div>
-              <strong className="match">{r[3]}</strong>
-              <p>{r[4]}</p>
+              <strong className="match">{r.matchSummary}</strong>
+              <p>{r.description}</p>
               <button
                 className="secondary"
                 onClick={() => {

@@ -8,7 +8,15 @@ export interface FindRecipesInput {
   dietaryExclusions?: string[];
 }
 
+export interface RecipeDto {
+  name: string;
+  cookTime: string;
+  difficulty: string;
+  matchSummary: string;
+  description: string;
+}
+
 export const findRecipesService = {
   submit: (input: FindRecipesInput) =>
-    apiClient.post<FindRecipesInput, FindRecipesInput>("/findrecipes", input),
+    apiClient.post<RecipeDto[], FindRecipesInput>("/findrecipes", input),
 };

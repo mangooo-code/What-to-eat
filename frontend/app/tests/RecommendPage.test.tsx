@@ -16,13 +16,23 @@ describe("RecommendPage", () => {
     mockApp();
   });
 
-  it("shows the first batch of recipes by default", () => {
+  it("shows recipes from the backend result", () => {
     render(<RecommendPage />);
     expect(screen.getByText("番茄炒蛋")).toBeInTheDocument();
   });
 
-  it("shows the second batch once switched", () => {
-    mockApp({ batch: 1 });
+  it("renders whatever recommendedRecipes context provides", () => {
+    mockApp({
+      recommendedRecipes: [
+        {
+          name: "可乐鸡翅",
+          cookTime: "30 分钟",
+          difficulty: "简单",
+          matchSummary: "缺少 2 种主要食材",
+          description: "换一批后的固定推荐结果。",
+        },
+      ],
+    });
     render(<RecommendPage />);
     expect(screen.getByText("可乐鸡翅")).toBeInTheDocument();
     expect(screen.queryByText("番茄炒蛋")).not.toBeInTheDocument();
