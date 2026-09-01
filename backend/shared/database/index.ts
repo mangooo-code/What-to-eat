@@ -26,3 +26,8 @@ export {
   getUserById,
   verifyCredentials,
 } from "./userRepository";
+export {
+  getRecipeById,
+  listRecipeIngredients,
+  listRecipes,
+} from "./recipeRepository";

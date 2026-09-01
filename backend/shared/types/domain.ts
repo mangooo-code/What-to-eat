@@ -36,3 +36,40 @@ export interface Ingredient {
   createdDate: string;
   updatedDate: string;
 }
+
+export type Json = string | number | boolean | null | Json[] | { [key: string]: Json };
+
+export interface Recipe {
+  id: string;
+  name: string;
+  description: string | null;
+  /** Estimated total cook time, in minutes. */
+  time: number | null;
+  difficulty: string | null;
+  imageFileId: string | null;
+  tags: string[];
+  seasonings: string[];
+  substitutions: string[];
+  /** Ordered list of cooking steps; shape defined by application logic, not the database. */
+  steps: Json;
+  /** Dietary/taste preferences this recipe suits; shape defined by application logic. */
+  preferences: Json | null;
+  source: "curated" | "ai_generated";
+  /** Average of "RecipeRatings"."score", rounded to 2 decimal places. */
+  rating: number | null;
+  ratingCount: number;
+  createdDate: string;
+  updatedDate: string;
+}
+
+export interface RecipeIngredient {
+  id: number;
+  recipeId: string;
+  /** References a specific user's inventory row; null for AI-generated recipes with no inventory link. */
+  ingredientId: string | null;
+  /** Ingredient name captured at recipe-creation time, independent of the live inventory row. */
+  nameSnapshot: string | null;
+  unitTypeId: number | null;
+  quantity: number;
+  isOptional: boolean;
+}
