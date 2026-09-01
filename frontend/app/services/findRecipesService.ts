@@ -19,6 +19,7 @@ export interface RecipeDto {
 }
 
 export const findRecipesService = {
+  // AI recipe generation can take noticeably longer than the client's default timeout.
   submit: (input: FindRecipesInput) =>
-    apiClient.post<RecipeDto[], FindRecipesInput>("/findrecipes", input),
+    apiClient.post<RecipeDto[], FindRecipesInput>("/findrecipes", input, { timeoutMs: 28_000 }),
 };

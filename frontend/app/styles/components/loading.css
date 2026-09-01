@@ -32,6 +32,14 @@
   text-align: center;
 }
 
+.loading-text {
+  transition: opacity 0.5s ease;
+}
+
+.loading-text-hidden {
+  opacity: 0;
+}
+
 .loading-state .image-placeholder.wide {
   width: min(100%, 680px);
   height: clamp(260px, 45vw, 430px);

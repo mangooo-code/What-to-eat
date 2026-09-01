@@ -18,10 +18,10 @@ describe("LoadingSequence", () => {
     expect(screen.getByText(texts[0])).toBeInTheDocument();
   });
 
-  it("advances to the next text every second", () => {
+  it("advances to the next text after the hold and transition", () => {
     render(<LoadingSequence texts={texts} />);
     act(() => {
-      vi.advanceTimersByTime(1000);
+      vi.advanceTimersByTime(1500);
     });
     expect(screen.getByText(texts[1])).toBeInTheDocument();
   });

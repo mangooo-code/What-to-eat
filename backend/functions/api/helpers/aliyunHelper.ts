@@ -43,7 +43,7 @@ export async function generate(
   options: AliyunGenerationOptions = {},
 ): Promise<string> {
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), options.timeoutMs ?? 15_000);
+  const timeout = setTimeout(() => controller.abort(), options.timeoutMs ?? 20_000);
   try {
     const response = await fetch(`${getAliyunBaseUrl()}${GENERATION_PATH}`, {
       method: "POST",

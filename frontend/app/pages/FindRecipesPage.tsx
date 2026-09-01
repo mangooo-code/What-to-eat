@@ -102,7 +102,7 @@ export function FindRecipesPage() {
     try {
       const [recipes] = await Promise.all([
         findRecipesService.submit(submission),
-        new Promise((resolve) => setTimeout(resolve, 4200)),
+        new Promise((resolve) => setTimeout(resolve, 1000)),
       ]);
       setRecommendedRecipes(recipes);
       go("recommend");
