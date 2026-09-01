@@ -9,6 +9,31 @@
   height: 230px;
 }
 
+.camera-dialog {
+  display: grid;
+  gap: 14px;
+  width: min(100%, 480px);
+}
+
+.camera-preview {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  border-radius: 12px;
+  background: #000;
+  object-fit: cover;
+}
+
+.camera-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.shutter-button {
+  flex: 1;
+}
+
 .thumbs {
   display: flex;
   width: 100%;
