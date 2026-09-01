@@ -105,3 +105,15 @@ export async function deleteMember(memberId: string, ownerUserId: string): Promi
   });
   return rows.length > 0;
 }
+
+export async function countMembersByIds(memberIds: string[], ownerUserId: string): Promise<number> {
+  if (!memberIds.length) return 0;
+  const rows = await postgrestRequest<Array<{ id: string }>>("HouseholdMembers", {
+    query: {
+      select: "id",
+      ownerUserId: `eq.${ownerUserId}`,
+      id: `in.(${memberIds.join(",")})`,
+    },
+  });
+  return rows.length;
+}

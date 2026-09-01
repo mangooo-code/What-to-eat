@@ -43,6 +43,12 @@
                 "target": "function:api",
                 "enablePathTransmission": true,
                 "enableAuth": false
+            },
+            {
+                "path": "/findrecipes",
+                "target": "function:api",
+                "enablePathTransmission": true,
+                "enableAuth": false
             }
         ]
     },

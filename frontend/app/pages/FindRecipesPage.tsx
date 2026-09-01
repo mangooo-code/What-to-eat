@@ -8,6 +8,7 @@ import { Header } from "../components/Header";
 import { AssetImage } from "../components/AssetImage";
 import { limits } from "../lib/data";
 import { memberService } from "../services/memberService";
+import { findRecipesService } from "../services/findRecipesService";
 import type { HouseholdMember } from "../types/domain";
 
 const tasteImages: Record<string, string> = {
@@ -33,6 +34,7 @@ export function FindRecipesPage() {
     otherLimit,
     setOtherLimit,
     go,
+    say,
   } = useApp();
   const [visibleMemberIds, setVisibleMemberIds] = useState<string[]>([]);
   const [memberPickerOpen, setMemberPickerOpen] = useState(false);
@@ -86,9 +88,14 @@ export function FindRecipesPage() {
       preferLikedRecipes: prefer,
       dietaryExclusions: chosenLimits,
     };
-    // TODO: POST `submission` to the backend once the find-recipes endpoint exists
-    console.log("findrecipes submission", submission);
-    go("recommend-loading");
+    try {
+      await findRecipesService.submit(submission);
+      go("recommend-loading");
+    } catch (error) {
+      say(`提交失败：${error instanceof Error ? error.message : "请稍后重试"}`);
+    } finally {
+      setSubmitting(false);
+    }
   };
   return (
     <>

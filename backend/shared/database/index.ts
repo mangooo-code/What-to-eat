@@ -15,6 +15,7 @@ export {
   type UpdateIngredientRecord,
 } from "./inventoryRepository";
 export {
+  countMembersByIds,
   createMember,
   deleteMember,
   listMembers,

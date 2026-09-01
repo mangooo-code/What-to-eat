@@ -31,3 +31,11 @@ export interface CreateMemberRequest {
 }
 
 export type UpdateMemberRequest = Partial<CreateMemberRequest>;
+
+export interface FindRecipesRequest {
+  timePreference: string;
+  memberIds?: string[];
+  tastePreference: string;
+  preferLikedRecipes?: boolean;
+  dietaryExclusions?: string[];
+}
