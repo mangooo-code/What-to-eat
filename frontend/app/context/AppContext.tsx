@@ -283,6 +283,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
       return () => clearTimeout(t);
     }
   }, [page]);
+  useEffect(() => {
+    if (page !== "findrecipes") setFindRecipesSubmitting(false);
+  }, [page]);
   const loadCurrentUser = async () => {
     if (!authToken.get()) {
       setCurrentUser(null);
