@@ -103,11 +103,12 @@ describe("ConfirmPage", () => {
     mockApp({
       foods,
       confirmEdit: -1,
-      newFood: { name: "青椒", qty: 1, unit: "个", place: "冷藏", days: 3 },
+      newFood: { name: "青椒", qty: 1, unit: "个", place: "冷藏", days: 0 },
     });
     render(<ConfirmPage />);
     expect(screen.getByText("新增食材信息")).toBeInTheDocument();
     expect(screen.queryByText("删除")).not.toBeInTheDocument();
     expect(screen.queryByLabelText("存放位置")).not.toBeInTheDocument();
+    expect(screen.getByLabelText("过期时间（选填）")).toHaveValue("none");
   });
 });
