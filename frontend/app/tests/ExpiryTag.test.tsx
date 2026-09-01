@@ -15,6 +15,12 @@ describe("ExpiryTag", () => {
     expect(el).toHaveClass("urgent");
   });
 
+  it("shows unknown when no expiry date is stored", () => {
+    render(<ExpiryTag days={0} expiryDate={null} />);
+    expect(screen.getByText("未知")).toBeInTheDocument();
+    expect(screen.queryByText("正常")).not.toBeInTheDocument();
+  });
+
   it("shows urgent 'expiring soon' for 1-3 days", () => {
     render(<ExpiryTag days={3} />);
     const el = screen.getByText("即将过期");

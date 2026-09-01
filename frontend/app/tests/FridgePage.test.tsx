@@ -125,6 +125,48 @@ describe("FridgePage", () => {
     expect(setFoodModal).toHaveBeenCalledWith("summary");
   });
 
+  it("shows unknown and restores 暂不设置 when expiryDate is null", async () => {
+    const itemWithoutExpiry = { ...snapshot.items[0], expiryDate: null };
+    vi.spyOn(inventoryService, "list").mockResolvedValueOnce({ ...snapshot, items: [itemWithoutExpiry] });
+    mockApp({
+      foods: [{ ...foods[0], days: 0, expiryDate: null }],
+      foodModal: "summary",
+      editIndex: 0,
+    });
+    const view = render(<FridgePage />);
+
+    expect(await screen.findAllByText("未知")).toHaveLength(2);
+    view.unmount();
+
+    mockApp({
+      foods: [{ ...foods[0], days: 0, expiryDate: null }],
+      foodModal: "edit",
+      newFood: { ...foods[0], days: 0, expiryDate: null },
+    });
+    render(<FridgePage />);
+    expect(await screen.findByLabelText("过期时间（选填）")).toHaveValue("none");
+  });
+
+  it("sends null when an existing expiry is cleared", async () => {
+    const update = vi.spyOn(inventoryService, "update").mockResolvedValue({
+      ...snapshot.items[0],
+      expiryDate: null,
+    });
+    mockApp({
+      foods: [{ ...foods[0], days: 0, expiryDate: null }],
+      foodModal: "edit",
+      newFood: { ...foods[0], days: 0, expiryDate: null },
+    });
+    render(<FridgePage />);
+    await screen.findByLabelText("过期时间（选填）");
+    fireEvent.click(screen.getByText("保存修改"));
+
+    await waitFor(() => expect(update).toHaveBeenCalledWith(
+      foods[0].id,
+      expect.objectContaining({ expiryDate: null }),
+    ));
+  });
+
   it("keeps the single-page controls visible and disabled", () => {
     mockApp({ foods });
     render(<FridgePage />);
