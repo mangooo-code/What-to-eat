@@ -5,6 +5,7 @@ import { countMembersByIds } from "../../../shared/database/memberRepository";
 import type { HttpEvent, HttpResponse } from "../../../shared/types/api";
 import { getMethod, parseJsonBody, requireString } from "../../../shared/validation/http";
 import type { FindRecipesRequest } from "../contracts";
+import { search } from "../helpers/aiRecipeLookup";
 
 const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
@@ -49,7 +50,8 @@ export async function handleFindRecipes(event: HttpEvent): Promise<HttpResponse>
       preferLikedRecipes: optionalBoolean(body.preferLikedRecipes, "preferLikedRecipes"),
       dietaryExclusions: optionalStringArray(body.dietaryExclusions, "dietaryExclusions"),
     };
-    return successResponse(submission, 202);
+    const recipes = await search(submission);
+    return successResponse(recipes, 200);
   }
 
   throw new AppError("METHOD_NOT_ALLOWED", "Method not allowed", 405);
