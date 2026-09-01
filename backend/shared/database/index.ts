@@ -31,5 +31,6 @@ export {
   getRecipeById,
   listRecipeIngredients,
   listRecipes,
+  MAX_RESULTS,
   type RecipeTimeRange,
 } from "./recipeRepository";

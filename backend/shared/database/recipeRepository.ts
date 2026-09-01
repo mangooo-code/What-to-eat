@@ -101,6 +101,8 @@ export interface RecipeTimeRange {
   minMinutesExclusive?: number;
 }
 
+export const MAX_RESULTS = 3;
+
 // Finds the user's favorited recipes whose time fits the given range and whose non-optional
 // ingredients (matched by name, since RecipeIngredients.nameSnapshot is decoupled from any
 // specific user's inventory row) are all present in the user's current fridge/pantry inventory.
@@ -118,11 +120,12 @@ export async function findMatchingFavoriteRecipeIds(
   if (timeRange.maxMinutes !== undefined) timeFilter.time = `lte.${timeRange.maxMinutes}`;
   if (timeRange.minMinutesExclusive !== undefined) timeFilter.time = `gt.${timeRange.minMinutesExclusive}`;
 
-  const candidates = await postgrestRequest<Array<{ id: string }>>("Recipes", {
-    query: { select: "id", id: `in.(${favoriteIds.join(",")})`, ...timeFilter },
+  const candidates = await postgrestRequest<Array<{ id: string; rating: string | null }>>("Recipes", {
+    query: { select: "id,rating", id: `in.(${favoriteIds.join(",")})`, ...timeFilter },
   });
   const candidateIds = candidates.map((row) => row.id);
   if (!candidateIds.length) return [];
+  const ratingById = new Map(candidates.map((row) => [row.id, row.rating === null ? null : Number(row.rating)]));
 
   const [requiredIngredients, inventory] = await Promise.all([
     postgrestRequest<Array<{ recipeId: string; nameSnapshot: string | null }>>("RecipeIngredients", {
@@ -149,8 +152,14 @@ export async function findMatchingFavoriteRecipeIds(
     requiredNamesByRecipe.set(row.recipeId, names);
   }
 
-  return candidateIds.filter((id) => {
+  const matchingIds = candidateIds.filter((id) => {
     const requiredNames = requiredNamesByRecipe.get(id) ?? [];
     return requiredNames.every((name) => availableNames.has(name));
   });
+
+  // Highest-rated first (unrated recipes sort last); cap at MAX_RESULTS since the
+  // frontend only ever displays a handful of recommendations at a time.
+  return matchingIds
+    .sort((a, b) => (ratingById.get(b) ?? -1) - (ratingById.get(a) ?? -1))
+    .slice(0, MAX_RESULTS);
 }
