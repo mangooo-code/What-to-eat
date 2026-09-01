@@ -39,6 +39,18 @@ export function FindRecipesPage() {
   const [pickerMembers, setPickerMembers] = useState<HouseholdMember[]>([]);
   const [timeInvalid, setTimeInvalid] = useState(false);
   const [tasteInvalid, setTasteInvalid] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [formError, setFormError] = useState("");
+  const [displayedFormError, setDisplayedFormError] = useState("");
+  const [formErrorToken, setFormErrorToken] = useState(0);
+  useEffect(() => {
+    if (formError) setDisplayedFormError(formError);
+  }, [formError]);
+  useEffect(() => {
+    if (!formError) return;
+    const t = setTimeout(() => setFormError(""), 5000);
+    return () => clearTimeout(t);
+  }, [formError, formErrorToken]);
   useEffect(() => {
     memberService.list({ excludeOwner: true }).then(setPickerMembers).catch(() => {});
   }, []);
@@ -54,6 +66,30 @@ export function FindRecipesPage() {
     setChosenLimits((a) => (a.includes(v) ? a : [...a, v]));
     setOtherLimit("");
   };
+  const handleSubmit = async () => {
+    setSubmitting(true);
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    const missingTime = !time;
+    const missingTaste = !taste;
+    if (missingTime || missingTaste) {
+      setTimeInvalid(missingTime);
+      setTasteInvalid(missingTaste);
+      setSubmitting(false);
+      setFormError("还有必填项没有选择，请检查后重试。");
+      setFormErrorToken((t) => t + 1);
+      return;
+    }
+    const submission = {
+      timePreference: time,
+      memberIds: members,
+      tastePreference: taste,
+      preferLikedRecipes: prefer,
+      dietaryExclusions: chosenLimits,
+    };
+    // TODO: POST `submission` to the backend once the find-recipes endpoint exists
+    console.log("findrecipes submission", submission);
+    go("recommend-loading");
+  };
   return (
     <>
       <Header
@@ -63,26 +99,7 @@ export function FindRecipesPage() {
       />
       <form
         className="findrecipes-layout"
-        onSubmit={(e) => {
-          e.preventDefault();
-          const missingTime = !time;
-          const missingTaste = !taste;
-          if (missingTime || missingTaste) {
-            setTimeInvalid(missingTime);
-            setTasteInvalid(missingTaste);
-            return;
-          }
-          const submission = {
-            timePreference: time,
-            memberIds: members,
-            tastePreference: taste,
-            preferLikedRecipes: prefer,
-            dietaryExclusions: chosenLimits,
-          };
-          // TODO: POST `submission` to the backend once the find-recipes endpoint exists
-          console.log("findrecipes submission", submission);
-          go("recommend-loading");
-        }}
+        onSubmit={(e) => e.preventDefault()}
       >
         <section className={`need-card${timeInvalid ? " invalid" : ""}`}>
           <h2>今天有多少时间？<span className="required-mark">*</span></h2>
@@ -258,11 +275,17 @@ export function FindRecipesPage() {
             </button>
           </div>
         </section>
+        <p className={`findrecipes-error${formError ? " visible" : ""}`} role="alert">
+          {displayedFormError}
+          <span className="findrecipes-error-progress" key={formErrorToken} />
+        </p>
         <button
-          type="submit"
+          type="button"
           className="primary findrecipes-submit"
+          disabled={submitting}
+          onClick={handleSubmit}
         >
-          帮我挑一挑
+          {submitting ? <span className="button-spinner" role="status" aria-label="提交中" /> : "帮我挑一挑"}
         </button>
       </form>
     </>
