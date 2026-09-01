@@ -162,6 +162,16 @@ interface AppContextValue {
 
 const AppContext = createContext<AppContextValue | null>(null);
 
+export function selectValidMemberIds(
+  selected: string[],
+  items: HouseholdMember[],
+): string[] {
+  const valid = selected.filter((id) => items.some((item) => item.memberId === id));
+  if (valid.length) return valid;
+  const owner = items.find((item) => item.isOwner);
+  return owner ? [owner.memberId] : [];
+}
+
 export function AppProvider({ children }: { children: ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
@@ -293,12 +303,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     try {
       const items = await memberService.list();
       setHouseholdMembers(items);
-      setMembers((selected) => {
-        const valid = selected.filter((id) => items.some((item) => item.memberId === id));
-        if (valid.length) return valid;
-        const owner = items.find((item) => item.isOwner);
-        return owner ? [owner.memberId] : [];
-      });
+      setMembers((selected) => selectValidMemberIds(selected, items));
     } catch (error) {
       say(`成员加载失败：${error instanceof Error ? error.message : "请稍后重试"}`);
     } finally {

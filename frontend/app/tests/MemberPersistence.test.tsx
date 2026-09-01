@@ -1,6 +1,6 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { AppProvider, useApp } from "../context/AppContext";
+import { AppProvider, selectValidMemberIds, useApp } from "../context/AppContext";
 import { memberService } from "../services/memberService";
 import type { HouseholdMember } from "../types/domain";
 
@@ -37,6 +37,14 @@ const owner: HouseholdMember = {
   updatedDate: "2026-08-30T00:00:00.000Z",
 };
 
+const partner: HouseholdMember = {
+  ...owner,
+  memberId: "10000000-0000-4000-8000-000000000102",
+  name: "阳",
+  relationship: "伴侣",
+  isOwner: false,
+};
+
 function Harness() {
   const app = useApp();
   return (
@@ -71,5 +79,17 @@ describe("member persistence state", () => {
     await waitFor(() => expect(screen.getByLabelText("toast")).toHaveTextContent("成员保存失败"));
     expect(screen.getByLabelText("member-count")).toHaveTextContent("1");
     expect(screen.getByLabelText("editor-state")).toHaveTextContent("open");
+  });
+
+  it("keeps selected members that still exist", () => {
+    expect(selectValidMemberIds([partner.memberId], [owner, partner])).toEqual([partner.memberId]);
+  });
+
+  it("falls back to the owner when the selected member no longer exists", () => {
+    expect(selectValidMemberIds(["missing-member"], [owner, partner])).toEqual([owner.memberId]);
+  });
+
+  it("returns an empty selection for an empty member array", () => {
+    expect(selectValidMemberIds([owner.memberId], [])).toEqual([]);
   });
 });

@@ -23,6 +23,8 @@ export function ConfirmPage() {
     fridgePlace,
   } = useApp();
   const [saving, setSaving] = useState(false);
+  const [expiryEditor, setExpiryEditor] = useState<number | null>(null);
+  const [customExpiryEditor, setCustomExpiryEditor] = useState<number | null>(null);
   const editing =
     confirmEdit === -1
       ? newFood
@@ -40,11 +42,35 @@ export function ConfirmPage() {
         {foods.map((f, i) => (
           <article className="confirm-item" key={`${f.name}${i}`}>
             <FoodEmoji name={f.name} />
-            <span>
+            <span className="confirm-food-details">
               <strong>{f.name || "未命名食材"}</strong>
               <small>
-                {f.qty} {f.unit} · {f.days} 天后过期
+                {f.qty} {f.unit}
+                {f.days > 0 && (
+                  <button
+                    type="button"
+                    className="confirm-expiry-value"
+                    onClick={() => {
+                      setExpiryEditor(i);
+                      setCustomExpiryEditor(null);
+                    }}
+                  >
+                    · {f.days}天后过期
+                  </button>
+                )}
               </small>
+              {f.days <= 0 && expiryEditor !== i && (
+                <button
+                  type="button"
+                  className="confirm-expiry-add"
+                  onClick={() => {
+                    setExpiryEditor(i);
+                    setCustomExpiryEditor(null);
+                  }}
+                >
+                  + 添加过期时间
+                </button>
+              )}
             </span>
             <button
               className="confirm-edit-button"
@@ -52,13 +78,69 @@ export function ConfirmPage() {
             >
               修改
             </button>
+            {expiryEditor === i && (
+              <div className="confirm-expiry-editor">
+                <div className="confirm-expiry-options">
+                  {[3, 7, 14].map((days) => (
+                    <button
+                      type="button"
+                      key={days}
+                      onClick={() => {
+                        setFoods((items) => items.map((item, index) => index === i ? { ...item, days } : item));
+                        setExpiryEditor(null);
+                        setCustomExpiryEditor(null);
+                      }}
+                    >
+                      {days}天后
+                    </button>
+                  ))}
+                  <button type="button" onClick={() => setCustomExpiryEditor(i)}>自定义</button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setFoods((items) => items.map((item, index) => index === i ? { ...item, days: 0 } : item));
+                      setExpiryEditor(null);
+                      setCustomExpiryEditor(null);
+                    }}
+                  >
+                    暂不设置
+                  </button>
+                </div>
+                {customExpiryEditor === i && (
+                  <span className="confirm-custom-expiry">
+                    <input
+                      aria-label={`${f.name}自定义过期天数`}
+                      type="number"
+                      min="1"
+                      step="1"
+                      inputMode="numeric"
+                      value={f.days > 0 ? f.days : 1}
+                      onChange={(event) => {
+                        const days = Math.max(1, Math.floor(Number(event.target.value) || 1));
+                        setFoods((items) => items.map((item, index) => index === i ? { ...item, days } : item));
+                      }}
+                    />
+                    <b>天后过期</b>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setExpiryEditor(null);
+                        setCustomExpiryEditor(null);
+                      }}
+                    >
+                      完成
+                    </button>
+                  </span>
+                )}
+              </div>
+            )}
           </article>
         ))}
       </div>
       <button
         className="add-row"
         onClick={() => {
-          setNewFood({ name: "", qty: 1, unit: "个", place: fridgePlace, days: 3, source: "recognition" });
+          setNewFood({ name: "", qty: 1, unit: "个", place: fridgePlace, days: 0, source: "recognition" });
           setConfirmEdit(-1);
         }}
       >
@@ -83,7 +165,9 @@ export function ConfirmPage() {
                 quantity: Number(food.qty),
                 unitTypeId,
                 locationId,
-                expiryDate: new Date(Date.now() + food.days * 86_400_000).toISOString(),
+                expiryDate: food.days > 0
+                  ? new Date(Date.now() + food.days * 86_400_000).toISOString()
+                  : null,
                 imageFileId: food.imageFileId ?? null,
                 source: "recognition",
               });
@@ -112,6 +196,7 @@ export function ConfirmPage() {
             <h2 id="confirm-edit-title">{confirmEdit === -1 ? "新增食材信息" : "编辑食材信息"}</h2>
             <Field
               food={editing}
+              showExpiry={false}
               showPlace={false}
               onChange={(f) =>
                 confirmEdit === -1

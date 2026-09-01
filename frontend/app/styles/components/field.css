@@ -15,6 +15,10 @@
   grid-column: 1/-1;
 }
 
+.food-form .optional-expiry-field {
+  grid-column: 1/-1;
+}
+
 .food-form input,
 .food-form select,
 .label input,
@@ -76,6 +80,10 @@
   border-left: 1px solid var(--line);
   border-radius: 0;
   background: var(--butter-soft);
+}
+
+.custom-expiry-input {
+  max-width: 210px;
 }
 
 .food-form select,

@@ -13,6 +13,7 @@ function mockApp(overrides: Parameters<typeof createAppState>[0] = {}) {
 }
 
 const foods = [{ name: "番茄", qty: 2, unit: "个", place: "冷藏", days: 3 }];
+const foodsWithoutExpiry = [{ name: "番茄", qty: 2, unit: "个", place: "冷藏", days: 0 }];
 
 describe("ConfirmPage", () => {
   beforeEach(() => {
@@ -36,6 +37,18 @@ describe("ConfirmPage", () => {
     render(<ConfirmPage />);
     fireEvent.click(screen.getByText("修改"));
     expect(setConfirmEdit).toHaveBeenCalledWith(0);
+  });
+
+  it("adds an optional expiry inside the ingredient card", () => {
+    const setFoods = vi.fn();
+    mockApp({ foods: foodsWithoutExpiry, setFoods });
+    render(<ConfirmPage />);
+
+    fireEvent.click(screen.getByText("+ 添加过期时间"));
+    fireEvent.click(screen.getByText("7天后"));
+
+    const update = setFoods.mock.calls[0][0] as (items: typeof foodsWithoutExpiry) => typeof foodsWithoutExpiry;
+    expect(update(foodsWithoutExpiry)[0].days).toBe(7);
   });
 
   it("starts a new food entry from the add-row button", () => {
@@ -63,12 +76,24 @@ describe("ConfirmPage", () => {
     expect(go).toHaveBeenCalledWith("fridge");
   });
 
+  it("submits null when an expiry was not set", async () => {
+    mockApp({ foods: foodsWithoutExpiry });
+    render(<ConfirmPage />);
+    fireEvent.click(screen.getByText("确认添加"));
+
+    await waitFor(() => expect(inventoryService.create).toHaveBeenCalledWith(
+      expect.objectContaining({ expiryDate: null }),
+    ));
+  });
+
   it("shows the editor modal with a delete option for existing foods", () => {
     const setFoods = vi.fn();
     const setConfirmEdit = vi.fn();
     mockApp({ foods, confirmEdit: 0, setFoods, setConfirmEdit });
     render(<ConfirmPage />);
     expect(screen.getByText("编辑食材信息")).toBeInTheDocument();
+    expect(screen.queryByText("几天后过期")).not.toBeInTheDocument();
+    expect(screen.queryByText("过期时间（选填）")).not.toBeInTheDocument();
     fireEvent.click(screen.getByText("删除"));
     expect(setFoods).toHaveBeenCalledTimes(1);
     expect(setConfirmEdit).toHaveBeenCalledWith(null);

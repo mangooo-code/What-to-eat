@@ -63,4 +63,29 @@ describe("Field", () => {
     fireEvent.change(daysInput, { target: { value: "4.9" } });
     expect(onChange).toHaveBeenCalledWith({ ...food, days: 4 });
   });
+
+  it("supports an optional preset expiry for manual entry", () => {
+    const onChange = vi.fn();
+    const unsetFood = { ...food, days: 0 };
+    render(<Field food={unsetFood} onChange={onChange} useOptionalExpiry />);
+
+    const expirySelect = screen.getByLabelText("过期时间（选填）");
+    expect(expirySelect).toHaveValue("none");
+    expect(screen.queryByLabelText("自定义过期天数")).not.toBeInTheDocument();
+
+    fireEvent.change(expirySelect, { target: { value: "7" } });
+    expect(onChange).toHaveBeenCalledWith({ ...unsetFood, days: 7 });
+  });
+
+  it("only shows a positive day input for a custom expiry", () => {
+    const onChange = vi.fn();
+    const unsetFood = { ...food, days: 0 };
+    render(<Field food={unsetFood} onChange={onChange} useOptionalExpiry />);
+
+    fireEvent.change(screen.getByLabelText("过期时间（选填）"), {
+      target: { value: "custom" },
+    });
+    expect(screen.getByLabelText("自定义过期天数")).toHaveValue(1);
+    expect(onChange).toHaveBeenCalledWith({ ...unsetFood, days: 1 });
+  });
 });
