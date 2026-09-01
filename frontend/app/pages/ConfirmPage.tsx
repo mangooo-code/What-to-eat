@@ -196,8 +196,9 @@ export function ConfirmPage() {
             <h2 id="confirm-edit-title">{confirmEdit === -1 ? "新增食材信息" : "编辑食材信息"}</h2>
             <Field
               food={editing}
-              showExpiry={false}
+              showExpiry={confirmEdit === -1}
               showPlace={false}
+              useOptionalExpiry={confirmEdit === -1}
               onChange={(f) =>
                 confirmEdit === -1
                   ? setNewFood(f)
