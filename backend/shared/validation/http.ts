@@ -6,9 +6,11 @@ export function getMethod(event: HttpEvent): string {
 }
 
 export function getQueryParams(event: HttpEvent): URLSearchParams {
-  const path = event.path ?? "";
-  const queryIndex = path.indexOf("?");
-  return new URLSearchParams(queryIndex >= 0 ? path.slice(queryIndex + 1) : "");
+  return new URLSearchParams(
+    Object.entries(event.queryStringParameters ?? {}).filter(
+      (entry): entry is [string, string] => entry[1] !== undefined,
+    ),
+  );
 }
 
 export function parseJsonBody<T>(event: HttpEvent): T {
