@@ -19,12 +19,11 @@ export function CapturePage() {
     fridgePlace,
     go,
   } = useApp();
-  const [photoSheetOpen, setPhotoSheetOpen] = useState(false);
   const [previewUrl, setPreviewUrl] = useState("");
   const cameraInput = useRef<HTMLInputElement>(null);
   const albumInput = useRef<HTMLInputElement>(null);
   const isPhotoTab = captureTab !== "voice";
-  const count = photos.camera + photos.album > 0 ? 1 : 0;
+  const hasPhoto = Boolean(previewUrl);
 
   useEffect(() => () => {
     if (previewUrl) URL.revokeObjectURL(previewUrl);
@@ -42,7 +41,12 @@ export function CapturePage() {
     if (previewUrl) URL.revokeObjectURL(previewUrl);
     setPreviewUrl(URL.createObjectURL(file));
     setPhotos({ camera: source === "camera" ? 1 : 0, album: source === "album" ? 1 : 0 });
-    setPhotoSheetOpen(false);
+  };
+
+  const openPhotoPicker = (input: HTMLInputElement | null) => {
+    if (!input) return;
+    input.value = "";
+    input.click();
   };
 
   const clearPhoto = () => {
@@ -91,18 +95,20 @@ export function CapturePage() {
             <p>目前仅支持上传一张照片，尽量拍清楚一点。</p>
           </div>
           <div className="upload-actions">
-            <button
-              className="secondary"
-              onClick={() => setPhotoSheetOpen(true)}
-            >
-              {count ? "重新选择" : "添加照片"}
-            </button>
-            {count > 0 && (
+            <div className="photo-source-actions">
+              <button type="button" className="secondary" onClick={() => openPhotoPicker(cameraInput.current)}>
+                拍照
+              </button>
+              <button type="button" className="secondary" onClick={() => openPhotoPicker(albumInput.current)}>
+                从相册选择
+              </button>
+            </div>
+            {hasPhoto && (
               <button className="link" onClick={clearPhoto}>删除照片</button>
             )}
           </div>
-          <input ref={cameraInput} className="visually-hidden" type="file" accept="image/*" capture="environment" onChange={(e) => choosePhoto(e.target.files?.[0], "camera")} />
-          <input ref={albumInput} className="visually-hidden" type="file" accept="image/*" onChange={(e) => choosePhoto(e.target.files?.[0], "album")} />
+          <input ref={cameraInput} aria-label="拍照文件输入" className="visually-hidden" type="file" accept="image/*" capture="environment" onChange={(e) => choosePhoto(e.target.files?.[0], "camera")} />
+          <input ref={albumInput} aria-label="相册文件输入" className="visually-hidden" type="file" accept="image/*" onChange={(e) => choosePhoto(e.target.files?.[0], "album")} />
         </section>
       ) : (
         <section className="voice-parse">
@@ -126,23 +132,13 @@ export function CapturePage() {
       )}
       {isPhotoTab && (
         <>
-          <button type="button" className="primary sticky" disabled={!count} onClick={() => {
+          <button type="button" className="primary sticky" disabled={!hasPhoto} onClick={() => {
             setFoods(prepareRecognizedFoods());
             go("recognize");
           }}>
             开始识别
           </button>
         </>
-      )}
-      {photoSheetOpen && (
-        <div className="photo-sheet-overlay" onClick={() => setPhotoSheetOpen(false)}>
-          <div className="photo-source-sheet" role="dialog" aria-modal="true" aria-label="选择照片来源" onClick={(e) => e.stopPropagation()}>
-            <h2>添加照片</h2>
-            <button onClick={() => cameraInput.current?.click()}>拍照</button>
-            <button onClick={() => albumInput.current?.click()}>从相册选择</button>
-            <button className="link" onClick={() => setPhotoSheetOpen(false)}>取消</button>
-          </div>
-        </div>
       )}
     </>
   );

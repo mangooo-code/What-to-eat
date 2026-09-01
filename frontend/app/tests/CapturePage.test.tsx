@@ -14,6 +14,11 @@ function mockApp(overrides: Parameters<typeof createAppState>[0] = {}) {
 describe("CapturePage", () => {
   beforeEach(() => {
     mockApp();
+    vi.stubGlobal("URL", {
+      ...URL,
+      createObjectURL: vi.fn((file: File) => `blob:${file.name}`),
+      revokeObjectURL: vi.fn(),
+    });
   });
 
   it("shows the single-photo section by default", () => {
@@ -22,7 +27,8 @@ describe("CapturePage", () => {
     expect(screen.getByText("目前仅支持上传一张照片，尽量拍清楚一点。")).toBeInTheDocument();
     expect(screen.getByText("拍照识别")).toBeInTheDocument();
     expect(screen.getByText("语音识别")).toBeInTheDocument();
-    expect(screen.queryByText("从相册选")).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "拍照" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "从相册选择" })).toBeInTheDocument();
   });
 
   it("switches to the voice tab", () => {
@@ -65,20 +71,41 @@ describe("CapturePage", () => {
     expect(go).toHaveBeenCalledWith("recognize");
   });
 
-  it("opens a bottom sheet with camera and album choices", () => {
-    mockApp({ captureTab: "camera", photos: { camera: 0, album: 0 } });
+  it("uses one preview and lets a new source replace the current photo", () => {
+    const setPhotos = vi.fn();
+    mockApp({ captureTab: "camera", photos: { camera: 0, album: 0 }, setPhotos });
     render(<CapturePage />);
-    fireEvent.click(screen.getByText("添加照片"));
-    expect(screen.getByRole("dialog", { name: "选择照片来源" })).toBeInTheDocument();
-    expect(screen.getByText("拍照")).toBeInTheDocument();
-    expect(screen.getByText("从相册选择")).toBeInTheDocument();
+    const recognize = screen.getByRole("button", { name: "开始识别" });
+    expect(recognize).toBeDisabled();
+
+    fireEvent.change(screen.getByLabelText("拍照文件输入"), {
+      target: { files: [new File(["camera"], "camera.png", { type: "image/png" })] },
+    });
+    expect(screen.getByAltText("待识别食材预览")).toHaveAttribute("src", "blob:camera.png");
+    expect(setPhotos).toHaveBeenLastCalledWith({ camera: 1, album: 0 });
+    expect(recognize).toBeEnabled();
+
+    fireEvent.change(screen.getByLabelText("相册文件输入"), {
+      target: { files: [new File(["album"], "album.png", { type: "image/png" })] },
+    });
+    expect(screen.getByAltText("待识别食材预览")).toHaveAttribute("src", "blob:album.png");
+    expect(screen.getAllByAltText("待识别食材预览")).toHaveLength(1);
+    expect(setPhotos).toHaveBeenLastCalledWith({ camera: 0, album: 1 });
+
+    fireEvent.click(screen.getByRole("button", { name: "删除照片" }));
+    expect(screen.queryByAltText("待识别食材预览")).not.toBeInTheDocument();
+    expect(setPhotos).toHaveBeenLastCalledWith({ camera: 0, album: 0 });
+    expect(recognize).toBeDisabled();
   });
 
   it("navigates to recognize once photos are ready", () => {
     const go = vi.fn();
     const setFoods = vi.fn();
-    mockApp({ captureTab: "camera", photos: { camera: 1, album: 0 }, go, setFoods });
+    mockApp({ captureTab: "camera", photos: { camera: 0, album: 0 }, go, setFoods });
     render(<CapturePage />);
+    fireEvent.change(screen.getByLabelText("相册文件输入"), {
+      target: { files: [new File(["album"], "album.png", { type: "image/png" })] },
+    });
     fireEvent.click(screen.getByText("开始识别"));
     expect(setFoods).toHaveBeenCalled();
     expect(go).toHaveBeenCalledWith("recognize");
