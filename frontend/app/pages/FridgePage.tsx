@@ -132,7 +132,7 @@ export function FridgePage() {
         quantity: Number(newFood.qty),
         unitTypeId,
         locationId,
-        expiryDate: foodModal === "add" && newFood.days === 0
+        expiryDate: newFood.days === 0
           ? null
           : new Date(Date.now() + newFood.days * 86_400_000).toISOString(),
         imageFileId: newFood.imageFileId ?? null,
@@ -227,7 +227,7 @@ export function FridgePage() {
                       {f.qty} {f.unit}
                     </small>
                   </span>
-                  <ExpiryTag days={f.days} />
+                  <ExpiryTag days={f.days} expiryDate={f.expiryDate} />
                 </button>
               );
             })}
@@ -315,7 +315,7 @@ export function FridgePage() {
                   </span>
                   <span>
                     过期状态：
-                    <ExpiryTag days={selected.days} />
+                    <ExpiryTag days={selected.days} expiryDate={selected.expiryDate} />
                   </span>
                 </div>
                 <div className="modal-actions">
@@ -344,7 +344,7 @@ export function FridgePage() {
                   food={selected}
                   onChange={setNewFood}
                   showPlace={false}
-                  useOptionalExpiry={foodModal === "add"}
+                  useOptionalExpiry
                 />
                 <div className="modal-edit-actions">
                   <button

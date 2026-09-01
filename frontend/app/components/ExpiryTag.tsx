@@ -1,9 +1,11 @@
 "use client";
 import "../styles/components/expiry-tag.css";
 
-export function ExpiryTag({ days }: { days: number }) {
+export function ExpiryTag({ days, expiryDate }: { days: number; expiryDate?: string | null }) {
   const state =
-    days < 0
+    expiryDate === null
+      ? ["未知", "expired"]
+      : days < 0
       ? ["已过期", "expired"]
       : days === 0
         ? ["今日到期", "urgent"]
