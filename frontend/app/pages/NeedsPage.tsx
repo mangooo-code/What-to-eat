@@ -1,20 +1,21 @@
 "use client";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import "../styles/pages/needs.css";
 import { useApp } from "../context/AppContext";
 import { Choice } from "../components/Choice";
 import { Header } from "../components/Header";
 import { AssetImage } from "../components/AssetImage";
 import { limits } from "../lib/data";
+import { memberService } from "../services/memberService";
+import type { HouseholdMember } from "../types/domain";
 
 export function NeedsPage() {
   const {
     time,
     setTime,
-    householdMembers,
-    membersLoading,
     members,
     setMembers,
-    openMember,
     taste,
     setTaste,
     prefer,
@@ -29,6 +30,18 @@ export function NeedsPage() {
     setNeedError,
     go,
   } = useApp();
+  const [visibleMemberIds, setVisibleMemberIds] = useState<string[]>([]);
+  const [memberPickerOpen, setMemberPickerOpen] = useState(false);
+  const [pickerMembers, setPickerMembers] = useState<HouseholdMember[]>([]);
+  useEffect(() => {
+    memberService.list({ excludeOwner: true }).then(setPickerMembers).catch(() => {});
+  }, []);
+  const visibleMembers = pickerMembers.filter((member) =>
+    visibleMemberIds.includes(member.memberId),
+  );
+  const pickableMembers = pickerMembers.filter(
+    (member) => !visibleMemberIds.includes(member.memberId),
+  );
   const missing = time ? 0 : 1;
   return (
     <>
@@ -52,31 +65,97 @@ export function NeedsPage() {
           </div>
         </section>
         <section className="need-card">
-          <h2>今天和谁一起吃？</h2>
+          <div className="card-header-row">
+            <h2>今天还有谁一起吃？</h2>
+            <button
+              type="button"
+              className="add-diner"
+              aria-label="添加就餐人"
+              onClick={() => setMemberPickerOpen(true)}
+            >
+              <strong>＋</strong>
+            </button>
+          </div>
           <div className="chips member-options">
-            {householdMembers.map((member) => (
-              <button
-                type="button"
-                className={members.includes(member.memberId) ? "active" : ""}
-                aria-pressed={members.includes(member.memberId)}
-                key={member.memberId}
-                onClick={() =>
-                  setMembers((a) =>
-                    a.includes(member.memberId)
-                      ? a.filter((id) => id !== member.memberId)
-                      : [...a, member.memberId],
-                  )
-                }
-              >
-                {member.name}
-              </button>
+            {visibleMembers.map((member) => (
+              <span className="member-chip active" key={member.memberId}>
+                <span className="member-chip-name">{member.name}</span>
+                <button
+                  type="button"
+                  className="member-chip-remove"
+                  aria-label={`移除${member.name}`}
+                  onClick={() => {
+                    setVisibleMemberIds((ids) => ids.filter((id) => id !== member.memberId));
+                    setMembers((a) => a.filter((id) => id !== member.memberId));
+                  }}
+                >
+                  ×
+                </button>
+              </span>
             ))}
-            {membersLoading && <span className="member-loading"><AssetImage name="general-loading.png" alt="" />成员加载中……</span>}
-            <button type="button" onClick={() => openMember("needs")}>＋ 添加成员</button>
+            {visibleMembers.length === 0 && (
+              <p className="member-empty">目前只有我们！</p>
+            )}
           </div>
         </section>
-        <section className="need-card">
-          <h2>今天想吃什么口味？</h2>
+        {memberPickerOpen && typeof document !== "undefined" && createPortal(
+          <div
+            className="overlay"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="member-picker-title"
+            onClick={() => setMemberPickerOpen(false)}
+          >
+            <div className="dialog member-picker" onClick={(e) => e.stopPropagation()}>
+              <button
+                className="modal-close"
+                aria-label="关闭"
+                onClick={() => setMemberPickerOpen(false)}
+              >
+                ×
+              </button>
+              <h2 id="member-picker-title">选择就餐人</h2>
+              <div className="member-picker-list">
+                {pickableMembers.map((member) => (
+                  <button
+                    type="button"
+                    key={member.memberId}
+                    onClick={() => {
+                      setVisibleMemberIds((ids) => [...ids, member.memberId]);
+                      setMembers((a) => (a.includes(member.memberId) ? a : [...a, member.memberId]));
+                    }}
+                  >
+                    {member.name}
+                  </button>
+                ))}
+                {pickableMembers.length === 0 && (
+                  <p className="member-empty">没有更多成员了</p>
+                )}
+              </div>
+              <div className="actions">
+                <button onClick={() => setMemberPickerOpen(false)}>完成</button>
+              </div>
+            </div>
+          </div>,
+          document.body,
+        )}
+        <section className="need-card full">
+          <div className="card-header-row">
+            <h2>今天想吃什么口味？</h2>
+            <label className="toggle-row">
+              <span>
+                <strong>优先喜欢过的菜谱</strong>
+              </span>
+              <input
+                type="checkbox"
+                checked={prefer}
+                onChange={(e) => setPrefer(e.target.checked)}
+              />
+              <i className={`switch ${prefer ? "on" : ""}`} aria-hidden="true">
+                {prefer ? "ON" : "OFF"}
+              </i>
+            </label>
+          </div>
           <div className="chips option-cards icon-options">
             {["按平时口味", "重口过瘾", "家常下饭", "清淡爽口", "健康轻食"].map(
               (x) => (
@@ -103,24 +182,8 @@ export function NeedsPage() {
             )}
           </div>
         </section>
-        <section className="need-card preference-card">
-          <label className="toggle-row">
-            <span>
-              <strong>喜欢的菜谱优先</strong>
-              <small>优先考虑之前喜欢过的菜谱</small>
-            </span>
-            <input
-              type="checkbox"
-              checked={prefer}
-              onChange={(e) => setPrefer(e.target.checked)}
-            />
-            <i className={`switch ${prefer ? "on" : ""}`} aria-hidden="true">
-              {prefer ? "ON" : "OFF"}
-            </i>
-          </label>
-        </section>
         <section className="need-card full">
-          <h2>这顿有什么不吃的？</h2>
+          <h2>这顿有什么不吃的</h2>
           <div className="chips option-cards">
             {[...limits, ...chosenLimits.filter((x) => !limits.includes(x))].map(
               (x) => (

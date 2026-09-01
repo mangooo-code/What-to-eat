@@ -25,6 +25,12 @@ describe("memberService response contract", () => {
     await expect(memberService.list()).resolves.toEqual([owner]);
   });
 
+  it("preserves the remote excludeOwner query option", async () => {
+    const get = vi.spyOn(apiClient, "get").mockResolvedValue([owner]);
+    await memberService.list({ excludeOwner: true });
+    expect(get).toHaveBeenCalledWith("/members", { query: { excludeOwner: true } });
+  });
+
   it("unwraps an items response at the service boundary", async () => {
     vi.spyOn(apiClient, "get").mockResolvedValue({ items: [owner] });
     await expect(memberService.list()).resolves.toEqual([owner]);

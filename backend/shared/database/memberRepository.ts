@@ -48,11 +48,15 @@ function mapMember(row: HouseholdMemberRow): HouseholdMember {
   };
 }
 
-export async function listMembers(ownerUserId: string): Promise<HouseholdMember[]> {
+export async function listMembers(
+  ownerUserId: string,
+  options: { excludeOwner?: boolean } = {},
+): Promise<HouseholdMember[]> {
   const rows = await postgrestRequest<HouseholdMemberRow[]>("HouseholdMembers", {
     query: {
       select: memberColumns,
       ownerUserId: `eq.${ownerUserId}`,
+      ...(options.excludeOwner ? { isOwner: "is.false" } : {}),
       order: "isOwner.desc,createdDate.asc,id.asc",
     },
   });

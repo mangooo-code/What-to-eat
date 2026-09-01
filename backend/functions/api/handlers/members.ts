@@ -3,7 +3,7 @@ import { successResponse } from "../../../shared/errors/httpResponse";
 import { requireAuth } from "../../../shared/auth";
 import { createMember, deleteMember, listMembers, updateMember } from "../../../shared/database/memberRepository";
 import type { HttpEvent, HttpResponse } from "../../../shared/types/api";
-import { getMethod, parseJsonBody, requireString } from "../../../shared/validation/http";
+import { getMethod, getQueryParams, parseJsonBody, requireString } from "../../../shared/validation/http";
 import type { CreateMemberRequest, UpdateMemberRequest } from "../contracts";
 
 const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -39,7 +39,8 @@ export async function handleMembers(event: HttpEvent): Promise<HttpResponse> {
   const memberId = memberIdFromPath(event.path);
 
   if (method === "GET" && !memberId) {
-    return successResponse(await listMembers(ownerUserId));
+    const excludeOwner = getQueryParams(event).get("excludeOwner") === "true";
+    return successResponse(await listMembers(ownerUserId, { excludeOwner }));
   }
 
   if (method === "POST" && !memberId) {

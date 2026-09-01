@@ -18,6 +18,7 @@ export interface HttpEvent {
   requestContext?: { httpMethod?: string };
   headers?: Record<string, string | undefined>;
   path?: string;
+  queryStringParameters?: Record<string, string | undefined>;
   body?: string | Record<string, unknown> | null;
   isBase64Encoded?: boolean;
 }

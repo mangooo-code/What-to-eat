@@ -63,8 +63,10 @@ function parseMemberResponse(response: unknown): HouseholdMember {
 }
 
 export const memberService = {
-  list: async (): Promise<HouseholdMember[]> => parseMemberListResponse(
-    await apiClient.get<unknown>("/members"),
+  list: async (options?: { excludeOwner?: boolean }): Promise<HouseholdMember[]> => parseMemberListResponse(
+    await apiClient.get<unknown>("/members", {
+      query: options?.excludeOwner ? { excludeOwner: true } : undefined,
+    }),
   ),
   create: async (input: CreateMemberInput): Promise<HouseholdMember> => parseMemberResponse(
     await apiClient.post<unknown, CreateMemberInput>("/members", input),
