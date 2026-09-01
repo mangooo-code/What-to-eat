@@ -91,6 +91,10 @@
   display: grid;
 }
 
+.findrecipes-submit {
+  grid-column: 1/-1;
+}
+
 .need-card h2 {
   margin-bottom: 16px;
 }

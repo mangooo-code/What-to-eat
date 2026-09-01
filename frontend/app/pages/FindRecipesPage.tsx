@@ -10,6 +10,14 @@ import { limits } from "../lib/data";
 import { memberService } from "../services/memberService";
 import type { HouseholdMember } from "../types/domain";
 
+const tasteImages: Record<string, string> = {
+  "按平时口味": "based-on-usual-taste.png",
+  "重口过瘾": "bold-and-satisfying.png",
+  "家常下饭": "home-style-meal.png",
+  "清淡爽口": "light-and-refreshing.png",
+  "健康轻食": "healthy-light-meal.png",
+};
+
 export function FindRecipesPage() {
   const {
     time,
@@ -40,6 +48,12 @@ export function FindRecipesPage() {
   const pickableMembers = pickerMembers.filter(
     (member) => !visibleMemberIds.includes(member.memberId),
   );
+  const addOtherLimit = () => {
+    const v = otherLimit.trim();
+    if (!v) return;
+    setChosenLimits((a) => (a.includes(v) ? a : [...a, v]));
+    setOtherLimit("");
+  };
   return (
     <>
       <Header
@@ -47,7 +61,29 @@ export function FindRecipesPage() {
         sub="告诉我今天的需求，我来帮你缩小选择范围。"
         back={() => go("home")}
       />
-      <div className="findrecipes-layout">
+      <form
+        className="findrecipes-layout"
+        onSubmit={(e) => {
+          e.preventDefault();
+          const missingTime = !time;
+          const missingTaste = !taste;
+          if (missingTime || missingTaste) {
+            setTimeInvalid(missingTime);
+            setTasteInvalid(missingTaste);
+            return;
+          }
+          const submission = {
+            timePreference: time,
+            memberIds: members,
+            tastePreference: taste,
+            preferLikedRecipes: prefer,
+            dietaryExclusions: chosenLimits,
+          };
+          // TODO: POST `submission` to the backend once the find-recipes endpoint exists
+          console.log("findrecipes submission", submission);
+          go("recommend-loading");
+        }}
+      >
         <section className={`need-card${timeInvalid ? " invalid" : ""}`}>
           <h2>今天有多少时间？<span className="required-mark">*</span></h2>
           <div className="option-grid">
@@ -171,13 +207,7 @@ export function FindRecipesPage() {
                   }}
                 >
                   <AssetImage
-                    name={{
-                      "按平时口味": "based-on-usual-taste.png",
-                      "重口过瘾": "bold-and-satisfying.png",
-                      "家常下饭": "home-style-meal.png",
-                      "清淡爽口": "light-and-refreshing.png",
-                      "健康轻食": "healthy-light-meal.png",
-                    }[x]!}
+                    name={tasteImages[x]!}
                     alt=""
                   />
                   {x}
@@ -214,10 +244,7 @@ export function FindRecipesPage() {
               onKeyDown={(e) => {
                 if (e.key !== "Enter") return;
                 e.preventDefault();
-                const v = otherLimit.trim();
-                if (!v) return;
-                setChosenLimits((a) => (a.includes(v) ? a : [...a, v]));
-                setOtherLimit("");
+                addOtherLimit();
               }}
               placeholder="输入这顿不吃的食材或要求"
               aria-label="输入这顿不吃的食材或要求"
@@ -225,34 +252,19 @@ export function FindRecipesPage() {
             <button
               type="button"
               disabled={!otherLimit.trim()}
-              onClick={() => {
-                const v = otherLimit.trim();
-                setChosenLimits((a) => (a.includes(v) ? a : [...a, v]));
-                setOtherLimit("");
-              }}
+              onClick={addOtherLimit}
             >
               确认添加
             </button>
           </div>
         </section>
-      </div>
-      <br style={{ display: "block", height: "1em" }} />
-      <button
-        type="button"
-        className="primary"
-        onClick={() => {
-          const missingTime = !time;
-          const missingTaste = !taste;
-          if (missingTime || missingTaste) {
-            setTimeInvalid(missingTime);
-            setTasteInvalid(missingTaste);
-            return;
-          }
-          go("recommend-loading");
-        }}
-      >
-        帮我挑一挑
-      </button>
+        <button
+          type="submit"
+          className="primary findrecipes-submit"
+        >
+          帮我挑一挑
+        </button>
+      </form>
     </>
   );
 }
