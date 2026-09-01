@@ -2,12 +2,29 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 20px;
+  gap: 8px;
 }
 
 .toggle-row strong,
 .toggle-row small {
   display: block;
+}
+
+.toggle-row span {
+  flex: 1;
+  min-width: 0;
+}
+
+.toggle-row strong {
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+@media (max-width: 479px) {
+  .toggle-row strong {
+    font-size: 12px;
+  }
 }
 
 .toggle-row small {
@@ -43,11 +60,6 @@
 .relation-options button {
   min-height: 48px;
   border-radius: 8px;
-}
-
-.preference-card {
-  display: grid;
-  align-content: center;
 }
 
 .other-limit {
@@ -102,6 +114,12 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+@media (min-width: 800px) {
+  .option-cards.icon-options {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
 .option-cards.icon-options button {
   width: 100%;
   min-width: 0;
@@ -110,6 +128,19 @@
 .option-cards.icon-options .asset-icon {
   width: 34px;
   height: 34px;
+}
+
+.card-header-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.card-header-row h2 {
+  margin-bottom: 0;
 }
 
 .other-limit {
@@ -150,6 +181,14 @@
 .switch.on {
   background: var(--orange);
   color: var(--paper-raised);
+}
+
+@media (max-width: 479px) {
+  .switch {
+    width: 48px;
+    height: 26px;
+    font-size: 9px;
+  }
 }
 
 .other-limit-input {

@@ -14,7 +14,6 @@ export function NeedsPage() {
     membersLoading,
     members,
     setMembers,
-    openMember,
     taste,
     setTaste,
     prefer,
@@ -52,7 +51,7 @@ export function NeedsPage() {
           </div>
         </section>
         <section className="need-card">
-          <h2>今天和谁一起吃？</h2>
+          <h2>今天为谁下厨？</h2>
           <div className="chips member-options">
             {householdMembers.map((member) => (
               <button
@@ -72,11 +71,25 @@ export function NeedsPage() {
               </button>
             ))}
             {membersLoading && <span className="member-loading"><AssetImage name="general-loading.png" alt="" />成员加载中……</span>}
-            <button type="button" onClick={() => openMember("needs")}>＋ 添加成员</button>
           </div>
         </section>
-        <section className="need-card">
-          <h2>今天想吃什么口味？</h2>
+        <section className="need-card full">
+          <div className="card-header-row">
+            <h2>今天想吃什么口味？</h2>
+            <label className="toggle-row">
+              <span>
+                <strong>优先喜欢过的菜谱</strong>
+              </span>
+              <input
+                type="checkbox"
+                checked={prefer}
+                onChange={(e) => setPrefer(e.target.checked)}
+              />
+              <i className={`switch ${prefer ? "on" : ""}`} aria-hidden="true">
+                {prefer ? "ON" : "OFF"}
+              </i>
+            </label>
+          </div>
           <div className="chips option-cards icon-options">
             {["按平时口味", "重口过瘾", "家常下饭", "清淡爽口", "健康轻食"].map(
               (x) => (
@@ -103,24 +116,8 @@ export function NeedsPage() {
             )}
           </div>
         </section>
-        <section className="need-card preference-card">
-          <label className="toggle-row">
-            <span>
-              <strong>喜欢的菜谱优先</strong>
-              <small>优先考虑之前喜欢过的菜谱</small>
-            </span>
-            <input
-              type="checkbox"
-              checked={prefer}
-              onChange={(e) => setPrefer(e.target.checked)}
-            />
-            <i className={`switch ${prefer ? "on" : ""}`} aria-hidden="true">
-              {prefer ? "ON" : "OFF"}
-            </i>
-          </label>
-        </section>
         <section className="need-card full">
-          <h2>这顿有什么不吃的？</h2>
+          <h2>这顿有什么不吃的</h2>
           <div className="chips option-cards">
             {[...limits, ...chosenLimits.filter((x) => !limits.includes(x))].map(
               (x) => (
