@@ -51,6 +51,7 @@ export function FindRecipesPage() {
   const [timeInvalid, setTimeInvalid] = useState(false);
   const [tasteInvalid, setTasteInvalid] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [checking, setChecking] = useState(false);
   const [formError, setFormError] = useState("");
   const [displayedFormError, setDisplayedFormError] = useState("");
   const [formErrorToken, setFormErrorToken] = useState(0);
@@ -85,6 +86,8 @@ export function FindRecipesPage() {
       setTasteInvalid(missingTaste);
       setFormError("还有必填项没有选择，请检查后重试。");
       setFormErrorToken((t) => t + 1);
+      setChecking(true);
+      setTimeout(() => setChecking(false), 500);
       return;
     }
     setSubmitting(true);
@@ -302,9 +305,10 @@ export function FindRecipesPage() {
         <button
           type="button"
           className="primary findrecipes-submit"
+          disabled={checking}
           onClick={handleSubmit}
         >
-          帮我挑一挑
+          {checking ? <span className="button-spinner" role="status" aria-label="检查中" /> : "帮我挑一挑"}
         </button>
       </form>
     </>
