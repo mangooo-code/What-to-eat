@@ -200,8 +200,6 @@ export function createAppState(overrides: Partial<AppState> = {}): AppState {
     setLiked: vi.fn(),
     likedRecipes: [],
     setLikedRecipes: vi.fn(),
-    recipeTab: "done",
-    setRecipeTab: vi.fn(),
     recipeOrigin: "recommend",
     setRecipeOrigin: vi.fn(),
     consumeOpen: false,

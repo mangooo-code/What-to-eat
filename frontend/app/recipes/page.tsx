@@ -1,6 +1,12 @@
 "use client";
-import { RecipesPage } from "../pages/RecipesPage";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
+// Legacy /recipes URL: redirect to the history tab's own route.
 export default function Page() {
-  return <RecipesPage />;
+  const router = useRouter();
+  useEffect(() => {
+    router.replace("/recipes/history");
+  }, [router]);
+  return null;
 }

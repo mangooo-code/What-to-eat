@@ -9,7 +9,8 @@ import { AssetImage } from "../components/AssetImage";
 import { recipesDone, recipesLiked } from "../lib/data";
 
 export function RecipesPage() {
-  const { recipeTab, setRecipeTab, setRecipeOrigin, go } = useApp();
+  const { page, setRecipeOrigin, go } = useApp();
+  const recipeTab: "done" | "liked" = page === "recipesFavorites" ? "liked" : "done";
   const data = recipeTab === "done" ? recipesDone : recipesLiked;
   return (
     <>
@@ -20,7 +21,7 @@ export function RecipesPage() {
           role="tab"
           aria-selected={recipeTab === "done"}
           className={recipeTab === "done" ? "active" : ""}
-          onClick={() => setRecipeTab("done")}
+          onClick={() => go("recipesHistory")}
         >
           历史菜谱
         </button>
@@ -29,7 +30,7 @@ export function RecipesPage() {
           role="tab"
           aria-selected={recipeTab === "liked"}
           className={recipeTab === "liked" ? "active" : ""}
-          onClick={() => setRecipeTab("liked")}
+          onClick={() => go("recipesFavorites")}
         >
           喜欢的菜谱
         </button>

@@ -13,21 +13,21 @@ function mockApp(overrides: Parameters<typeof createAppState>[0] = {}) {
 
 describe("RecipesPage", () => {
   it("shows history recipes by default", () => {
-    mockApp({ recipeTab: "done" });
+    mockApp({ page: "recipesHistory" });
     render(<RecipesPage />);
     expect(screen.getByText("上周 · 3 次")).toBeInTheDocument();
   });
 
-  it("switches to liked recipes", () => {
-    const setRecipeTab = vi.fn();
-    mockApp({ recipeTab: "done", setRecipeTab });
+  it("navigates to the favorites route when switching tabs", () => {
+    const go = vi.fn();
+    mockApp({ page: "recipesHistory", go });
     render(<RecipesPage />);
     fireEvent.click(screen.getByText("喜欢的菜谱"));
-    expect(setRecipeTab).toHaveBeenCalledWith("liked");
+    expect(go).toHaveBeenCalledWith("recipesFavorites");
   });
 
   it("shows a liked badge on the liked tab", () => {
-    mockApp({ recipeTab: "liked" });
+    mockApp({ page: "recipesFavorites" });
     render(<RecipesPage />);
     expect(screen.getAllByText("♥ 已喜欢").length).toBeGreaterThan(0);
   });
@@ -35,7 +35,7 @@ describe("RecipesPage", () => {
   it("opens a recipe and records where it came from", () => {
     const setRecipeOrigin = vi.fn();
     const go = vi.fn();
-    mockApp({ recipeTab: "done", setRecipeOrigin, go });
+    mockApp({ page: "recipesHistory", setRecipeOrigin, go });
     render(<RecipesPage />);
     fireEvent.click(screen.getByText("番茄炒蛋"));
     expect(setRecipeOrigin).toHaveBeenCalledWith("done");

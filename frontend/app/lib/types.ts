@@ -14,7 +14,8 @@ export type Page =
   | "feedback"
   | "profile"
   | "diet"
-  | "recipes";
+  | "recipesHistory"
+  | "recipesFavorites";
 
 export type Food = {
   id?: string;

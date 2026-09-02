@@ -34,7 +34,8 @@ const pageToPath: Record<Page, string> = {
   feedback: "/feedback",
   profile: "/profile",
   diet: "/diet",
-  recipes: "/recipes",
+  recipesHistory: "/recipes/history",
+  recipesFavorites: "/recipes/favorites",
 };
 const pathToPage: Record<string, Page> = Object.fromEntries(
   Object.entries(pageToPath).map(([p, path]) => [path, p as Page]),
@@ -145,8 +146,6 @@ interface AppContextValue {
   setLiked: (v: boolean) => void;
   likedRecipes: string[];
   setLikedRecipes: React.Dispatch<React.SetStateAction<string[]>>;
-  recipeTab: "done" | "liked";
-  setRecipeTab: (v: "done" | "liked") => void;
   recipeOrigin: "recommend" | "done" | "liked";
   setRecipeOrigin: (v: "recommend" | "done" | "liked") => void;
   consumeOpen: boolean;
@@ -266,7 +265,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [recommendedRecipes, setRecommendedRecipes] = useState<RecipeDto[]>([]);
   const [liked, setLiked] = useState(false);
   const [likedRecipes, setLikedRecipes] = useState<string[]>([]);
-  const [recipeTab, setRecipeTab] = useState<"done" | "liked">("done");
   const [recipeOrigin, setRecipeOrigin] = useState<
     "recommend" | "done" | "liked"
   >("recommend");
@@ -432,8 +430,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setMemberOpen(true);
   };
   const openRecipes = (tab: "done" | "liked") => {
-    setRecipeTab(tab);
-    go("recipes");
+    go(tab === "done" ? "recipesHistory" : "recipesFavorites");
   };
   const openDiet = (memberId: string) => {
     const member = householdMembers.find((item) => item.memberId === memberId);
@@ -496,10 +493,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   };
   const recipeBack = () => {
     if (recipeOrigin === "recommend") go("recommend");
-    else {
-      setRecipeTab(recipeOrigin);
-      go("recipes");
-    }
+    else go(recipeOrigin === "done" ? "recipesHistory" : "recipesFavorites");
   };
 
   const value: AppContextValue = {
@@ -603,8 +597,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setLiked,
     likedRecipes,
     setLikedRecipes,
-    recipeTab,
-    setRecipeTab,
     recipeOrigin,
     setRecipeOrigin,
     consumeOpen,
