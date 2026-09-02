@@ -19,11 +19,26 @@ export interface FindRecipesSubmission {
   dietaryExclusions: string[];
 }
 
+export interface RecipeIngredientDto {
+  name: string;
+  quantity: string;
+}
+
+export interface RecipeStepDto {
+  title: string;
+  detailedInstructions: string;
+  time: number | null;
+}
+
 // API-facing shape: persisted Recipe fields relevant for display, plus fields computed at
 // request time (cookTime display string, ingredient match summary) that aren't stored in the DB.
+// ingredients/seasonings/steps are only populated for AI-generated recipes for now.
 export type RecipeDto = Pick<Recipe, "id" | "name" | "description" | "difficulty" | "tags"> & {
   cookTime: string;
   matchSummary: string;
+  ingredients?: RecipeIngredientDto[];
+  seasonings?: RecipeIngredientDto[];
+  steps?: RecipeStepDto[];
 };
 
 function formatCookTime(minutes: number | null): string {
@@ -55,35 +70,59 @@ interface AiGeneratedRecipe {
   difficulty: string;
   time: number;
   tags: string[];
+  ingredients: RecipeIngredientDto[];
+  seasonings: RecipeIngredientDto[];
+  steps: RecipeStepDto[];
 }
 
-async function collectMemberDietaryExclusions(userId: string, memberIds: string[]): Promise<string[]> {
-  if (!memberIds.length) return [];
+async function collectMemberDietaryInfo(
+  userId: string,
+  memberIds: string[],
+): Promise<{ dietaryExclusions: string[]; allergens: string[] }> {
+  if (!memberIds.length) return { dietaryExclusions: [], allergens: [] };
   const members = await listMembers(userId);
-  const exclusions = members
-    .filter((member) => memberIds.includes(member.memberId))
-    .flatMap((member) => member.dietaryRestrictions);
-  return [...new Set(exclusions)];
+  const selected = members.filter((member) => memberIds.includes(member.memberId));
+  return {
+    dietaryExclusions: [...new Set(selected.flatMap((member) => member.dietaryRestrictions))],
+    allergens: [...new Set(selected.flatMap((member) => member.allergens))],
+  };
 }
 
 function buildAiRecipePrompt(input: {
-  count: number;
   ingredientNames: string[];
   timePreference: string;
   tastePreference: string;
   dietaryExclusions: string[];
   memberDietaryExclusions: string[];
+  allergens: string[];
 }): string {
   return [
-    `请推荐 ${input.count} 道菜谱。`,
+    "请推荐 1 道菜谱。",
     `可用食材：${input.ingredientNames.length ? input.ingredientNames.join("、") : "无"}`,
     `时间要求：${input.timePreference}`,
     `口味偏好：${input.tastePreference}`,
     `本人忌口：${input.dietaryExclusions.length ? input.dietaryExclusions.join("、") : "无"}`,
     `同桌家庭成员忌口：${input.memberDietaryExclusions.length ? input.memberDietaryExclusions.join("、") : "无"}`,
+    `过敏源（必须避免）：${input.allergens.length ? input.allergens.join("、") : "无"}`,
     "请仅返回一个 JSON 数组，不要包含 Markdown 代码块标记或其他任何说明文字，每个元素包含以下字段：",
-    'name（string，菜名）、description（string，简要说明）、difficulty（string，简单/中等/困难）、time（number，预计所需分钟数）、tags（string[]，菜系或口味标签）。',
+    'name（string，菜名）、description（string，简要说明）、difficulty（string，简单/中等/困难）、time（number，预计所需分钟数）、tags（string[]，菜系或口味标签）、',
+    'ingredients（数组，主料，每项包含 name 食材名和 quantity 用量，例如 {"name":"番茄","quantity":"2 个"}）、',
+    'seasonings（数组，调料，格式同 ingredients，quantity 可为“适量”“少许”等，例如 {"name":"盐","quantity":"适量"}）、',
+    'steps（数组，按顺序排列的制作步骤，每项包含 title 步骤标题、detailedInstructions 详细做法、time 预计耗时分钟数（数字，不确定则为 null），与数据库 RecipeSteps 表结构一致）。',
   ].join("\n");
+}
+
+function isRecipeIngredientDto(value: unknown): value is RecipeIngredientDto {
+  return typeof value === "object" && value !== null &&
+    typeof (value as RecipeIngredientDto).name === "string" &&
+    typeof (value as RecipeIngredientDto).quantity === "string";
+}
+
+function isRecipeStepDto(value: unknown): value is RecipeStepDto {
+  return typeof value === "object" && value !== null &&
+    typeof (value as RecipeStepDto).title === "string" &&
+    typeof (value as RecipeStepDto).detailedInstructions === "string" &&
+    ((value as RecipeStepDto).time === null || typeof (value as RecipeStepDto).time === "number");
 }
 
 function parseAiRecipes(raw: string): AiGeneratedRecipe[] {
@@ -102,7 +141,13 @@ function parseAiRecipes(raw: string): AiGeneratedRecipe[] {
     typeof (item as AiGeneratedRecipe).description === "string" &&
     typeof (item as AiGeneratedRecipe).difficulty === "string" &&
     typeof (item as AiGeneratedRecipe).time === "number" &&
-    Array.isArray((item as AiGeneratedRecipe).tags));
+    Array.isArray((item as AiGeneratedRecipe).tags) &&
+    Array.isArray((item as AiGeneratedRecipe).ingredients) &&
+    (item as AiGeneratedRecipe).ingredients.every(isRecipeIngredientDto) &&
+    Array.isArray((item as AiGeneratedRecipe).seasonings) &&
+    (item as AiGeneratedRecipe).seasonings.every(isRecipeIngredientDto) &&
+    Array.isArray((item as AiGeneratedRecipe).steps) &&
+    (item as AiGeneratedRecipe).steps.every(isRecipeStepDto));
 }
 
 function toAiDto(recipe: AiGeneratedRecipe): RecipeDto {
@@ -114,6 +159,9 @@ function toAiDto(recipe: AiGeneratedRecipe): RecipeDto {
     tags: recipe.tags,
     cookTime: formatCookTime(recipe.time),
     matchSummary: "AI 推荐 · 根据现有食材生成",
+    ingredients: recipe.ingredients,
+    seasonings: recipe.seasonings,
+    steps: recipe.steps,
   };
 }
 
@@ -144,35 +192,44 @@ async function callAiForRecipes(promptText: string): Promise<string> {
   throw lastError;
 }
 
+// One recipe per AI call; failures are swallowed so one bad call doesn't sink the others.
+async function generateSingleRecipeWithAi(promptText: string): Promise<RecipeDto | null> {
+  try {
+    const raw = await callAiForRecipes(promptText);
+    const [recipe] = parseAiRecipes(raw);
+    return recipe ? toAiDto(recipe) : null;
+  } catch (error) {
+    console.error("generateSingleRecipeWithAi: giving up", error);
+    return null;
+  }
+}
+
 // Fills any spots not covered by the user's favorited recipes by asking Aliyun DashScope
 // to generate new recipe ideas from the user's current fridge contents and preferences.
+// Each recipe is requested in its own concurrent AI call rather than one batched call.
 async function generateRecipesWithAi(
   submission: FindRecipesSubmission,
   count: number,
 ): Promise<RecipeDto[]> {
   if (count <= 0) return [];
 
-  const [ingredients, memberDietaryExclusions] = await Promise.all([
+  const [ingredients, memberDietaryInfo] = await Promise.all([
     listIngredients(submission.userId),
-    collectMemberDietaryExclusions(submission.userId, submission.memberIds),
+    collectMemberDietaryInfo(submission.userId, submission.memberIds),
   ]);
   const promptText = buildAiRecipePrompt({
-    count,
     ingredientNames: [...new Set(ingredients.map((ingredient) => ingredient.name))],
     timePreference: submission.timePreference,
     tastePreference: submission.tastePreference,
     dietaryExclusions: submission.dietaryExclusions,
-    memberDietaryExclusions,
+    memberDietaryExclusions: memberDietaryInfo.dietaryExclusions,
+    allergens: memberDietaryInfo.allergens,
   });
 
-  try {
-    const raw = await callAiForRecipes(promptText);
-    return parseAiRecipes(raw).slice(0, count).map(toAiDto);
-  } catch (error) {
-    // Best-effort top-up: favorites results should still be returned if AI generation fails.
-    console.error("generateRecipesWithAi: giving up", error);
-    return [];
-  }
+  const results = await Promise.all(
+    Array.from({ length: count }, () => generateSingleRecipeWithAi(promptText)),
+  );
+  return results.filter((recipe): recipe is RecipeDto => recipe !== null);
 }
 
 // Returns the user's favorited recipes that match the current request, topped up with
