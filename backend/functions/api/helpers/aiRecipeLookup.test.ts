@@ -70,6 +70,7 @@ test("generates AI recipes to fill all result slots when favorites aren't reques
 test("tops up remaining slots with AI recipes after favorites are found", async () => {
   const recipeRow = {
     id: "r1",
+    userId: "u1",
     name: "收藏菜",
     description: "desc",
     time: "25",
@@ -79,6 +80,7 @@ test("tops up remaining slots with AI recipes after favorites are found", async 
     seasonings: ["盐"],
     substitutions: [] as string[],
     preferences: null,
+    isFavorite: true,
     source: "curated" as const,
     rating: "4.5",
     ratingCount: 2,
@@ -86,7 +88,6 @@ test("tops up remaining slots with AI recipes after favorites are found", async 
     updatedDate: "d",
   };
   mockFetchByUrl([
-    { match: /\/v1\/rdb\/rest\/RecipeFavorites\?/, body: [{ recipeId: "r1" }] },
     { match: /\/v1\/rdb\/rest\/Recipes\?/, body: [recipeRow] },
     { match: /\/v1\/rdb\/rest\/RecipeIngredients\?/, body: [] },
     { match: /\/v1\/rdb\/rest\/Ingredients\?/, body: [] },

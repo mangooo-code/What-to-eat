@@ -41,6 +41,7 @@ export type Json = string | number | boolean | null | Json[] | { [key: string]: 
 
 export interface Recipe {
   id: string;
+  userId: string;
   name: string;
   description: string | null;
   /** Estimated total cook time, in minutes. */
@@ -52,6 +53,7 @@ export interface Recipe {
   substitutions: string[];
   /** Dietary/taste preferences this recipe suits; shape defined by application logic. */
   preferences: Json | null;
+  isFavorite: boolean;
   source: "curated" | "ai_generated";
   /** Average of "RecipeRatings"."score", rounded to 2 decimal places. */
   rating: number | null;

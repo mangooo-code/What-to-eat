@@ -3,6 +3,7 @@ import { postgrestRequest } from "./postgrestClient";
 
 interface RecipeRow {
   id: string;
+  userId: string;
   name: string;
   description: string | null;
   time: string | null;
@@ -12,6 +13,7 @@ interface RecipeRow {
   seasonings: string[];
   substitutions: string[];
   preferences: Recipe["preferences"];
+  isFavorite: boolean;
   source: Recipe["source"];
   rating: string | null;
   ratingCount: number;
@@ -41,8 +43,8 @@ interface RecipeStepRow {
 }
 
 const recipeColumns = [
-  "id", "name", "description", "time", "difficulty", "imageFileId", "tags",
-  "seasonings", "substitutions", "preferences", "source", "rating",
+  "id", "userId", "name", "description", "time", "difficulty", "imageFileId", "tags",
+  "seasonings", "substitutions", "preferences", "isFavorite", "source", "rating",
   "ratingCount", "createdDate", "updatedDate",
 ].join(",");
 
@@ -57,6 +59,7 @@ const recipeStepColumns = [
 function mapRecipe(row: RecipeRow): Recipe {
   return {
     id: row.id,
+    userId: row.userId,
     name: row.name,
     description: row.description,
     time: row.time === null ? null : Number(row.time),
@@ -66,6 +69,7 @@ function mapRecipe(row: RecipeRow): Recipe {
     seasonings: row.seasonings,
     substitutions: row.substitutions,
     preferences: row.preferences,
+    isFavorite: row.isFavorite,
     source: row.source,
     rating: row.rating === null ? null : Number(row.rating),
     ratingCount: row.ratingCount,
@@ -136,25 +140,19 @@ export interface RecipeTimeRange {
 
 export const MAX_RESULTS = 3;
 
-// Finds the user's favorited recipes whose time fits the given range and whose non-optional
-// ingredients (matched by name, since RecipeIngredients.nameSnapshot is decoupled from any
-// specific user's inventory row) are all present in the user's current fridge/pantry inventory.
+// Finds the user's favorited recipes (Recipes.isFavorite) whose time fits the given range and
+// whose non-optional ingredients (matched by name, since RecipeIngredients.nameSnapshot is
+// decoupled from any specific user's inventory row) are all present in the user's inventory.
 export async function findMatchingFavoriteRecipeIds(
   userId: string,
   timeRange: RecipeTimeRange = {},
 ): Promise<string[]> {
-  const favorites = await postgrestRequest<Array<{ recipeId: string }>>("RecipeFavorites", {
-    query: { select: "recipeId", userId: `eq.${userId}` },
-  });
-  const favoriteIds = favorites.map((row) => row.recipeId);
-  if (!favoriteIds.length) return [];
-
   const timeFilter: Record<string, string> = {};
   if (timeRange.maxMinutes !== undefined) timeFilter.time = `lte.${timeRange.maxMinutes}`;
   if (timeRange.minMinutesExclusive !== undefined) timeFilter.time = `gt.${timeRange.minMinutesExclusive}`;
 
   const candidates = await postgrestRequest<Array<{ id: string; rating: string | null }>>("Recipes", {
-    query: { select: "id,rating", id: `in.(${favoriteIds.join(",")})`, ...timeFilter },
+    query: { select: "id,rating", userId: `eq.${userId}`, isFavorite: "is.true", ...timeFilter },
   });
   const candidateIds = candidates.map((row) => row.id);
   if (!candidateIds.length) return [];

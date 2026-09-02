@@ -22,6 +22,7 @@ test.afterEach(() => {
 
 const recipeRow = {
   id: "r1",
+  userId: "u1",
   name: "番茄炒蛋",
   description: "desc",
   time: "20",
@@ -31,6 +32,7 @@ const recipeRow = {
   seasonings: ["盐"],
   substitutions: [] as string[],
   preferences: null,
+  isFavorite: true,
   source: "curated" as const,
   rating: "4.5",
   ratingCount: 2,
@@ -85,8 +87,7 @@ test("findMatchingFavoriteRecipeIds returns [] immediately when there are no fav
 
 test("findMatchingFavoriteRecipeIds filters by time range and inventory, sorted by rating desc", async () => {
   const responses = [
-    [{ recipeId: "r1" }, { recipeId: "r2" }], // RecipeFavorites
-    [{ id: "r1", rating: "4.5" }, { id: "r2", rating: null }], // Recipes (time filter)
+    [{ id: "r1", rating: "4.5" }, { id: "r2", rating: null }], // Recipes (userId+isFavorite+time filter)
     [{ recipeId: "r1", nameSnapshot: "番茄" }, { recipeId: "r2", nameSnapshot: "缺货食材" }], // RecipeIngredients
     [{ name: "番茄", normalizedName: null }], // Ingredients (user inventory)
   ];
@@ -99,5 +100,6 @@ test("findMatchingFavoriteRecipeIds filters by time range and inventory, sorted 
 
   const ids = await findMatchingFavoriteRecipeIds("u1", { maxMinutes: 30 });
   assert.deepEqual(ids, ["r1"]);
-  assert.match(calls[1], /time=lte\.30/);
+  assert.match(calls[0], /time=lte\.30/);
+  assert.match(calls[0], /isFavorite=is\.true/);
 });
