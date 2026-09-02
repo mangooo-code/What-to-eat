@@ -8,6 +8,17 @@ export interface FindRecipesInput {
   dietaryExclusions?: string[];
 }
 
+export interface RecipeIngredientDto {
+  name: string;
+  quantity: string;
+}
+
+export interface RecipeStepDto {
+  title: string;
+  detailedInstructions: string;
+  time: number | null;
+}
+
 export interface RecipeDto {
   id: string;
   name: string;
@@ -16,6 +27,10 @@ export interface RecipeDto {
   matchSummary: string;
   description: string;
   tags: string[];
+  // Only populated for AI-generated recipes for now.
+  ingredients?: RecipeIngredientDto[];
+  seasonings?: RecipeIngredientDto[];
+  steps?: RecipeStepDto[];
 }
 
 export const findRecipesService = {

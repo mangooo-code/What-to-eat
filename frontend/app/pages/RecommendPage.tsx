@@ -1,5 +1,6 @@
 "use client";
 import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import "../styles/pages/recommend.css";
 import "../styles/components/recipe-card.css";
 import { useApp } from "../context/AppContext";
@@ -7,8 +8,8 @@ import { Header } from "../components/Header";
 import { Placeholder } from "../components/Placeholder";
 
 export function RecommendPage() {
-  const { recommendedRecipes, setBatch, likedRecipes, setLikedRecipes, setRecipeOrigin, go, say } =
-    useApp();
+  const { recommendedRecipes, setBatch, likedRecipes, setLikedRecipes, go, say } = useApp();
+  const router = useRouter();
   useEffect(() => {
     if (recommendedRecipes.length === 0) go("findrecipes");
   }, [recommendedRecipes, go]);
@@ -56,10 +57,7 @@ export function RecommendPage() {
               <p>{r.description}</p>
               <button
                 className="secondary"
-                onClick={() => {
-                  setRecipeOrigin("recommend");
-                  go("recipe");
-                }}
+                onClick={() => router.push(`/recipes/recommendations/recipe?id=${r.id}`)}
               >
                 查看菜谱
               </button>

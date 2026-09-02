@@ -5,6 +5,8 @@ import { useApp } from "../context/AppContext";
 import { createAppState } from "../tests/mockApp";
 
 vi.mock("../context/AppContext", () => ({ useApp: vi.fn() }));
+const mockPush = vi.fn();
+vi.mock("next/navigation", () => ({ useRouter: () => ({ push: mockPush }) }));
 const mockedUseApp = vi.mocked(useApp);
 
 function mockApp(overrides: Parameters<typeof createAppState>[0] = {}) {
@@ -14,6 +16,7 @@ function mockApp(overrides: Parameters<typeof createAppState>[0] = {}) {
 describe("RecommendPage", () => {
   beforeEach(() => {
     mockApp();
+    mockPush.mockClear();
   });
 
   it("shows recipes from the backend result", () => {
@@ -48,14 +51,12 @@ describe("RecommendPage", () => {
     expect(setLikedRecipes).toHaveBeenCalledTimes(1);
   });
 
-  it("opens a recipe and records its origin", () => {
-    const setRecipeOrigin = vi.fn();
-    const go = vi.fn();
-    mockApp({ setRecipeOrigin, go });
+  it("opens a recipe's detail page with its id in the query string", () => {
     render(<RecommendPage />);
     fireEvent.click(screen.getAllByText("查看菜谱")[0]);
-    expect(setRecipeOrigin).toHaveBeenCalledWith("recommend");
-    expect(go).toHaveBeenCalledWith("recipe");
+    expect(mockPush).toHaveBeenCalledWith(
+      "/recipes/recommendations/recipe?id=9e2b8f2a-2f8a-4b2b-9b8f-2a2f8a4b2b9b",
+    );
   });
 
   it("requests a new batch after a short delay", () => {
