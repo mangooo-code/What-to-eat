@@ -185,7 +185,8 @@ export function selectValidMemberIds(
 export function AppProvider({ children }: { children: ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
-  const page = pathToPage[pathname] ?? "login";
+  const currentPath = pathname ?? "/";
+  const page = pathToPage[currentPath] ?? "login";
   const [countryCode, setCountryCode] = useState("+86");
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
