@@ -1,5 +1,6 @@
 "use client";
 import "../styles/pages/recipe.css";
+import "../styles/components/recipe-step-card.css";
 import { FoodEmoji } from "./FoodEmoji";
 import { Placeholder } from "./Placeholder";
 import type { RecipeDto } from "../services/findRecipesService";
@@ -78,12 +79,15 @@ export function RecipeDetail({
           <h2>制作步骤</h2>
           <ol className="recipe-step-list">
             {recipe.steps.map((step, index) => (
-              <li key={`${step.title}-${index}`}>
-                <div className="step-title">
-                  <h3>{step.title}</h3>
-                  {step.time !== null && <strong>{step.time} 分钟</strong>}
+              <li className="detail-step" key={`${step.title}-${index}`}>
+                <div className="step-number">{index + 1}</div>
+                <div className="step-content">
+                  <div className="step-title">
+                    <h3>{step.title}</h3>
+                    {step.time !== null && <strong>{step.time} 分钟</strong>}
+                  </div>
+                  <p>{step.detailedInstructions}</p>
                 </div>
-                <p>{step.detailedInstructions}</p>
               </li>
             ))}
           </ol>
