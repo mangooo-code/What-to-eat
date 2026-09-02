@@ -46,7 +46,7 @@ interface AppContextValue {
   page: Page;
   authChecked: boolean;
   go: (p: Page) => void;
-  goBack: (fallback: Page) => void;
+  goBack: () => void;
   countryCode: string;
   setCountryCode: (v: string) => void;
   phone: string;
@@ -219,9 +219,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [recognitionImageFile, setRecognitionImageFile] = useState<File | null>(null);
   const [recognitionImagePreviewUrl, setRecognitionImagePreviewUrl] = useState("");
   const recognitionImagePreviewUrlRef = useRef("");
-  // Tracks how many entries we've pushed this session, so goBack() only uses
-  // router.back() (preserving forward history) when there's actually something to pop.
-  const pushCountRef = useRef(0);
   const [listening, setListening] = useState(false);
   const [input, setInput] = useState("");
   const [time, setTime] = useState("");
@@ -316,20 +313,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }, [recommendedRecipes]);
 
   const go = (p: Page) => {
-    pushCountRef.current += 1;
     router.push(pageToPath[p]);
     window.scrollTo(0, 0);
   };
-  // Prefers real browser back navigation (keeps forward history intact) over push,
-  // but only once we know we've pushed at least one entry ourselves this session.
-  const goBack = (fallback: Page) => {
-    if (pushCountRef.current > 0) {
-      pushCountRef.current -= 1;
-      router.back();
-    } else {
-      go(fallback);
-    }
-  };
+  // Real browser back navigation, so the forward button keeps working afterward.
+  const goBack = () => router.back();
   const say = (s: string) => {
     setToast(s);
     setTimeout(() => setToast(""), 1800);
@@ -526,8 +514,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     go("login");
   };
   const recipeBack = () => {
-    if (recipeOrigin === "recommend") goBack("recommend");
-    else goBack(recipeOrigin === "done" ? "recipesHistory" : "recipesFavorites");
+    goBack();
   };
 
   const value: AppContextValue = {

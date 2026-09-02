@@ -49,6 +49,6 @@ describe("MemberPage", () => {
     mockApp({ goBack });
     render(<MemberPage />);
     fireEvent.click(screen.getByRole("button", { name: /返回/ }));
-    expect(goBack).toHaveBeenCalledWith("findrecipes");
+    expect(goBack).toHaveBeenCalledTimes(1);
   });
 });

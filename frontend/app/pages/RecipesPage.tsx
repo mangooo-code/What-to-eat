@@ -14,7 +14,7 @@ export function RecipesPage() {
   const data = recipeTab === "done" ? recipesDone : recipesLiked;
   return (
     <>
-      <Header title="我的菜谱" back={() => goBack("profile")} />
+      <Header title="我的菜谱" back={() => goBack()} />
       <div className="tabs" role="tablist">
         <button
           type="button"

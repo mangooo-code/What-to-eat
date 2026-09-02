@@ -13,7 +13,7 @@ export function RecommendRecipePage() {
   if (!recipe) {
     return (
       <>
-        <Header title="菜谱详情" back={() => goBack("recommend")} />
+        <Header title="菜谱详情" back={() => goBack()} />
         <p>没有找到这道菜谱，可能已经过期，请回到推荐页重新查看。</p>
       </>
     );
@@ -21,7 +21,7 @@ export function RecommendRecipePage() {
 
   return (
     <>
-      <Header title="菜谱详情" back={() => goBack("recommend")} />
+      <Header title="菜谱详情" back={() => goBack()} />
       <RecipeDetail
         recipe={recipe}
         liked={likedRecipes.includes(recipe.id)}

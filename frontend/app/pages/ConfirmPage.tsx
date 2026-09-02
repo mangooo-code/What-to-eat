@@ -37,7 +37,7 @@ export function ConfirmPage() {
       <Header
         title="这些食材对吗？"
         sub="我先整理了一遍，有不对的地方可以直接修改。"
-        back={() => goBack("capture")}
+        back={() => goBack()}
       />
       <div className="confirm-list">
         {foods.map((f, i) => (

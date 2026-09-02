@@ -15,7 +15,7 @@ export function EditPage() {
   if (!food || !draft) return null;
   return (
     <>
-      <Header title="编辑食材" back={() => goBack("fridge")} />
+      <Header title="编辑食材" back={() => goBack()} />
       <Field
         food={draft}
         onChange={setDraft}

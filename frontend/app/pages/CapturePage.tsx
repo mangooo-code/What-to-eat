@@ -130,7 +130,7 @@ export function CapturePage() {
       <Header
         title="让我看看家里有什么"
         sub="拍给我看，或者直接告诉我都可以。"
-        back={() => goBack("fridge")}
+        back={() => goBack()}
       />
       <div className="tabs capture-tabs" role="tablist">
         <button

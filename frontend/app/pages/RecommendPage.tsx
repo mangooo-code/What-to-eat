@@ -19,7 +19,7 @@ export function RecommendPage() {
       <Header
         title="今天可以吃这些"
         sub="照着家里的食材和你的想法，我挑了这 3 道。"
-        back={() => goBack("findrecipes")}
+        back={() => goBack()}
       />
       <div className="recipe-grid recommend-grid">
         {recommendedRecipes.map((r) => (

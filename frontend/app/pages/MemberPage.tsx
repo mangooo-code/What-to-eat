@@ -25,7 +25,7 @@ export function MemberPage() {
   } = useApp();
   return (
     <>
-      <Header title="添加一起吃饭的人" back={() => goBack("findrecipes")} />
+      <Header title="添加一起吃饭的人" back={() => goBack()} />
       <label className="label">
         姓名 / 昵称
         <input

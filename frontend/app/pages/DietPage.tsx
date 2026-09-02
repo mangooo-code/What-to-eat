@@ -35,7 +35,7 @@ export function DietPage() {
             ? "我的饮食档案"
             : `${draftProfileName}的饮食档案`
         }
-        back={() => goBack("profile")}
+        back={() => goBack()}
       />
       {!activeMember?.isOwner && (
         <label className="label profile-name">

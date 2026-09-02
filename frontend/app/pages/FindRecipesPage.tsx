@@ -121,7 +121,7 @@ export function FindRecipesPage() {
       <Header
         title="这一顿想怎么吃？"
         sub="告诉我今天的需求，我来帮你缩小选择范围。"
-        back={() => goBack("home")}
+        back={() => goBack()}
       />
       <form
         className="findrecipes-layout"
