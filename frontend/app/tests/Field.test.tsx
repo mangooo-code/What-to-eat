@@ -1,10 +1,22 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it, vi, beforeEach } from "vitest";
 import { Field } from "../components/Field";
+import { ingredientService } from "../services/ingredientService";
 
 const food = { name: "番茄", qty: 2, unit: "个", place: "冷藏", days: 3 };
 
+vi.mock("../services/ingredientService", () => ({
+  ingredientService: { listUnitTypes: vi.fn() },
+}));
+const mockedListUnitTypes = vi.mocked(ingredientService.listUnitTypes);
+
+const unitTypes = ["个", "颗", "根", "块", "盒", "袋", "瓶", "g", "kg", "ml", "L"].map((name, id) => ({ id, name }));
+
 describe("Field", () => {
+  beforeEach(() => {
+    mockedListUnitTypes.mockResolvedValue(unitTypes);
+  });
+
   it("renders the current food values", () => {
     render(<Field food={food} onChange={() => {}} />);
     expect(screen.getByLabelText("食材名称")).toHaveValue("番茄");
@@ -33,9 +45,10 @@ describe("Field", () => {
     expect(onChange).toHaveBeenCalledWith({ ...food, qty: 0 });
   });
 
-  it("calls onChange with the new unit", () => {
+  it("calls onChange with the new unit", async () => {
     const onChange = vi.fn();
     render(<Field food={food} onChange={onChange} />);
+    await screen.findByRole("option", { name: "kg" });
     fireEvent.change(screen.getByLabelText("单位"), {
       target: { value: "kg" },
     });

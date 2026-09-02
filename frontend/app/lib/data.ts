@@ -1,4 +1,3 @@
-export const units = ["个", "颗", "根", "块", "盒", "袋", "瓶", "g", "kg", "ml", "L"];
 export const limits = [
   "不吃辣",
   "不吃香菜",

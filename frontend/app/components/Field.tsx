@@ -1,7 +1,7 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "../styles/components/field.css";
-import { units } from "../lib/data";
+import { ingredientService } from "../services/ingredientService";
 import type { Food } from "../lib/types";
 
 export function Field({
@@ -23,6 +23,23 @@ export function Field({
       ? String(food.days)
       : "custom";
   const [expiryOption, setExpiryOption] = useState(initialExpiryOption);
+  // Seeds with the food's current unit so the <select> always has a valid value, even
+  // before the real unit list has finished loading from the backend.
+  const [units, setUnits] = useState<string[]>([food.unit]);
+
+  useEffect(() => {
+    let active = true;
+    ingredientService.listUnitTypes()
+      .then((unitTypes) => {
+        if (!active) return;
+        const names = unitTypes.map((unitType) => unitType.name);
+        setUnits(names.includes(food.unit) ? names : [...names, food.unit]);
+      })
+      .catch(() => {});
+    return () => { active = false; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
 
   return (
     <div className="food-form">
