@@ -172,7 +172,7 @@ export function FindRecipesPage() {
               </span>
             ))}
             {visibleMembers.length === 0 && (
-              <p className="member-empty">目前只有我们！</p>
+              <p className="member-empty">目前只有主用户“我”</p>
             )}
           </div>
         </section>
@@ -221,7 +221,7 @@ export function FindRecipesPage() {
             <h2>今天想吃什么口味？<span className="required-mark">*</span></h2>
             <label className="toggle-row">
               <span>
-                <strong>优先喜欢过的菜谱</strong>
+                <strong>优先推荐喜欢的菜谱</strong>
               </span>
               <input
                 type="checkbox"
