@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "build": "tsc --noEmit",
-    "test": "functions/api/node_modules/.bin/esbuild functions/api/helpers/ingredientRecognition.test.ts --bundle --platform=node --target=node20 --outfile=/tmp/what-to-eat-ingredient-recognition.test.cjs && node --test /tmp/what-to-eat-ingredient-recognition.test.cjs"
+    "test": "rm -rf /tmp/what-to-eat-tests && functions/api/node_modules/.bin/esbuild $(find shared functions -name '*.test.ts' -not -path '*/node_modules/*') --bundle --platform=node --target=node20 --format=cjs --outdir=/tmp/what-to-eat-tests --outbase=. && node --test '/tmp/what-to-eat-tests/**/*.test.js'"
   },
   "dependencies": {
     "jsonwebtoken": "^9.0.3",
