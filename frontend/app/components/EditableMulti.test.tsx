@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import { EditableMulti } from "../components/EditableMulti";
+import { EditableMulti } from "./EditableMulti";
 
 const opts = ["不吃辣", "不吃香菜"];
 

@@ -1,9 +1,9 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { FindRecipesPage } from "../pages/FindRecipesPage";
+import { FindRecipesPage } from "./FindRecipesPage";
 import { useApp } from "../context/AppContext";
 import { findRecipesService } from "../services/findRecipesService";
-import { createAppState } from "./mockApp";
+import { createAppState } from "../tests/mockApp";
 
 vi.mock("../context/AppContext", () => ({ useApp: vi.fn() }));
 vi.mock("../services/findRecipesService", () => ({ findRecipesService: { submit: vi.fn() } }));

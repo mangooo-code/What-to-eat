@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import { Single } from "../components/Single";
+import { Single } from "./Single";
 
 const opts = ["清淡", "家常", "香辣"];
 

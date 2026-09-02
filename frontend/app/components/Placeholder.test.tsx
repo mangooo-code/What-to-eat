@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { Placeholder } from "../components/Placeholder";
+import { Placeholder } from "./Placeholder";
 
 describe("Placeholder", () => {
   it("renders an image placeholder by default", () => {

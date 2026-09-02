@@ -1,8 +1,8 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { ConfirmPage } from "../pages/ConfirmPage";
+import { ConfirmPage } from "./ConfirmPage";
 import { useApp } from "../context/AppContext";
-import { createAppState } from "./mockApp";
+import { createAppState } from "../tests/mockApp";
 import { inventoryService } from "../services/inventoryService";
 
 vi.mock("../context/AppContext", () => ({ useApp: vi.fn() }));

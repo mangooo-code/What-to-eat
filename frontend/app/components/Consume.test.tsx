@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import { Consume } from "../components/Consume";
+import { Consume } from "./Consume";
 
 describe("Consume", () => {
   it("renders both ingredients with their predicted amounts", () => {

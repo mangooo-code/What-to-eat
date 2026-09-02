@@ -1,6 +1,6 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { Shell } from "../components/Shell";
+import { Shell } from "./Shell";
 import { useApp } from "../context/AppContext";
 import { inventoryService } from "../services/inventoryService";
 

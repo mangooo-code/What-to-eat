@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { RecognizePage } from "../pages/RecognizePage";
+import { RecognizePage } from "./RecognizePage";
 
 describe("RecognizePage", () => {
   it("shows the scanning message", () => {

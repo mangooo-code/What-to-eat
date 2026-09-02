@@ -1,8 +1,8 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { CookPage } from "../pages/CookPage";
+import { CookPage } from "./CookPage";
 import { useApp } from "../context/AppContext";
-import { createAppState } from "./mockApp";
+import { createAppState } from "../tests/mockApp";
 
 vi.mock("../context/AppContext", () => ({ useApp: vi.fn() }));
 const mockedUseApp = vi.mocked(useApp);

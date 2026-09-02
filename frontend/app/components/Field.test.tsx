@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi, beforeEach } from "vitest";
-import { Field } from "../components/Field";
+import { Field } from "./Field";
 import { ingredientService } from "../services/ingredientService";
 
 const food = { name: "番茄", qty: 2, unit: "个", place: "冷藏", days: 3 };

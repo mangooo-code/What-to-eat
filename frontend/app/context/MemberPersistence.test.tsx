@@ -1,6 +1,6 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { AppProvider, selectValidMemberIds, useApp } from "../context/AppContext";
+import { AppProvider, selectValidMemberIds, useApp } from "./AppContext";
 import { memberService } from "../services/memberService";
 import type { HouseholdMember } from "../types/domain";
 

@@ -1,6 +1,6 @@
 import { act, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { RecipeStepCard } from "../components/RecipeStepCard";
+import { RecipeStepCard } from "./RecipeStepCard";
 import { vi } from "vitest";
 
 const data = ["第 1 步｜炒鸡蛋", "锅中加入食用油……", "3 分钟"];

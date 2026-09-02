@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import { ProfileForm } from "../components/ProfileForm";
+import { ProfileForm } from "./ProfileForm";
 
 describe("ProfileForm", () => {
   it("manages its own state when uncontrolled", () => {

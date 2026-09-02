@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { apiClient } from "../services/apiClient";
-import { memberService, parseMemberListResponse } from "../services/memberService";
+import { apiClient } from "./apiClient";
+import { memberService, parseMemberListResponse } from "./memberService";
 import type { HouseholdMember } from "../types/domain";
 
 const owner: HouseholdMember = {

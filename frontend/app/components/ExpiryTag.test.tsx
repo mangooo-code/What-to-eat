@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { ExpiryTag } from "../components/ExpiryTag";
+import { ExpiryTag } from "./ExpiryTag";
 
 describe("ExpiryTag", () => {
   it("shows expired for negative days", () => {
