@@ -20,7 +20,7 @@ export function RecommendPage() {
         sub="照着家里的食材和你的想法，我挑了这 3 道。"
         back={() => go("findrecipes")}
       />
-      <div className="recipe-grid">
+      <div className="recipe-grid recommend-grid">
         {recommendedRecipes.map((r) => (
           <article className="recipe-card" key={r.id}>
             <Placeholder wide />

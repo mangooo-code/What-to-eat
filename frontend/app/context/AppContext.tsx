@@ -40,6 +40,8 @@ const pathToPage: Record<string, Page> = Object.fromEntries(
   Object.entries(pageToPath).map(([p, path]) => [path, p as Page]),
 );
 
+const RECOMMENDED_RECIPES_KEY = "wte_recommended_recipes";
+
 interface AppContextValue {
   page: Page;
   authChecked: boolean;
@@ -261,7 +263,15 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [other, setOther] = useState(false);
   const [otherLimit, setOtherLimit] = useState("");
   const [batch, setBatch] = useState(0);
-  const [recommendedRecipes, setRecommendedRecipes] = useState<RecipeDto[]>([]);
+  const [recommendedRecipes, setRecommendedRecipes] = useState<RecipeDto[]>(() => {
+    if (typeof window === "undefined") return [];
+    try {
+      const raw = localStorage.getItem(RECOMMENDED_RECIPES_KEY);
+      return raw ? (JSON.parse(raw) as RecipeDto[]) : [];
+    } catch {
+      return [];
+    }
+  });
   const [liked, setLiked] = useState(false);
   const [likedRecipes, setLikedRecipes] = useState<string[]>([]);
   const [recipeOrigin, setRecipeOrigin] = useState<
@@ -290,6 +300,16 @@ export function AppProvider({ children }: { children: ReactNode }) {
       recognitionImagePreviewUrlRef.current = "";
     }
   }, []);
+
+  // Persists the latest findrecipes results so refreshing the recommend page can restore them.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (recommendedRecipes.length) {
+      localStorage.setItem(RECOMMENDED_RECIPES_KEY, JSON.stringify(recommendedRecipes));
+    } else {
+      localStorage.removeItem(RECOMMENDED_RECIPES_KEY);
+    }
+  }, [recommendedRecipes]);
 
   const go = (p: Page) => {
     router.push(pageToPath[p]);

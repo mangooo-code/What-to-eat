@@ -92,6 +92,7 @@ export function FindRecipesPage() {
       return;
     }
     setSubmitting(true);
+    setRecommendedRecipes([]);
     const submission = {
       timePreference: time,
       memberIds: members,

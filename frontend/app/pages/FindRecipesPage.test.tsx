@@ -1,104 +1,127 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { FindRecipesPage } from "./FindRecipesPage";
 import { useApp } from "../context/AppContext";
 import { findRecipesService } from "../services/findRecipesService";
+import { memberService } from "../services/memberService";
+import type { HouseholdMember } from "../types/domain";
 import { createAppState } from "../tests/mockApp";
 
 vi.mock("../context/AppContext", () => ({ useApp: vi.fn() }));
 vi.mock("../services/findRecipesService", () => ({ findRecipesService: { submit: vi.fn() } }));
+vi.mock("../services/memberService", () => ({ memberService: { list: vi.fn() } }));
 const mockedUseApp = vi.mocked(useApp);
 const mockedSubmit = vi.mocked(findRecipesService.submit);
+const mockedList = vi.mocked(memberService.list);
+
+const member: HouseholdMember = {
+  memberId: "22222222-2222-4222-8222-222222222222",
+  ownerUserId: "00000000-0000-4000-8000-000000000000",
+  name: "阳",
+  relationship: "伴侣",
+  isOwner: false,
+  tastePreference: null,
+  dietPreference: null,
+  dietaryRestrictions: [],
+  allergens: [],
+  createdDate: "2026-08-30T00:00:00.000Z",
+  updatedDate: "2026-08-30T00:00:00.000Z",
+};
 
 function mockApp(overrides: Parameters<typeof createAppState>[0] = {}) {
   mockedUseApp.mockReturnValue(createAppState(overrides));
 }
 
+// Flushes the mount-time memberService.list() fetch so it settles inside act().
+async function renderPage() {
+  render(<FindRecipesPage />);
+  await act(async () => {});
+}
+
 describe("FindRecipesPage", () => {
   beforeEach(() => {
     mockApp();
+    mockedList.mockResolvedValue([]);
   });
 
-  it("selects a time option", () => {
+  it("selects a time option", async () => {
     const setTime = vi.fn();
     mockApp({ setTime });
-    render(<FindRecipesPage />);
+    await renderPage();
     fireEvent.click(screen.getByText("快速解决（15–30 分钟）"));
     expect(setTime).toHaveBeenCalledWith("快速解决（15–30 分钟）");
   });
 
-  it("toggles a dining member", () => {
+  it("opens the member picker dialog", async () => {
+    await renderPage();
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    fireEvent.click(screen.getByLabelText("添加就餐人"));
+    expect(await screen.findByRole("dialog", { name: "挑选就餐人" })).toBeInTheDocument();
+  });
+
+  it("selects a member from the picker and can remove them", async () => {
+    mockedList.mockResolvedValue([member]);
     const setMembers = vi.fn();
-    mockApp({ members: ["11111111-1111-4111-8111-111111111111"], setMembers });
-    render(<FindRecipesPage />);
-    fireEvent.click(screen.getByText("阳"));
+    mockApp({ setMembers });
+    await renderPage();
+    fireEvent.click(screen.getByLabelText("添加就餐人"));
+    fireEvent.click(await screen.findByRole("button", { name: "阳" }));
     expect(setMembers).toHaveBeenCalledTimes(1);
+    fireEvent.click(screen.getByLabelText("移除阳"));
+    expect(setMembers).toHaveBeenCalledTimes(2);
   });
 
-  it("opens the add-member flow", () => {
-    const openMember = vi.fn();
-    mockApp({ openMember });
-    render(<FindRecipesPage />);
-    fireEvent.click(screen.getByText("＋ 添加成员"));
-    expect(openMember).toHaveBeenCalledWith("findrecipes");
-  });
-
-  it("selects a taste preference", () => {
+  it("selects a taste preference", async () => {
     const setTaste = vi.fn();
     mockApp({ setTaste });
-    render(<FindRecipesPage />);
+    await renderPage();
     fireEvent.click(screen.getByText("重口过瘾"));
     expect(setTaste).toHaveBeenCalledWith("重口过瘾");
   });
 
-  it("toggles the prefer-liked-recipes switch", () => {
+  it("toggles the prefer-liked-recipes switch", async () => {
     const setPrefer = vi.fn();
     mockApp({ setPrefer });
-    render(<FindRecipesPage />);
+    await renderPage();
     fireEvent.click(screen.getByRole("checkbox"));
     expect(setPrefer).toHaveBeenCalledWith(true);
   });
 
-  it("toggles a dietary limit", () => {
+  it("toggles a dietary limit", async () => {
     const setChosenLimits = vi.fn();
     mockApp({ setChosenLimits });
-    render(<FindRecipesPage />);
+    await renderPage();
     fireEvent.click(screen.getByText("不吃辣"));
     expect(setChosenLimits).toHaveBeenCalledTimes(1);
   });
 
-  it("reveals the custom-limit input", () => {
-    const setOther = vi.fn();
-    mockApp({ setOther });
-    render(<FindRecipesPage />);
-    fireEvent.click(screen.getByText("＋ 添加其他限制"));
-    expect(setOther).toHaveBeenCalledWith(true);
-  });
-
-  it("adds a custom limit and resets the input", () => {
+  it("adds a custom limit and resets the input", async () => {
     const setChosenLimits = vi.fn();
     const setOtherLimit = vi.fn();
-    const setOther = vi.fn();
     mockApp({
-      other: true,
       otherLimit: "不吃动物内脏",
       setChosenLimits,
       setOtherLimit,
-      setOther,
     });
-    render(<FindRecipesPage />);
+    await renderPage();
     fireEvent.click(screen.getByText("确认添加"));
     expect(setChosenLimits).toHaveBeenCalledTimes(1);
     expect(setOtherLimit).toHaveBeenCalledWith("");
-    expect(setOther).toHaveBeenCalledWith(false);
   });
 
-  it("blocks submission and shows an error when time is missing", () => {
-    const setNeedError = vi.fn();
-    const go = vi.fn();
-    mockApp({ time: "", setNeedError, go });
-    render(<FindRecipesPage />);
-    expect(screen.getByRole("button", { name: "帮我挑一挑" })).toBeDisabled();
+  it("disables the custom-limit confirm button until something is typed", async () => {
+    mockApp({ otherLimit: "" });
+    await renderPage();
+    expect(screen.getByText("确认添加")).toBeDisabled();
+  });
+
+  it("blocks submission and shows an error when time is missing", async () => {
+    mockApp({ time: "" });
+    await renderPage();
+    const submit = screen.getByRole("button", { name: "帮我挑一挑" });
+    fireEvent.click(submit);
+    expect(submit).toBeDisabled();
+    expect(screen.getByRole("alert")).toHaveTextContent("还有必填项没有选择，请检查后重试。");
   });
 
   it("proceeds to recommend once time and taste are chosen", async () => {
@@ -112,7 +135,7 @@ describe("FindRecipesPage", () => {
       go,
       setRecommendedRecipes,
     });
-    render(<FindRecipesPage />);
+    await renderPage();
     fireEvent.click(screen.getByRole("button", { name: "帮我挑一挑" }));
     await vi.advanceTimersByTimeAsync(4200);
     expect(setRecommendedRecipes).toHaveBeenCalledWith([]);
@@ -120,3 +143,4 @@ describe("FindRecipesPage", () => {
     vi.useRealTimers();
   });
 });
+

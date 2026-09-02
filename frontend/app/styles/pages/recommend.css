@@ -6,3 +6,10 @@
 .bottom-question button {
   margin: 10px;
 }
+
+/* Unlike other recipe grids, this one stays single-column beyond phone width too. */
+@media (min-width: 800px) {
+  .recipe-grid.recommend-grid {
+    grid-template-columns: 1fr;
+  }
+}
