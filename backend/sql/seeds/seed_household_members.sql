@@ -15,3 +15,6 @@ WHERE NOT EXISTS (
   WHERE existing."ownerUserId" = seed."ownerUserId"
     AND existing."name" = seed."name"
 );
+
+INSERT INTO "SeedHistory" ("seedName") VALUES ('seed_household_members')
+ON CONFLICT ("seedName") DO NOTHING;

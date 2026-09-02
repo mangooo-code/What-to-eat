@@ -30,6 +30,7 @@ export {
   findMatchingFavoriteRecipeIds,
   getRecipeById,
   listRecipeIngredients,
+  listRecipeSteps,
   listRecipes,
   MAX_RESULTS,
   type RecipeTimeRange,

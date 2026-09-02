@@ -50,8 +50,6 @@ export interface Recipe {
   tags: string[];
   seasonings: string[];
   substitutions: string[];
-  /** Ordered list of cooking steps; shape defined by application logic, not the database. */
-  steps: Json;
   /** Dietary/taste preferences this recipe suits; shape defined by application logic. */
   preferences: Json | null;
   source: "curated" | "ai_generated";
@@ -72,4 +70,16 @@ export interface RecipeIngredient {
   unitTypeId: number | null;
   quantity: number;
   isOptional: boolean;
+}
+
+export interface RecipeStep {
+  id: string;
+  recipeId: string;
+  stepNumber: number;
+  title: string;
+  detailedInstructions: string;
+  /** Estimated time for this step, in minutes. */
+  time: number | null;
+  createdAt: string;
+  updatedAt: string;
 }

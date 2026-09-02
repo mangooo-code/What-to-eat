@@ -62,3 +62,6 @@ SELECT
       AND existing."name" = seed."name"
       AND existing."locationId" = locations."id"
  );
+
+INSERT INTO "SeedHistory" ("seedName") VALUES ('seed_inventory')
+ON CONFLICT ("seedName") DO NOTHING;

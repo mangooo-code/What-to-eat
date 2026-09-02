@@ -1,4 +1,4 @@
-import type { Recipe, RecipeIngredient } from "../types/domain";
+import type { Recipe, RecipeIngredient, RecipeStep } from "../types/domain";
 import { postgrestRequest } from "./postgrestClient";
 
 interface RecipeRow {
@@ -11,7 +11,6 @@ interface RecipeRow {
   tags: string[];
   seasonings: string[];
   substitutions: string[];
-  steps: Recipe["steps"];
   preferences: Recipe["preferences"];
   source: Recipe["source"];
   rating: string | null;
@@ -30,14 +29,29 @@ interface RecipeIngredientRow {
   isOptional: boolean;
 }
 
+interface RecipeStepRow {
+  id: string;
+  recipeId: string;
+  stepNumber: number;
+  title: string;
+  detailedInstructions: string;
+  time: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
 const recipeColumns = [
   "id", "name", "description", "time", "difficulty", "imageFileId", "tags",
-  "seasonings", "substitutions", "steps", "preferences", "source", "rating",
+  "seasonings", "substitutions", "preferences", "source", "rating",
   "ratingCount", "createdDate", "updatedDate",
 ].join(",");
 
 const recipeIngredientColumns = [
   "id", "recipeId", "ingredientId", "nameSnapshot", "unitTypeId", "quantity", "isOptional",
+].join(",");
+
+const recipeStepColumns = [
+  "id", "recipeId", "stepNumber", "title", "detailedInstructions", "time", "createdAt", "updatedAt",
 ].join(",");
 
 function mapRecipe(row: RecipeRow): Recipe {
@@ -51,7 +65,6 @@ function mapRecipe(row: RecipeRow): Recipe {
     tags: row.tags,
     seasonings: row.seasonings,
     substitutions: row.substitutions,
-    steps: row.steps,
     preferences: row.preferences,
     source: row.source,
     rating: row.rating === null ? null : Number(row.rating),
@@ -70,6 +83,19 @@ function mapRecipeIngredient(row: RecipeIngredientRow): RecipeIngredient {
     unitTypeId: row.unitTypeId,
     quantity: Number(row.quantity),
     isOptional: row.isOptional,
+  };
+}
+
+function mapRecipeStep(row: RecipeStepRow): RecipeStep {
+  return {
+    id: row.id,
+    recipeId: row.recipeId,
+    stepNumber: row.stepNumber,
+    title: row.title,
+    detailedInstructions: row.detailedInstructions,
+    time: row.time === null ? null : Number(row.time),
+    createdAt: row.createdAt,
+    updatedAt: row.updatedAt,
   };
 }
 
@@ -92,6 +118,13 @@ export async function listRecipeIngredients(recipeId: string): Promise<RecipeIng
     query: { select: recipeIngredientColumns, recipeId: `eq.${recipeId}`, order: "id.asc" },
   });
   return rows.map(mapRecipeIngredient);
+}
+
+export async function listRecipeSteps(recipeId: string): Promise<RecipeStep[]> {
+  const rows = await postgrestRequest<RecipeStepRow[]>("RecipeSteps", {
+    query: { select: recipeStepColumns, recipeId: `eq.${recipeId}`, order: "stepNumber.asc" },
+  });
+  return rows.map(mapRecipeStep);
 }
 
 export interface RecipeTimeRange {
