@@ -1,13 +1,3 @@
-import type { Food } from "./types";
-
-export const initialFoods: Food[] = [
-  { name: "番茄", qty: 2, unit: "个", place: "冷藏", days: 3 },
-  { name: "鸡蛋", qty: 6, unit: "个", place: "冷藏", days: 10 },
-  { name: "嫩豆腐", qty: 1, unit: "盒", place: "冷藏", days: 2 },
-  { name: "青椒", qty: 3, unit: "个", place: "冷藏", days: 4 },
-  { name: "猪里脊", qty: 300, unit: "g", place: "冷冻", days: 15 },
-  { name: "牛奶", qty: 1, unit: "盒", place: "冷藏", days: 2 },
-];
 export const units = ["个", "颗", "根", "块", "盒", "袋", "瓶", "g", "kg", "ml", "L"];
 export const limits = [
   "不吃辣",

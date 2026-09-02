@@ -9,7 +9,6 @@ import {
   type ReactNode,
 } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { initialFoods } from "../lib/data";
 import type { RecipeDto } from "../services/findRecipesService";
 import type { Food, Page, ProfileData } from "../lib/types";
 import type { HouseholdMember, User } from "../types/domain";
@@ -193,7 +192,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [agreed, setAgreed] = useState(false);
   const [loginError, setLoginError] = useState("");
   const [legal, setLegal] = useState("");
-  const [foods, setFoods] = useState(initialFoods);
+  const [foods, setFoods] = useState<Food[]>([]);
   const [editIndex, setEditIndex] = useState(0);
   const [confirmEdit, setConfirmEdit] = useState<number | null>(null);
   const [foodModal, setFoodModal] = useState<

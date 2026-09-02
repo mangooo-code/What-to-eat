@@ -1,5 +1,4 @@
 import { vi } from "vitest";
-import { initialFoods } from "../lib/data";
 import type { useApp } from "../context/AppContext";
 
 // Full default snapshot of AppContext state/handlers so page tests only need
@@ -68,7 +67,7 @@ export function createAppState(overrides: Partial<AppState> = {}): AppState {
     setLoginError: vi.fn(),
     legal: "",
     setLegal: vi.fn(),
-    foods: [...initialFoods],
+    foods: [],
     setFoods: vi.fn(),
     editIndex: 0,
     setEditIndex: vi.fn(),
