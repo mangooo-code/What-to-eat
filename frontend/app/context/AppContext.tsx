@@ -46,7 +46,7 @@ interface AppContextValue {
   page: Page;
   authChecked: boolean;
   go: (p: Page) => void;
-  goBack: () => void;
+  goBack: (override?: Page) => void;
   countryCode: string;
   setCountryCode: (v: string) => void;
   phone: string;
@@ -316,8 +316,12 @@ export function AppProvider({ children }: { children: ReactNode }) {
     router.push(pageToPath[p]);
     window.scrollTo(0, 0);
   };
-  // Real browser back navigation, so the forward button keeps working afterward.
-  const goBack = () => router.back();
+  // Defaults to real browser back navigation; pass an override for the few pages
+  // that need a specific destination regardless of how the user actually arrived.
+  const goBack = (override?: Page) => {
+    if (override) go(override);
+    else router.back();
+  };
   const say = (s: string) => {
     setToast(s);
     setTimeout(() => setToast(""), 1800);

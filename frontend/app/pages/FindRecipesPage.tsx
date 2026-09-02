@@ -8,6 +8,7 @@ import { Header } from "../components/Header";
 import { AssetImage } from "../components/AssetImage";
 import { LoadingSequence } from "../components/LoadingSequence";
 import { limits } from "../lib/data";
+import { inventoryService } from "../services/inventoryService";
 import { memberService } from "../services/memberService";
 import { findRecipesService } from "../services/findRecipesService";
 import type { HouseholdMember } from "../types/domain";
@@ -54,6 +55,7 @@ export function FindRecipesPage() {
   const [timeInvalid, setTimeInvalid] = useState(false);
   const [tasteInvalid, setTasteInvalid] = useState(false);
   const [checking, setChecking] = useState(false);
+  const [hasItems, setHasItems] = useState<boolean | null>(null);
   const [formError, setFormError] = useState("");
   const [displayedFormError, setDisplayedFormError] = useState("");
   const [formErrorToken, setFormErrorToken] = useState(0);
@@ -67,6 +69,11 @@ export function FindRecipesPage() {
   }, [formError, formErrorToken]);
   useEffect(() => {
     memberService.list({ excludeOwner: true }).then(setPickerMembers).catch(() => {});
+  }, []);
+  useEffect(() => {
+    inventoryService.exists()
+      .then(({ hasItems }) => setHasItems(hasItems))
+      .catch(() => setHasItems(null));
   }, []);
   const visibleMembers = pickerMembers.filter((member) =>
     visibleMemberIds.includes(member.memberId),
@@ -121,7 +128,7 @@ export function FindRecipesPage() {
       <Header
         title="这一顿想怎么吃？"
         sub="告诉我今天的需求，我来帮你缩小选择范围。"
-        back={() => goBack()}
+        back={() => goBack("home")}
       />
       <form
         className="findrecipes-layout"
@@ -308,10 +315,14 @@ export function FindRecipesPage() {
         <button
           type="button"
           className="primary findrecipes-submit"
-          disabled={checking}
+          disabled={checking || hasItems === false}
           onClick={handleSubmit}
         >
-          {checking ? <span className="button-spinner" role="status" aria-label="检查中" /> : "帮我挑一挑"}
+          {hasItems === false
+            ? "冰箱空空的"
+            : checking
+              ? <span className="button-spinner" role="status" aria-label="检查中" />
+              : "帮我挑一挑"}
         </button>
       </form>
     </>

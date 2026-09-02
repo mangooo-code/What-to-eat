@@ -3,6 +3,7 @@ import test from "node:test";
 import {
   createIngredient,
   deleteIngredient,
+  hasAnyIngredients,
   listIngredients,
   listLocations,
   listUnitTypes,
@@ -51,6 +52,13 @@ test("listIngredients maps the quantity string to a number", async () => {
   const ingredients = await listIngredients("u1");
   assert.equal(ingredients[0].quantity, 2.5);
   assert.equal(ingredients[0].ownerUserId, "u1");
+});
+
+test("hasAnyIngredients reports true/false based on the returned rows", async () => {
+  mockFetch([{ id: "i1" }]);
+  assert.equal(await hasAnyIngredients("u1"), true);
+  mockFetch([]);
+  assert.equal(await hasAnyIngredients("u1"), false);
 });
 
 test("listLocations filters to fridge/freezer/pantry keys", async () => {

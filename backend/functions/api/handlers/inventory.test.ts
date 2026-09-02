@@ -53,6 +53,20 @@ test("requires authentication", async () => {
   );
 });
 
+test("GET /inventory/exists reports whether the user has any ingredients", async () => {
+  mockFetchByResource({ Ingredients: [ingredientRow] });
+  const response = await handleInventory({
+    httpMethod: "GET", headers: authHeader(), path: "/inventory/exists",
+  } as HttpEvent);
+  assert.deepEqual(JSON.parse(response.body), { success: true, data: { hasItems: true } });
+
+  mockFetchByResource({ Ingredients: [] });
+  const empty = await handleInventory({
+    httpMethod: "GET", headers: authHeader(), path: "/inventory/exists",
+  } as HttpEvent);
+  assert.deepEqual(JSON.parse(empty.body), { success: true, data: { hasItems: false } });
+});
+
 test("GET returns items, locations, and unit types together", async () => {
   mockFetchByResource({
     Ingredients: [ingredientRow],

@@ -77,6 +77,14 @@ export async function listIngredients(userId: string): Promise<Ingredient[]> {
   return rows.map(mapIngredient);
 }
 
+// Cheaper than listIngredients() for callers that only need a yes/no answer.
+export async function hasAnyIngredients(userId: string): Promise<boolean> {
+  const rows = await postgrestRequest<Array<{ id: string }>>("Ingredients", {
+    query: { select: "id", userId: `eq.${userId}`, limit: 1 },
+  });
+  return rows.length > 0;
+}
+
 export async function listLocations(userId: string): Promise<LocationDto[]> {
   return postgrestRequest<LocationRow[]>("Locations", {
     query: { select: "id,key,name", userId: `eq.${userId}`, key: "in.(fridge,freezer,pantry)", order: "key.asc" },

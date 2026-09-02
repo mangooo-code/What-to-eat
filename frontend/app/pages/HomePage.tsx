@@ -1,11 +1,24 @@
 "use client";
+import { useEffect, useState } from "react";
 import "../styles/pages/home.css";
 import { useApp } from "../context/AppContext";
 import { Header } from "../components/Header";
 import { AssetImage } from "../components/AssetImage";
+import { inventoryService } from "../services/inventoryService";
 
 export function HomePage() {
-  const { foods, go, setDialog, openRecipes } = useApp();
+  const { go, setDialog, openRecipes } = useApp();
+  const [hasItems, setHasItems] = useState<boolean | null>(null);
+  useEffect(() => {
+    inventoryService.exists()
+      .then(({ hasItems }) => setHasItems(hasItems))
+      // If the check itself fails, don't block the user over it.
+      .catch(() => setHasItems(null));
+  }, []);
+  const handleFindRecipes = () => {
+    if (hasItems === false) setDialog("冰箱还是空空的，先放点食材进来吧。");
+    else go("findrecipes");
+  };
   return (
     <>
       <Header title="今天想吃点什么？" sub="看看家里有什么，我来帮你挑。" />
@@ -27,13 +40,7 @@ export function HomePage() {
           </span>
           <b>›</b>
         </button>
-        <button
-          type="button"
-          className="featured"
-          onClick={() =>
-            foods.length ? go("findrecipes") : setDialog("冰箱还是空空的，先放点食材进来吧。")
-          }
-        >
+        <button type="button" className="featured" onClick={handleFindRecipes}>
           <AssetImage name="help-me-decide.png" alt="帮我决定" />
           <span>
             <strong>帮我决定</strong>

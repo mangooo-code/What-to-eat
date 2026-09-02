@@ -29,7 +29,7 @@ describe("RecommendRecipePage", () => {
     render(<RecommendRecipePage />);
     expect(screen.getByText(/没有找到这道菜谱/)).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: /返回/ }));
-    expect(goBack).toHaveBeenCalledTimes(1);
+    expect(goBack).toHaveBeenCalledWith();
   });
 
   it("renders the matching recipe's detail", async () => {

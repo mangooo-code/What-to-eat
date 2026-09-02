@@ -3,6 +3,7 @@ export { getDatabaseConfig } from "./config";
 export {
   createIngredient,
   deleteIngredient,
+  hasAnyIngredients,
   listIngredients,
   listLocations,
   listUnitTypes,

@@ -122,4 +122,14 @@ describe("Shell", () => {
     await waitFor(() => expect(setFoods).toHaveBeenCalledTimes(1));
     expect(go).toHaveBeenCalledWith("fridge");
   });
+
+  it("navigates to the fridge when the empty-fridge dialog confirms", () => {
+    const go = vi.fn();
+    const setDialog = vi.fn();
+    mockApp({ dialog: "冰箱还是空空的，先放点食材进来吧。", go, setDialog });
+    render(<Shell>内容</Shell>);
+    fireEvent.click(screen.getByText("打开冰箱"));
+    expect(go).toHaveBeenCalledWith("fridge");
+    expect(setDialog).toHaveBeenCalledWith("");
+  });
 });

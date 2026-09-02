@@ -79,7 +79,7 @@ test("returns generated recipes for a valid submission", async () => {
   const aiBody = { output: { choices: [{ message: { content: [{ text: JSON.stringify([aiRecipe]) }] } }] } };
   globalThis.fetch = (async (url: string | URL) => {
     const str = url.toString();
-    if (/\/v1\/rdb\/rest\/Ingredients\?/.test(str)) return new Response("[]", { status: 200 });
+    if (/\/v1\/rdb\/rest\/Ingredients\?/.test(str)) return new Response(JSON.stringify([{ id: "i1" }]), { status: 200 });
     if (/\/services\/aigc\//.test(str)) return new Response(JSON.stringify(aiBody), { status: 200 });
     throw new Error(`Unexpected fetch call: ${str}`);
   }) as typeof fetch;
@@ -94,3 +94,16 @@ test("returns generated recipes for a valid submission", async () => {
   assert.equal(payload.data.length, 3);
   assert.equal(payload.data[0].name, "AI 推荐菜");
 });
+
+test("rejects submission when the user's fridge has no ingredients", async () => {
+  globalThis.fetch = (async () => new Response("[]", { status: 200 })) as typeof fetch;
+  await assert.rejects(
+    handleFindRecipes({
+      httpMethod: "POST",
+      headers: authHeader(),
+      body: JSON.stringify(baseBody()),
+    } as HttpEvent),
+    (error) => error instanceof AppError && error.code === "EMPTY_FRIDGE" && error.statusCode === 400,
+  );
+});
+

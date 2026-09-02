@@ -3,15 +3,18 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { FindRecipesPage } from "./FindRecipesPage";
 import { useApp } from "../context/AppContext";
 import { findRecipesService } from "../services/findRecipesService";
+import { inventoryService } from "../services/inventoryService";
 import { memberService } from "../services/memberService";
 import type { HouseholdMember } from "../types/domain";
 import { createAppState } from "../tests/mockApp";
 
 vi.mock("../context/AppContext", () => ({ useApp: vi.fn() }));
 vi.mock("../services/findRecipesService", () => ({ findRecipesService: { submit: vi.fn() } }));
+vi.mock("../services/inventoryService", () => ({ inventoryService: { exists: vi.fn() } }));
 vi.mock("../services/memberService", () => ({ memberService: { list: vi.fn() } }));
 const mockedUseApp = vi.mocked(useApp);
 const mockedSubmit = vi.mocked(findRecipesService.submit);
+const mockedExists = vi.mocked(inventoryService.exists);
 const mockedList = vi.mocked(memberService.list);
 
 const member: HouseholdMember = {
@@ -42,6 +45,7 @@ describe("FindRecipesPage", () => {
   beforeEach(() => {
     mockApp();
     mockedList.mockResolvedValue([]);
+    mockedExists.mockResolvedValue({ hasItems: true });
   });
 
   it("selects a time option", async () => {
@@ -122,6 +126,12 @@ describe("FindRecipesPage", () => {
     fireEvent.click(submit);
     expect(submit).toBeDisabled();
     expect(screen.getByRole("alert")).toHaveTextContent("还有必填项没有选择，请检查后重试。");
+  });
+
+  it("disables submission and shows an empty-fridge label when the fridge has no ingredients", async () => {
+    mockedExists.mockResolvedValue({ hasItems: false });
+    await renderPage();
+    expect(screen.getByText("冰箱空空的")).toBeDisabled();
   });
 
   it("proceeds to recommend once time and taste are chosen", async () => {

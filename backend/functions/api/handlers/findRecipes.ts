@@ -1,6 +1,7 @@
 import { AppError } from "../../../shared/errors/AppError";
 import { successResponse } from "../../../shared/errors/httpResponse";
 import { requireAuth } from "../../../shared/auth";
+import { hasAnyIngredients } from "../../../shared/database/inventoryRepository";
 import { countMembersByIds } from "../../../shared/database/memberRepository";
 import type { HttpEvent, HttpResponse } from "../../../shared/types/api";
 import { getMethod, parseJsonBody, requireString } from "../../../shared/validation/http";
@@ -42,6 +43,9 @@ export async function handleFindRecipes(event: HttpEvent): Promise<HttpResponse>
     const memberIds = optionalMemberIds(body.memberIds);
     if (memberIds.length && (await countMembersByIds(memberIds, ownerUserId)) !== memberIds.length) {
       throw new AppError("VALIDATION_ERROR", "One or more memberIds do not belong to the requesting user");
+    }
+    if (!(await hasAnyIngredients(ownerUserId))) {
+      throw new AppError("EMPTY_FRIDGE", "冰箱里还没有食材，请先添加一些再试", 400);
     }
     const submission = {
       userId: ownerUserId,

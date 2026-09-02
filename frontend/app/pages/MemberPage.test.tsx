@@ -44,11 +44,11 @@ describe("MemberPage", () => {
     expect(saveMember).toHaveBeenCalledTimes(1);
   });
 
-  it("goes back to findrecipes via the header back button", () => {
+  it("goes back via the header back button", () => {
     const goBack = vi.fn();
     mockApp({ goBack });
     render(<MemberPage />);
     fireEvent.click(screen.getByRole("button", { name: /返回/ }));
-    expect(goBack).toHaveBeenCalledTimes(1);
+    expect(goBack).toHaveBeenCalledWith();
   });
 });

@@ -202,7 +202,9 @@ export function Shell({
                   ? "移除后，这项食材不会再参与菜谱推荐。"
                   : dialog.includes("结束")
                     ? "结束后不会更新冰箱库存，也不会生成本次制作记录。"
-                    : "请确认本次操作。"}
+                    : dialog.includes("空空的")
+                      ? "去冰箱里添加一些食材吧。"
+                      : "请确认本次操作。"}
             </p>
             <div className="actions">
               <button onClick={() => setDialog("")}>取消</button>
@@ -211,7 +213,10 @@ export function Shell({
                 disabled={deleting}
                 onClick={async () => {
                   if (dialog.includes("退出")) logout();
-                  else {
+                  else if (dialog.includes("空空的")) {
+                    setDialog("");
+                    go("fridge");
+                  } else {
                     if (dialog.includes("删除") || dialog.includes("移除")) {
                       const ingredient = foods[editIndex];
                       if (!ingredient?.id) {
@@ -241,6 +246,8 @@ export function Shell({
                   ? "确认退出"
                   : dialog.includes("结束")
                     ? "结束制作"
+                    : dialog.includes("空空的")
+                      ? "打开冰箱"
                   : deleting
                     ? "删除中……"
                     : "删除"}

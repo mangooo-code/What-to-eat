@@ -34,6 +34,7 @@ export const inventoryService = {
       limit: params.limit,
     },
   }),
+  exists: () => apiClient.get<{ hasItems: boolean }>("/inventory/exists"),
   create: (input: CreateIngredientInput) => apiClient.post<Ingredient, CreateIngredientInput>("/inventory", input),
   update: (id: string, input: UpdateIngredientInput) => apiClient.patch<Ingredient, UpdateIngredientInput>(`/inventory/${encodeURIComponent(id)}`, input),
   remove: (id: string) => apiClient.delete<void>(`/inventory/${encodeURIComponent(id)}`),

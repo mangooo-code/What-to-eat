@@ -4,6 +4,7 @@ import { requireAuth } from "../../../shared/auth";
 import {
   createIngredient,
   deleteIngredient,
+  hasAnyIngredients,
   listIngredients,
   listLocations,
   listUnitTypes,
@@ -57,6 +58,11 @@ async function assertLocationBelongsToUser(locationId: string, userId: string): 
 export async function handleInventory(event: HttpEvent): Promise<HttpResponse> {
   const method = getMethod(event);
   const userId = requireAuth(event);
+
+  if (method === "GET" && (event.path ?? "").includes("/inventory/exists")) {
+    return successResponse({ hasItems: await hasAnyIngredients(userId) });
+  }
+
   const ingredientId = ingredientIdFromPath(event.path);
 
   if (method === "GET" && !ingredientId) {
