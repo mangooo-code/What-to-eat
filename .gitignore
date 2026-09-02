@@ -5,3 +5,8 @@
 env.dev
 env.*.local
 package-lock.json
+# Local symlink workaround: `tcb db pg migration` hardcodes ./cloudbase/migrations
+# and ignores cloudbaserc.json's database.migrations path.
+/cloudbase/
+# pnpm's local package content-store cache; never project source.
+.pnpm-store/
