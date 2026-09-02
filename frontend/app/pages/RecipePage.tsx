@@ -4,7 +4,6 @@ import { useApp } from "../context/AppContext";
 import { Header } from "../components/Header";
 import { Placeholder } from "../components/Placeholder";
 import { FoodEmoji } from "../components/FoodEmoji";
-import { steps } from "../lib/data";
 
 export function RecipePage() {
   const { recipeOrigin, liked, setLiked, go, recipeBack } = useApp();
@@ -71,18 +70,6 @@ export function RecipePage() {
               <span>暂无需要替换的食材</span>
             </div>
           </div>
-        </div>
-      </section>
-      <section className="block recipe-steps">
-        <h2>制作步骤</h2>
-        <div className="step-list preview-steps">
-          {steps.map((s, i) => (
-            <article className="step-preview" key={s[0]}>
-              <span>{i + 1}</span>
-              <strong>{s[0].split("｜")[1]}</strong>
-              <small>{s[2]}</small>
-            </article>
-          ))}
         </div>
       </section>
       <button className="primary sticky" onClick={() => go("cook")}>

@@ -16,10 +16,9 @@ describe("RecipePage", () => {
     mockApp();
   });
 
-  it("renders the recipe details and steps", () => {
+  it("renders the recipe details", () => {
     render(<RecipePage />);
     expect(screen.getByText("番茄炒蛋")).toBeInTheDocument();
-    expect(screen.getByText("炒鸡蛋")).toBeInTheDocument();
   });
 
   it("toggles liked", () => {

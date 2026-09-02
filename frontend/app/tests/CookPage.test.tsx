@@ -16,12 +16,6 @@ describe("CookPage", () => {
     mockApp();
   });
 
-  it("renders every cooking step", () => {
-    render(<CookPage />);
-    expect(screen.getByText("准备食材")).toBeInTheDocument();
-    expect(screen.getByText("混合调味")).toBeInTheDocument();
-  });
-
   it("shows the link back to recommendations only when relevant", () => {
     const { rerender } = render(<CookPage />);
     mockApp({ recipeOrigin: "done" });

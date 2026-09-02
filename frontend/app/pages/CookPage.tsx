@@ -3,8 +3,6 @@ import "../styles/pages/cook.css";
 import { useApp } from "../context/AppContext";
 import { Consume } from "../components/Consume";
 import { Header } from "../components/Header";
-import { RecipeStepCard } from "../components/RecipeStepCard";
-import { steps } from "../lib/data";
 
 export function CookPage() {
   const {
@@ -24,16 +22,6 @@ export function CookPage() {
           ‹ 看看其他菜谱
         </button>
       )}
-      <div className="cook-all-steps">
-        {steps.map((s, i) => (
-          <RecipeStepCard
-            key={s[0]}
-            index={i}
-            data={s}
-            timer={i === 1 || i === 2}
-          />
-        ))}
-      </div>
       <div className="sticky-actions">
         <button className="primary" onClick={() => setConsumeOpen(true)}>
           做好啦
