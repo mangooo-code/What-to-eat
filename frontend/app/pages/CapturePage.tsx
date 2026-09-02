@@ -8,6 +8,8 @@ import { Header } from "../components/Header";
 import { AssetImage } from "../components/AssetImage";
 import { getRecognitionErrorMessage, recognitionService } from "../services/recognitionService";
 
+const SUPPORTED_IMAGE_TYPES = new Set(["image/jpeg", "image/png", "image/webp"]);
+
 export function CapturePage() {
   const {
     captureTab,
@@ -46,6 +48,14 @@ export function CapturePage() {
   const prepareRecognizedFoods = () => recognizedFoods().map((food) => ({ ...food, days: null }));
 
   const acceptPhoto = (file: File, source: "camera" | "album") => {
+    if (file.size === 0) {
+      say("图片文件无效，请重新选择");
+      return;
+    }
+    if (!SUPPORTED_IMAGE_TYPES.has(file.type.toLowerCase())) {
+      say("仅支持 JPG、PNG、WEBP 格式的图片");
+      return;
+    }
     setRecognitionImage(file);
     setPhotos({ camera: source === "camera" ? 1 : 0, album: source === "album" ? 1 : 0 });
   };

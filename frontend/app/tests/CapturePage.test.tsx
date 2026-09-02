@@ -102,6 +102,58 @@ describe("CapturePage", () => {
     expect(setPhotos).toHaveBeenLastCalledWith({ camera: 0, album: 1 });
   });
 
+  it("rejects unsupported camera files and retains the existing image", () => {
+    const setPhotos = vi.fn();
+    const setRecognitionImage = vi.fn();
+    const say = vi.fn();
+    const existingImage = new File(["existing"], "existing.png", { type: "image/png" });
+    mockApp({
+      captureTab: "camera",
+      recognitionImageFile: existingImage,
+      recognitionImagePreviewUrl: "blob:existing.png",
+      setPhotos,
+      setRecognitionImage,
+      say,
+    });
+    render(<CapturePage />);
+
+    const unsupported = new File(["gif"], "photo.gif", { type: "image/gif" });
+    fireEvent.change(screen.getByLabelText("拍照文件输入"), {
+      target: { files: [unsupported] },
+    });
+
+    expect(say).toHaveBeenCalledWith("仅支持 JPG、PNG、WEBP 格式的图片");
+    expect(setRecognitionImage).not.toHaveBeenCalled();
+    expect(setPhotos).not.toHaveBeenCalled();
+    expect(screen.getByAltText("待识别食材预览")).toHaveAttribute("src", "blob:existing.png");
+  });
+
+  it("rejects empty album files and retains the existing image", () => {
+    const setPhotos = vi.fn();
+    const setRecognitionImage = vi.fn();
+    const say = vi.fn();
+    const existingImage = new File(["existing"], "existing.webp", { type: "image/webp" });
+    mockApp({
+      captureTab: "album",
+      recognitionImageFile: existingImage,
+      recognitionImagePreviewUrl: "blob:existing.webp",
+      setPhotos,
+      setRecognitionImage,
+      say,
+    });
+    render(<CapturePage />);
+
+    const empty = new File([], "empty.png", { type: "image/png" });
+    fireEvent.change(screen.getByLabelText("相册文件输入"), {
+      target: { files: [empty] },
+    });
+
+    expect(say).toHaveBeenCalledWith("图片文件无效，请重新选择");
+    expect(setRecognitionImage).not.toHaveBeenCalled();
+    expect(setPhotos).not.toHaveBeenCalled();
+    expect(screen.getByAltText("待识别食材预览")).toHaveAttribute("src", "blob:existing.webp");
+  });
+
   it("shows and clears the shared image preview", () => {
     const setPhotos = vi.fn();
     const setRecognitionImage = vi.fn();
