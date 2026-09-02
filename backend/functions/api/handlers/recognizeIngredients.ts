@@ -4,7 +4,7 @@ import { successResponse } from "../../../shared/errors/httpResponse";
 import type { HttpEvent, HttpResponse } from "../../../shared/types/api";
 import { getMethod } from "../../../shared/validation/http";
 import { parseMultipartFiles } from "../../../shared/validation/multipart";
-import { mockIngredientRecognition } from "../helpers/mockIngredientRecognition";
+import { recognizeIngredientImage } from "../helpers/ingredientRecognition";
 
 const MAX_IMAGE_BYTES = 10 * 1024 * 1024;
 
@@ -26,6 +26,6 @@ export async function handleRecognizeIngredients(event: HttpEvent): Promise<Http
     throw new AppError("IMAGE_TOO_LARGE", "Image file must not exceed 10MB", 413);
   }
 
-  // The bytes have been fully parsed and validated above. AI processing will replace this mock later.
-  return successResponse(mockIngredientRecognition);
+  const recognition = await recognizeIngredientImage(image.content, image.mimeType);
+  return successResponse(recognition);
 }
