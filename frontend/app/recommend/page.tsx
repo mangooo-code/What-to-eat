@@ -1,6 +1,12 @@
 "use client";
-import { RecommendPage } from "../pages/RecommendPage";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
+// Legacy /recommend URL: redirect to its new route.
 export default function Page() {
-  return <RecommendPage />;
+  const router = useRouter();
+  useEffect(() => {
+    router.replace("/recipes/suggestions");
+  }, [router]);
+  return null;
 }

@@ -27,7 +27,7 @@ const pageToPath: Record<Page, string> = {
   confirm: "/confirm",
   findrecipes: "/findrecipes",
   member: "/member",
-  recommend: "/recommend",
+  recommend: "/recipes/suggestions",
   recipe: "/recipe",
   cook: "/cook",
   feedback: "/feedback",
