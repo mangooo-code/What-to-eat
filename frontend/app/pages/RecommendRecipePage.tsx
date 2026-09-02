@@ -5,7 +5,7 @@ import { Header } from "../components/Header";
 import { RecipeDetail } from "../components/RecipeDetail";
 
 export function RecommendRecipePage() {
-  const { recommendedRecipes, likedRecipes, setLikedRecipes, go } = useApp();
+  const { recommendedRecipes, likedRecipes, setLikedRecipes, go, goBack } = useApp();
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
   const recipe = recommendedRecipes.find((r) => r.id === id);
@@ -13,7 +13,7 @@ export function RecommendRecipePage() {
   if (!recipe) {
     return (
       <>
-        <Header title="菜谱详情" back={() => go("recommend")} />
+        <Header title="菜谱详情" back={() => goBack("recommend")} />
         <p>没有找到这道菜谱，可能已经过期，请回到推荐页重新查看。</p>
       </>
     );
@@ -21,7 +21,7 @@ export function RecommendRecipePage() {
 
   return (
     <>
-      <Header title="菜谱详情" back={() => go("recommend")} />
+      <Header title="菜谱详情" back={() => goBack("recommend")} />
       <RecipeDetail
         recipe={recipe}
         liked={likedRecipes.includes(recipe.id)}

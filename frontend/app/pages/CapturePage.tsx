@@ -26,6 +26,7 @@ export function CapturePage() {
     fridgePlace,
     say,
     go,
+    goBack,
   } = useApp();
   const [recognizing, setRecognizing] = useState(false);
   const [cameraOpen, setCameraOpen] = useState(false);
@@ -129,7 +130,7 @@ export function CapturePage() {
       <Header
         title="让我看看家里有什么"
         sub="拍给我看，或者直接告诉我都可以。"
-        back={() => go("fridge")}
+        back={() => goBack("fridge")}
       />
       <div className="tabs capture-tabs" role="tablist">
         <button

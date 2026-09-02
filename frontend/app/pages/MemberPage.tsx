@@ -21,10 +21,11 @@ export function MemberPage() {
     draftAllergens,
     setDraftAllergens,
     go,
+    goBack,
   } = useApp();
   return (
     <>
-      <Header title="添加一起吃饭的人" back={() => go("findrecipes")} />
+      <Header title="添加一起吃饭的人" back={() => goBack("findrecipes")} />
       <label className="label">
         姓名 / 昵称
         <input

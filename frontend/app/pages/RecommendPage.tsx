@@ -8,7 +8,7 @@ import { Header } from "../components/Header";
 import { Placeholder } from "../components/Placeholder";
 
 export function RecommendPage() {
-  const { recommendedRecipes, setBatch, likedRecipes, setLikedRecipes, go, say } = useApp();
+  const { recommendedRecipes, setBatch, likedRecipes, setLikedRecipes, go, goBack, say } = useApp();
   const router = useRouter();
   useEffect(() => {
     if (recommendedRecipes.length === 0) go("findrecipes");
@@ -19,7 +19,7 @@ export function RecommendPage() {
       <Header
         title="今天可以吃这些"
         sub="照着家里的食材和你的想法，我挑了这 3 道。"
-        back={() => go("findrecipes")}
+        back={() => goBack("findrecipes")}
       />
       <div className="recipe-grid recommend-grid">
         {recommendedRecipes.map((r) => (

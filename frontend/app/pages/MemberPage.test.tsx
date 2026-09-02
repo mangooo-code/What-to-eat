@@ -45,10 +45,10 @@ describe("MemberPage", () => {
   });
 
   it("goes back to findrecipes via the header back button", () => {
-    const go = vi.fn();
-    mockApp({ go });
+    const goBack = vi.fn();
+    mockApp({ goBack });
     render(<MemberPage />);
     fireEvent.click(screen.getByRole("button", { name: /返回/ }));
-    expect(go).toHaveBeenCalledWith("findrecipes");
+    expect(goBack).toHaveBeenCalledWith("findrecipes");
   });
 });

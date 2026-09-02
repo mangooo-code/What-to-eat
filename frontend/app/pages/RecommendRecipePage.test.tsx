@@ -24,12 +24,12 @@ describe("RecommendRecipePage", () => {
 
   it("shows a not-found message when no recipe matches the id", async () => {
     await mockSearchParams("id=missing");
-    const go = vi.fn();
-    mockApp({ go });
+    const goBack = vi.fn();
+    mockApp({ goBack });
     render(<RecommendRecipePage />);
     expect(screen.getByText(/没有找到这道菜谱/)).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: /返回/ }));
-    expect(go).toHaveBeenCalledWith("recommend");
+    expect(goBack).toHaveBeenCalledWith("recommend");
   });
 
   it("renders the matching recipe's detail", async () => {

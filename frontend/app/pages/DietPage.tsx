@@ -24,6 +24,7 @@ export function DietPage() {
     saveDietProfile,
     deleteProfileMember,
     go,
+    goBack,
   } = useApp();
   const activeMember = householdMembers.find((member) => member.memberId === profileMemberId);
   return (
@@ -34,7 +35,7 @@ export function DietPage() {
             ? "我的饮食档案"
             : `${draftProfileName}的饮食档案`
         }
-        back={() => go("profile")}
+        back={() => goBack("profile")}
       />
       {!activeMember?.isOwner && (
         <label className="label profile-name">

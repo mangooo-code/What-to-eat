@@ -8,14 +8,14 @@ import { inventoryService } from "../services/inventoryService";
 const keyByPlace = { 冷藏: "fridge", 冷冻: "freezer", 常温: "pantry" } as const;
 
 export function EditPage() {
-  const { foods, editIndex, setFoods, go, say, setDialog } = useApp();
+  const { foods, editIndex, setFoods, go, goBack, say, setDialog } = useApp();
   const [draft, setDraft] = useState(() => foods[editIndex]);
   const [saving, setSaving] = useState(false);
   const food = foods[editIndex];
   if (!food || !draft) return null;
   return (
     <>
-      <Header title="编辑食材" back={() => go("fridge")} />
+      <Header title="编辑食材" back={() => goBack("fridge")} />
       <Field
         food={draft}
         onChange={setDraft}

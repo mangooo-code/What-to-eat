@@ -53,6 +53,7 @@ export function createAppState(overrides: Partial<AppState> = {}): AppState {
     findRecipesSubmitting: false,
     setFindRecipesSubmitting: vi.fn(),
     go: vi.fn(),
+    goBack: vi.fn(),
     countryCode: "+86",
     setCountryCode: vi.fn(),
     phone: "",
