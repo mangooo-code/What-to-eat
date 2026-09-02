@@ -57,15 +57,6 @@ p {
 }
 
 @media (min-width: 800px) {
-  .app-shell {
-    width: calc(100% - 64px);
-    min-height: calc(100vh - 64px);
-    margin: 32px;
-    border: 1px solid var(--line);
-  }
-}
-
-@media (min-width: 800px) {
   .page {
     padding: 54px 56px 120px;
   }
@@ -134,17 +125,6 @@ h1 {
   margin-top: 32px;
   padding: 16px 0 4px;
   background: rgba(250, 246, 237, 0.92);
-}
-
-@media (min-width: 800px) {
-  .app-shell {
-    width: calc(100% - 64px);
-    max-width: 1280px;
-    margin: 32px auto;
-    border: 0;
-    border-radius: 20px;
-    box-shadow: var(--shadow-raised);
-  }
 }
 
 @media (min-width: 800px) {
