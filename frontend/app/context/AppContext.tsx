@@ -150,6 +150,7 @@ interface AppContextValue {
   setLikedRecipes: React.Dispatch<React.SetStateAction<string[]>>;
   recipeOrigin: "recommend" | "done" | "liked";
   setRecipeOrigin: (v: "recommend" | "done" | "liked") => void;
+  recipesListOrigin: "home" | "profile";
   consumeOpen: boolean;
   setConsumeOpen: (v: boolean) => void;
   mealReaction: string;
@@ -278,6 +279,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [recipeOrigin, setRecipeOrigin] = useState<
     "recommend" | "done" | "liked"
   >("recommend");
+  const [recipesListOrigin, setRecipesListOrigin] = useState<"home" | "profile">("home");
   const [consumeOpen, setConsumeOpen] = useState(false);
   const [mealReaction, setMealReaction] = useState("");
   const [needError, setNeedError] = useState(false);
@@ -456,6 +458,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setMemberOpen(true);
   };
   const openRecipes = (tab: "done" | "liked") => {
+    setRecipesListOrigin(page === "profile" ? "profile" : "home");
     go(tab === "done" ? "recipesHistory" : "recipesFavorites");
   };
   const openDiet = (memberId: string) => {
@@ -625,6 +628,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setLikedRecipes,
     recipeOrigin,
     setRecipeOrigin,
+    recipesListOrigin,
     consumeOpen,
     setConsumeOpen,
     mealReaction,

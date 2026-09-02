@@ -41,4 +41,20 @@ describe("RecipesPage", () => {
     expect(setRecipeOrigin).toHaveBeenCalledWith("done");
     expect(go).toHaveBeenCalledWith("recipe");
   });
+
+  it("goes back to home when that's where it was opened from", () => {
+    const goBack = vi.fn();
+    mockApp({ page: "recipesHistory", recipesListOrigin: "home", goBack });
+    render(<RecipesPage />);
+    fireEvent.click(screen.getByRole("button", { name: /返回/ }));
+    expect(goBack).toHaveBeenCalledWith("home");
+  });
+
+  it("goes back to profile when that's where it was opened from", () => {
+    const goBack = vi.fn();
+    mockApp({ page: "recipesFavorites", recipesListOrigin: "profile", goBack });
+    render(<RecipesPage />);
+    fireEvent.click(screen.getByRole("button", { name: /返回/ }));
+    expect(goBack).toHaveBeenCalledWith("profile");
+  });
 });

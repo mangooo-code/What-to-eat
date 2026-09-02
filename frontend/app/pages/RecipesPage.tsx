@@ -9,12 +9,12 @@ import { AssetImage } from "../components/AssetImage";
 import { recipesDone, recipesLiked } from "../lib/data";
 
 export function RecipesPage() {
-  const { page, setRecipeOrigin, go, goBack } = useApp();
+  const { page, setRecipeOrigin, go, goBack, recipesListOrigin } = useApp();
   const recipeTab: "done" | "liked" = page === "recipesFavorites" ? "liked" : "done";
   const data = recipeTab === "done" ? recipesDone : recipesLiked;
   return (
     <>
-      <Header title="我的菜谱" back={() => goBack()} />
+      <Header title="我的菜谱" back={() => goBack(recipesListOrigin)} />
       <div className="tabs" role="tablist">
         <button
           type="button"
