@@ -7,6 +7,7 @@ import { handleInventory } from "./handlers/inventory";
 import { handleMembers } from "./handlers/members";
 import { handleUser } from "./handlers/user";
 import { handleFindRecipes } from "./handlers/findRecipes";
+import { handleRecipes } from "./handlers/recipes";
 import { handleRecognizeIngredients } from "./handlers/recognizeIngredients";
 import { handleIngredients } from "./handlers/ingredients";
 
@@ -37,6 +38,10 @@ export async function main(event: HttpEvent = {}): Promise<HttpResponse> {
 
     if (path.includes("/findrecipes")) {
       return await handleFindRecipes(event);
+    }
+
+    if (path.includes("/recipes")) {
+      return await handleRecipes(event);
     }
 
     if (path.includes("/recognize/ingredients")) {

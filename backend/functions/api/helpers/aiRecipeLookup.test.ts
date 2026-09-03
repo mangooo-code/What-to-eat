@@ -77,7 +77,6 @@ test("tops up remaining slots with AI recipes after favorites are found", async 
     difficulty: "简单",
     imageFileId: null,
     tags: ["家常"],
-    seasonings: ["盐"],
     substitutions: [] as string[],
     preferences: null,
     isFavorite: true,
@@ -90,6 +89,7 @@ test("tops up remaining slots with AI recipes after favorites are found", async 
   mockFetchByUrl([
     { match: /\/v1\/rdb\/rest\/Recipes\?/, body: [recipeRow] },
     { match: /\/v1\/rdb\/rest\/RecipeIngredients\?/, body: [] },
+    { match: /\/v1\/rdb\/rest\/RecipeSeasonings\?/, body: [{ id: "se1", recipeId: "r1", name: "盐", quantity: "适量", createdAt: "d", updatedAt: "d" }] },
     { match: /\/v1\/rdb\/rest\/Ingredients\?/, body: [] },
     { match: /\/services\/aigc\//, body: aiRecipeBody("AI 推荐菜") },
   ]);
@@ -98,6 +98,7 @@ test("tops up remaining slots with AI recipes after favorites are found", async 
   assert.equal(recipes.length, 3);
   assert.equal(recipes[0].name, "收藏菜");
   assert.equal(recipes[0].matchSummary, "已收藏 · 现有食材可以直接做");
+  assert.deepEqual(recipes[0].seasonings, [{ name: "盐", quantity: "适量" }]);
   assert.ok(recipes.slice(1).every((recipe) => recipe.matchSummary === "AI 推荐 · 根据现有食材生成"));
 });
 

@@ -2,11 +2,19 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { RecommendRecipePage } from "./RecommendRecipePage";
 import { useApp } from "../context/AppContext";
+import { currentlyCookingStorage } from "../services/currentlyCookingStorage";
+import { recipeService } from "../services/recipeService";
 import { createAppState } from "../tests/mockApp";
 
 vi.mock("../context/AppContext", () => ({ useApp: vi.fn() }));
 vi.mock("next/navigation", () => ({ useSearchParams: vi.fn() }));
+vi.mock("../services/recipeService", () => ({ recipeService: { save: vi.fn() } }));
+vi.mock("../services/currentlyCookingStorage", () => ({
+  currentlyCookingStorage: { get: vi.fn(), set: vi.fn(), clear: vi.fn() },
+}));
 const mockedUseApp = vi.mocked(useApp);
+const mockedSave = vi.mocked(recipeService.save);
+const mockedSet = vi.mocked(currentlyCookingStorage.set);
 
 async function mockSearchParams(query: string) {
   const { useSearchParams } = await import("next/navigation");
@@ -20,6 +28,8 @@ function mockApp(overrides: Parameters<typeof createAppState>[0] = {}) {
 describe("RecommendRecipePage", () => {
   beforeEach(() => {
     mockApp();
+    mockedSave.mockReset();
+    mockedSet.mockReset();
   });
 
   it("shows a not-found message when no recipe matches the id", async () => {
@@ -45,5 +55,27 @@ describe("RecommendRecipePage", () => {
     render(<RecommendRecipePage />);
     fireEvent.click(screen.getByText("♡ 喜欢"));
     expect(setLikedRecipes).toHaveBeenCalledTimes(1);
+  });
+
+  it("saves the recipe and stores its id as currentlyCooking before going to cook", async () => {
+    await mockSearchParams("id=9e2b8f2a-2f8a-4b2b-9b8f-2a2f8a4b2b9b");
+    mockedSave.mockResolvedValue({ id: "9e2b8f2a-2f8a-4b2b-9b8f-2a2f8a4b2b9b" });
+    const go = vi.fn();
+    mockApp({ go });
+    render(<RecommendRecipePage />);
+    fireEvent.click(screen.getByText("就做这道"));
+    await vi.waitFor(() => expect(mockedSet).toHaveBeenCalledWith("9e2b8f2a-2f8a-4b2b-9b8f-2a2f8a4b2b9b"));
+    expect(go).toHaveBeenCalledWith("cook");
+  });
+
+  it("still goes to cook if saving the recipe fails", async () => {
+    await mockSearchParams("id=9e2b8f2a-2f8a-4b2b-9b8f-2a2f8a4b2b9b");
+    mockedSave.mockRejectedValue(new Error("network error"));
+    const go = vi.fn();
+    mockApp({ go });
+    render(<RecommendRecipePage />);
+    fireEvent.click(screen.getByText("就做这道"));
+    await vi.waitFor(() => expect(go).toHaveBeenCalledWith("cook"));
+    expect(mockedSet).not.toHaveBeenCalled();
   });
 });

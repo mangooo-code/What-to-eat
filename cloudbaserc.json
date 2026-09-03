@@ -53,6 +53,12 @@
                 "enableAuth": false
             },
             {
+                "path": "/recipes",
+                "target": "function:api",
+                "enablePathTransmission": true,
+                "enableAuth": false
+            },
+            {
                 "path": "/recognize/ingredients",
                 "target": "function:api",
                 "enablePathTransmission": true,

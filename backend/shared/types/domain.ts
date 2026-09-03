@@ -49,7 +49,6 @@ export interface Recipe {
   difficulty: string | null;
   imageFileId: string | null;
   tags: string[];
-  seasonings: string[];
   substitutions: string[];
   /** Dietary/taste preferences this recipe suits; shape defined by application logic. */
   preferences: Json | null;
@@ -82,6 +81,16 @@ export interface RecipeStep {
   detailedInstructions: string;
   /** Estimated time for this step, in minutes. */
   time: number | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface RecipeSeasoning {
+  id: string;
+  recipeId: string;
+  name: string;
+  /** Free-text amount ("适量"/"少许"); it's a feeling, not a number. */
+  quantity: string | null;
   createdAt: string;
   updatedAt: string;
 }

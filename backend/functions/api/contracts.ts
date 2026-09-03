@@ -50,3 +50,28 @@ export interface RecognizedIngredientCandidate {
 export interface RecognizeIngredientsResponse {
   items: RecognizedIngredientCandidate[];
 }
+
+export interface SaveRecipeIngredientRequest {
+  name: string;
+  quantity: string;
+}
+
+export interface SaveRecipeStepRequest {
+  title: string;
+  detailedInstructions: string;
+  time: number | null;
+}
+
+// Sent when the user commits to cooking a recipe surfaced by findrecipes (favorite
+// or AI-generated); persists it (if not already a real row) so it has a stable id.
+export interface SaveRecipeRequest {
+  id: string;
+  name: string;
+  description?: string | null;
+  difficulty?: string | null;
+  tags?: string[];
+  /** Formatted display string (e.g. "15 分钟"), not raw minutes. */
+  cookTime?: string;
+  seasonings?: SaveRecipeIngredientRequest[];
+  steps?: SaveRecipeStepRequest[];
+}

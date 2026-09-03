@@ -31,8 +31,13 @@ export {
   findMatchingFavoriteRecipeIds,
   getRecipeById,
   listRecipeIngredients,
+  listRecipeSeasonings,
   listRecipeSteps,
   listRecipes,
+  saveRecipeWithSteps,
   MAX_RESULTS,
   type RecipeTimeRange,
+  type SaveRecipeInput,
+  type SaveRecipeSeasoningInput,
+  type SaveRecipeStepInput,
 } from "./recipeRepository";

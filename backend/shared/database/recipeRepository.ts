@@ -1,4 +1,4 @@
-import type { Recipe, RecipeIngredient, RecipeStep } from "../types/domain";
+import type { Recipe, RecipeIngredient, RecipeSeasoning, RecipeStep } from "../types/domain";
 import { postgrestRequest } from "./postgrestClient";
 
 interface RecipeRow {
@@ -10,7 +10,6 @@ interface RecipeRow {
   difficulty: string | null;
   imageFileId: string | null;
   tags: string[];
-  seasonings: string[];
   substitutions: string[];
   preferences: Recipe["preferences"];
   isFavorite: boolean;
@@ -42,9 +41,18 @@ interface RecipeStepRow {
   updatedAt: string;
 }
 
+interface RecipeSeasoningRow {
+  id: string;
+  recipeId: string;
+  name: string;
+  quantity: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
 const recipeColumns = [
   "id", "userId", "name", "description", "time", "difficulty", "imageFileId", "tags",
-  "seasonings", "substitutions", "preferences", "isFavorite", "source", "rating",
+  "substitutions", "preferences", "isFavorite", "source", "rating",
   "ratingCount", "createdDate", "updatedDate",
 ].join(",");
 
@@ -54,6 +62,10 @@ const recipeIngredientColumns = [
 
 const recipeStepColumns = [
   "id", "recipeId", "stepNumber", "title", "detailedInstructions", "time", "createdAt", "updatedAt",
+].join(",");
+
+const recipeSeasoningColumns = [
+  "id", "recipeId", "name", "quantity", "createdAt", "updatedAt",
 ].join(",");
 
 function mapRecipe(row: RecipeRow): Recipe {
@@ -66,7 +78,6 @@ function mapRecipe(row: RecipeRow): Recipe {
     difficulty: row.difficulty,
     imageFileId: row.imageFileId,
     tags: row.tags,
-    seasonings: row.seasonings,
     substitutions: row.substitutions,
     preferences: row.preferences,
     isFavorite: row.isFavorite,
@@ -103,6 +114,17 @@ function mapRecipeStep(row: RecipeStepRow): RecipeStep {
   };
 }
 
+function mapRecipeSeasoning(row: RecipeSeasoningRow): RecipeSeasoning {
+  return {
+    id: row.id,
+    recipeId: row.recipeId,
+    name: row.name,
+    quantity: row.quantity,
+    createdAt: row.createdAt,
+    updatedAt: row.updatedAt,
+  };
+}
+
 export async function listRecipes(options: { limit?: number } = {}): Promise<Recipe[]> {
   const rows = await postgrestRequest<RecipeRow[]>("Recipes", {
     query: { select: recipeColumns, order: "updatedDate.desc,id.asc", limit: options.limit },
@@ -117,6 +139,83 @@ export async function getRecipeById(id: string): Promise<Recipe | null> {
   return rows[0] ? mapRecipe(rows[0]) : null;
 }
 
+export interface SaveRecipeInput {
+  id: string;
+  name: string;
+  description: string | null;
+  difficulty: string | null;
+  tags: string[];
+  time: number | null;
+  source: Recipe["source"];
+}
+
+export interface SaveRecipeStepInput {
+  title: string;
+  detailedInstructions: string;
+  time: number | null;
+}
+
+export interface SaveRecipeSeasoningInput {
+  name: string;
+  quantity: string | null;
+}
+
+// Idempotent by id: if the recipe already exists (e.g. an already-favorited recipe
+// picked from findrecipes), returns it as-is instead of creating a duplicate.
+export async function saveRecipeWithSteps(
+  userId: string,
+  recipe: SaveRecipeInput,
+  steps: SaveRecipeStepInput[],
+  seasonings: SaveRecipeSeasoningInput[] = [],
+): Promise<Recipe> {
+  const existing = await getRecipeById(recipe.id);
+  if (existing) return existing;
+
+  const rows = await postgrestRequest<RecipeRow[]>("Recipes", {
+    method: "POST",
+    query: { select: recipeColumns },
+    prefer: "return=representation",
+    body: {
+      id: recipe.id,
+      userId,
+      name: recipe.name,
+      description: recipe.description,
+      difficulty: recipe.difficulty,
+      tags: recipe.tags,
+      time: recipe.time,
+      source: recipe.source,
+      isFavorite: false,
+    },
+  });
+  const created = mapRecipe(rows[0]);
+
+  if (steps.length) {
+    await postgrestRequest("RecipeSteps", {
+      method: "POST",
+      body: steps.map((step, index) => ({
+        recipeId: created.id,
+        stepNumber: index + 1,
+        title: step.title,
+        detailedInstructions: step.detailedInstructions,
+        time: step.time,
+      })),
+    });
+  }
+
+  if (seasonings.length) {
+    await postgrestRequest("RecipeSeasonings", {
+      method: "POST",
+      body: seasonings.map((seasoning) => ({
+        recipeId: created.id,
+        name: seasoning.name,
+        quantity: seasoning.quantity,
+      })),
+    });
+  }
+
+  return created;
+}
+
 export async function listRecipeIngredients(recipeId: string): Promise<RecipeIngredient[]> {
   const rows = await postgrestRequest<RecipeIngredientRow[]>("RecipeIngredients", {
     query: { select: recipeIngredientColumns, recipeId: `eq.${recipeId}`, order: "id.asc" },
@@ -129,6 +228,13 @@ export async function listRecipeSteps(recipeId: string): Promise<RecipeStep[]> {
     query: { select: recipeStepColumns, recipeId: `eq.${recipeId}`, order: "stepNumber.asc" },
   });
   return rows.map(mapRecipeStep);
+}
+
+export async function listRecipeSeasonings(recipeId: string): Promise<RecipeSeasoning[]> {
+  const rows = await postgrestRequest<RecipeSeasoningRow[]>("RecipeSeasonings", {
+    query: { select: recipeSeasoningColumns, recipeId: `eq.${recipeId}`, order: "createdAt.asc" },
+  });
+  return rows.map(mapRecipeSeasoning);
 }
 
 export interface RecipeTimeRange {

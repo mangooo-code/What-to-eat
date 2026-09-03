@@ -3,6 +3,8 @@ import { useSearchParams } from "next/navigation";
 import { useApp } from "../context/AppContext";
 import { Header } from "../components/Header";
 import { RecipeDetail } from "../components/RecipeDetail";
+import { currentlyCookingStorage } from "../services/currentlyCookingStorage";
+import { recipeService } from "../services/recipeService";
 
 export function RecommendRecipePage() {
   const { recommendedRecipes, likedRecipes, setLikedRecipes, go, goBack } = useApp();
@@ -19,6 +21,25 @@ export function RecommendRecipePage() {
     );
   }
 
+  const handleStartCooking = async () => {
+    try {
+      const saved = await recipeService.save({
+        id: recipe.id,
+        name: recipe.name,
+        description: recipe.description,
+        difficulty: recipe.difficulty,
+        tags: recipe.tags,
+        cookTime: recipe.cookTime,
+        seasonings: recipe.seasonings,
+        steps: recipe.steps,
+      });
+      currentlyCookingStorage.set(saved.id);
+    } catch {
+      // Best-effort: still let the user proceed to cook even if saving failed.
+    }
+    go("cook");
+  };
+
   return (
     <>
       <Header title="菜谱详情" back={() => goBack()} />
@@ -31,7 +52,7 @@ export function RecommendRecipePage() {
           )
         }
         primaryLabel="就做这道"
-        onPrimary={() => go("cook")}
+        onPrimary={handleStartCooking}
       />
     </>
   );
