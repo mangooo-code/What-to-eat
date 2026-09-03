@@ -40,7 +40,7 @@ describe("CookModePage", () => {
     mockPush.mockClear();
     mockBack.mockClear();
     mockedGetById.mockReset();
-    mockedSave.mockReset();
+    mockedSave.mockReset().mockResolvedValue({ id: "mock-id" });
     mockedSet.mockReset();
     mockedConsume.mockReset().mockResolvedValue({ consumed: true });
   });
@@ -139,29 +139,31 @@ describe("CookModePage", () => {
 
   it("opens the consume modal when done cooking", async () => {
     await mockSearchParams("id=9e2b8f2a-2f8a-4b2b-9b8f-2a2f8a4b2b9b");
-    mockedSave.mockResolvedValue({ id: "9e2b8f2a-2f8a-4b2b-9b8f-2a2f8a4b2b9b" });
     const setConsumeOpen = vi.fn();
     mockApp({ setConsumeOpen });
     render(<CookModePage />);
     fireEvent.click(screen.getByText("做好啦"));
     expect(setConsumeOpen).toHaveBeenCalledWith(true);
+    expect(mockedSave).not.toHaveBeenCalled();
   });
 
-  it("saves the recipe and stores its id as currentlyCooking when isStored is false", async () => {
+  it("saves the recipe and stores its id as currentlyCooking when isStored is false, when consumption is confirmed", async () => {
     await mockSearchParams("id=9e2b8f2a-2f8a-4b2b-9b8f-2a2f8a4b2b9b&isStored=false");
     mockedSave.mockResolvedValue({ id: "9e2b8f2a-2f8a-4b2b-9b8f-2a2f8a4b2b9b" });
+    mockApp({ consumeOpen: true });
     render(<CookModePage />);
-    fireEvent.click(screen.getByText("做好啦"));
+    await act(async () => {
+      fireEvent.click(screen.getByText("确认食材消耗"));
+    });
     expect(mockedSave).toHaveBeenCalledWith(
       expect.objectContaining({ id: "9e2b8f2a-2f8a-4b2b-9b8f-2a2f8a4b2b9b", name: "番茄炒蛋" }),
     );
-    await vi.waitFor(() => expect(mockedSet).toHaveBeenCalledWith("9e2b8f2a-2f8a-4b2b-9b8f-2a2f8a4b2b9b"));
+    expect(mockedSet).toHaveBeenCalledWith("9e2b8f2a-2f8a-4b2b-9b8f-2a2f8a4b2b9b");
   });
 
-  it("does not save again when isStored is true", async () => {
+  it("does not save again when isStored is true, when consumption is confirmed", async () => {
     await mockSearchParams("id=8b412e45-1acd-412c-ae89-4028704fb9a1&isStored=true");
-    const { recipeService } = await import("../services/recipeService");
-    vi.mocked(recipeService.getById).mockResolvedValue({
+    mockedGetById.mockResolvedValue({
       id: "8b412e45-1acd-412c-ae89-4028704fb9a1",
       name: "黑椒牛柳",
       description: null,
@@ -172,9 +174,12 @@ describe("CookModePage", () => {
       seasonings: [],
       steps: [],
     });
+    mockApp({ consumeOpen: true });
     render(<CookModePage />);
     await act(async () => {});
-    fireEvent.click(screen.getByText("做好啦"));
+    await act(async () => {
+      fireEvent.click(screen.getByText("确认食材消耗"));
+    });
     expect(mockedSave).not.toHaveBeenCalled();
     expect(mockedSet).not.toHaveBeenCalled();
   });
@@ -194,7 +199,9 @@ describe("CookModePage", () => {
     const go = vi.fn();
     mockApp({ consumeOpen: true, setConsumeOpen, go });
     render(<CookModePage />);
-    fireEvent.click(screen.getByText("确认食材消耗"));
+    await act(async () => {
+      fireEvent.click(screen.getByText("确认食材消耗"));
+    });
     expect(setConsumeOpen).toHaveBeenCalledWith(false);
     expect(go).toHaveBeenCalledWith("feedback");
   });
@@ -218,9 +225,11 @@ describe("CookModePage", () => {
     });
     render(<CookModePage />);
     expect(screen.getByText(/预计消耗 2 个/)).toBeInTheDocument();
-    const [input] = screen.getAllByRole("spinbutton");
+    const [input] = screen.getAllByRole("textbox");
     fireEvent.change(input, { target: { value: "1" } });
-    fireEvent.click(screen.getByText("确认食材消耗"));
+    await act(async () => {
+      fireEvent.click(screen.getByText("确认食材消耗"));
+    });
     expect(mockedConsume).toHaveBeenCalledWith([{ name: "番茄", quantity: 1 }]);
   });
 
@@ -241,9 +250,11 @@ describe("CookModePage", () => {
     render(<CookModePage />);
     await act(async () => {});
     expect(screen.getByText(/预计消耗 300 克/)).toBeInTheDocument();
-    const [input] = screen.getAllByRole("spinbutton");
+    const [input] = screen.getAllByRole("textbox");
     fireEvent.change(input, { target: { value: "250" } });
-    fireEvent.click(screen.getByText("确认食材消耗"));
+    await act(async () => {
+      fireEvent.click(screen.getByText("确认食材消耗"));
+    });
     expect(mockedConsume).toHaveBeenCalledWith([{ name: "牛柳", quantity: 250 }]);
   });
 

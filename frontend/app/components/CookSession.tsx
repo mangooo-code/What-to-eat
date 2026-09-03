@@ -31,7 +31,7 @@ export function CookSession({
   onStartConsume: () => void;
   onCloseConsume: () => void;
   onEndCooking: () => void;
-  onConsumeDone: (consumed: Array<{ name: string; quantity: number }>) => void;
+  onConsumeDone: (consumed: Array<{ name: string; quantity: number }>) => void | Promise<void>;
 }) {
   return (
     <>
@@ -64,14 +64,7 @@ export function CookSession({
       {consumeOpen && (
         <div className="overlay" role="dialog" aria-modal="true" aria-label="确认食材消耗">
           <div className="consume-modal">
-            <button
-              className="modal-close"
-              aria-label="关闭"
-              onClick={onCloseConsume}
-            >
-              ×
-            </button>
-            <Consume ingredients={ingredients} onDone={onConsumeDone} />
+            <Consume ingredients={ingredients} onDone={onConsumeDone} onClose={onCloseConsume} />
           </div>
         </div>
       )}

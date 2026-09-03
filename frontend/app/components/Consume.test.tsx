@@ -31,17 +31,24 @@ describe("Consume", () => {
     ]);
   });
 
-  it("never lets a quantity go negative", () => {
+  it("strips non-numeric characters (including a minus sign) as they're typed", () => {
     render(<Consume ingredients={ingredients} onDone={() => {}} />);
-    const [tomatoInput] = screen.getAllByRole("spinbutton");
+    const [tomatoInput] = screen.getAllByRole("textbox");
     fireEvent.change(tomatoInput, { target: { value: "-4" } });
-    expect(tomatoInput).toHaveValue(0);
+    expect(tomatoInput).toHaveValue("4");
+  });
+
+  it("strips whitespace and letters, keeping only the digits typed", () => {
+    render(<Consume ingredients={ingredients} onDone={() => {}} />);
+    const [tomatoInput] = screen.getAllByRole("textbox");
+    fireEvent.change(tomatoInput, { target: { value: "1 2a3" } });
+    expect(tomatoInput).toHaveValue("123");
   });
 
   it("reports the actually entered amounts when they differ from the prediction", () => {
     const onDone = vi.fn();
     render(<Consume ingredients={ingredients} onDone={onDone} />);
-    const [tomatoInput, eggInput] = screen.getAllByRole("spinbutton");
+    const [tomatoInput, eggInput] = screen.getAllByRole("textbox");
     fireEvent.change(tomatoInput, { target: { value: "1" } });
     fireEvent.change(eggInput, { target: { value: "5" } });
     fireEvent.click(screen.getByText("确认食材消耗"));

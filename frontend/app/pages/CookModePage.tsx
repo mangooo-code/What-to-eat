@@ -68,9 +68,9 @@ export function CookModePage() {
     : (localRecipe?.ingredients ?? []).map((item) => ({ name: item.name, ...splitQuantity(item.quantity) }));
 
   // Only saved if it isn't already a real, persisted recipe (favorites already are).
-  const handleStartConsume = () => {
+  const handleConsumeDone = async (consumed: Array<{ name: string; quantity: number }>) => {
     if (!isStored) {
-      recipeService
+      await recipeService
         .save({
           id: recipe.id,
           name: recipe.name,
@@ -86,7 +86,14 @@ export function CookModePage() {
           // Best-effort: still let the user finish cooking even if saving failed.
         });
     }
-    setConsumeOpen(true);
+    const items = consumed.filter((item) => item.quantity > 0);
+    if (items.length) {
+      await inventoryService.consume(items).catch(() => {
+        // Best-effort: don't block finishing the cook if the deduction fails.
+      });
+    }
+    setConsumeOpen(false);
+    go("feedback");
   };
 
   return (
@@ -99,19 +106,10 @@ export function CookModePage() {
       steps={recipe.steps ?? []}
       ingredients={consumeIngredients}
       consumeOpen={consumeOpen}
-      onStartConsume={handleStartConsume}
+      onStartConsume={() => setConsumeOpen(true)}
       onCloseConsume={() => setConsumeOpen(false)}
       onEndCooking={() => setDialog("确定结束这次制作吗？")}
-      onConsumeDone={(consumed) => {
-        const items = consumed.filter((item) => item.quantity > 0);
-        if (items.length) {
-          inventoryService.consume(items).catch(() => {
-            // Best-effort: don't block finishing the cook if the deduction fails.
-          });
-        }
-        setConsumeOpen(false);
-        go("feedback");
-      }}
+      onConsumeDone={handleConsumeDone}
     />
   );
 }

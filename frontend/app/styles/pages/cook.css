@@ -21,8 +21,27 @@
   animation: modal-in 0.22s ease both;
 }
 
-.consume-modal .page-header {
-  padding-right: 36px;
+.consume-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.consume-head h1 {
+  margin: 0;
+}
+
+.consume-modal .modal-close {
+  position: static;
+  border: 0;
+  background: none;
+  font-size: 28px;
+}
+
+.consume-sub {
+  margin: 6px 0 0;
+  color: var(--muted);
 }
 
 .consume-modal .consume-grid {
