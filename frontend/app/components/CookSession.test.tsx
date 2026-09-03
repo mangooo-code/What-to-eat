@@ -8,6 +8,7 @@ const baseProps = {
   back: vi.fn(),
   showOtherRecipesLink: false,
   onOtherRecipesClick: vi.fn(),
+  steps: [],
   consumeOpen: false,
   onStartConsume: vi.fn(),
   onCloseConsume: vi.fn(),
@@ -20,6 +21,27 @@ describe("CookSession", () => {
     render(<CookSession {...baseProps} />);
     expect(screen.getByText("一起做吧！")).toBeInTheDocument();
     expect(screen.getByText("番茄炒蛋 · 预计 15 分钟")).toBeInTheDocument();
+  });
+
+  it("does not render a steps section when there are no steps", () => {
+    render(<CookSession {...baseProps} />);
+    expect(screen.queryByText("制作步骤")).not.toBeInTheDocument();
+  });
+
+  it("renders each step with an interactive timer", () => {
+    render(
+      <CookSession
+        {...baseProps}
+        steps={[
+          { title: "备料", detailedInstructions: "洗净切块", time: 5 },
+          { title: "翻炒", detailedInstructions: "大火快炒", time: 3 },
+        ]}
+      />,
+    );
+    expect(screen.getByText("制作步骤")).toBeInTheDocument();
+    expect(screen.getByText("备料")).toBeInTheDocument();
+    expect(screen.getByText("翻炒")).toBeInTheDocument();
+    expect(screen.getAllByText("开始计时")).toHaveLength(2);
   });
 
   it("shows the other-recipes link only when asked", () => {

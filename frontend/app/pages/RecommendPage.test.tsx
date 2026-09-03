@@ -55,7 +55,7 @@ describe("RecommendPage", () => {
     render(<RecommendPage />);
     fireEvent.click(screen.getAllByText("查看菜谱")[0]);
     expect(mockPush).toHaveBeenCalledWith(
-      "/recipes/recommendations/recipe?id=9e2b8f2a-2f8a-4b2b-9b8f-2a2f8a4b2b9b",
+      "/recipes/recommendations/currentRecipe?id=9e2b8f2a-2f8a-4b2b-9b8f-2a2f8a4b2b9b",
     );
   });
 

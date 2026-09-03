@@ -2,6 +2,13 @@
 import { useApp } from "../context/AppContext";
 import { CookSession } from "../components/CookSession";
 
+const legacySteps = [
+  { title: "准备食材", detailedInstructions: "番茄切成小块。鸡蛋打入磐中，加少量盐搅匀。", time: 3 },
+  { title: "炒鸡蛋", detailedInstructions: "锅中加入食用油，油热后倒入鸡蛋，快速翻炒至刚刚凝固，然后盛出备用。", time: 3 },
+  { title: "炒番茄", detailedInstructions: "锅中加入少量食用油，倒入番茄，中火翻炒至变软出汁，再加入少量盐和白糖。", time: 5 },
+  { title: "混合调味", detailedInstructions: "将炒好的鸡蛋倒回锅中，与番茄翻炒均匀，让汤汁均匀裹住鸡蛋后即可出锅。", time: 2 },
+];
+
 export function CookPage() {
   const {
     recipeOrigin,
@@ -19,6 +26,7 @@ export function CookPage() {
       back={recipeBack}
       showOtherRecipesLink={recipeOrigin === "recommend"}
       onOtherRecipesClick={() => go("recommend")}
+      steps={legacySteps}
       consumeOpen={consumeOpen}
       onStartConsume={() => setConsumeOpen(true)}
       onCloseConsume={() => setConsumeOpen(false)}

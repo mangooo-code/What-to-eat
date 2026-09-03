@@ -1,13 +1,13 @@
 "use client";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useApp } from "../context/AppContext";
 import { Header } from "../components/Header";
 import { RecipeDetail } from "../components/RecipeDetail";
-import { currentlyCookingStorage } from "../services/currentlyCookingStorage";
 import { recipeService } from "../services/recipeService";
 
 export function RecommendRecipePage() {
-  const { recommendedRecipes, setRecommendedRecipes, setLikedRecipes, go, goBack } = useApp();
+  const { recommendedRecipes, setRecommendedRecipes, setLikedRecipes, goBack } = useApp();
+  const router = useRouter();
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
   const recipe = recommendedRecipes.find((r) => r.id === id);
@@ -37,23 +37,9 @@ export function RecommendRecipePage() {
     recipeService.updateFavorite(recipe.id, nextIsFavorite).catch(() => {});
   };
 
-  const handleStartCooking = async () => {
-    try {
-      const saved = await recipeService.save({
-        id: recipe.id,
-        name: recipe.name,
-        description: recipe.description,
-        difficulty: recipe.difficulty,
-        tags: recipe.tags,
-        cookTime: recipe.cookTime,
-        seasonings: recipe.seasonings,
-        steps: recipe.steps,
-      });
-      currentlyCookingStorage.set(saved.id);
-    } catch {
-      // Best-effort: still let the user proceed to cook even if saving failed.
-    }
-    go("cook");
+  const handleStartCooking = () => {
+    // Saving is now deferred to CookModePage's 做好啦 button (only when isStored is false).
+    router.push(`/recipes/cookMode?id=${recipe.id}&isStored=${recipe.isStored === true}`);
   };
 
   return (

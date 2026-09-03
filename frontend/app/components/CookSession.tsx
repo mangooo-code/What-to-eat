@@ -1,7 +1,10 @@
 "use client";
 import "../styles/pages/cook.css";
+import "../styles/components/recipe-step-card.css";
 import { Consume } from "./Consume";
 import { Header } from "./Header";
+import { RecipeStepCard } from "./RecipeStepCard";
+import type { RecipeStepDto } from "../services/findRecipesService";
 
 export function CookSession({
   title,
@@ -9,6 +12,7 @@ export function CookSession({
   back,
   showOtherRecipesLink,
   onOtherRecipesClick,
+  steps,
   consumeOpen,
   onStartConsume,
   onCloseConsume,
@@ -20,6 +24,7 @@ export function CookSession({
   back: () => void;
   showOtherRecipesLink: boolean;
   onOtherRecipesClick: () => void;
+  steps: RecipeStepDto[];
   consumeOpen: boolean;
   onStartConsume: () => void;
   onCloseConsume: () => void;
@@ -33,6 +38,18 @@ export function CookSession({
         <button className="link cook-back" onClick={onOtherRecipesClick}>
           ‹ 看看其他菜谱
         </button>
+      )}
+      {steps.length > 0 && (
+        <section className="block steps">
+          <h2>制作步骤</h2>
+          <ol className="recipe-step-list">
+            {steps.map((step, index) => (
+              <li key={`${step.title}-${index}`}>
+                <RecipeStepCard index={index} step={step} timer />
+              </li>
+            ))}
+          </ol>
+        </section>
       )}
       <div className="sticky-actions">
         <button className="primary" onClick={onStartConsume}>

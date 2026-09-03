@@ -40,6 +40,8 @@ export interface RecipeStepDto {
 export type RecipeDto = Pick<Recipe, "id" | "name" | "description" | "difficulty" | "tags" | "isFavorite"> & {
   cookTime: string;
   matchSummary: string;
+  /** Whether this id already exists as a real Recipes row (true for favorites, false for freshly AI-generated). */
+  isStored: boolean;
   ingredients?: RecipeIngredientDto[];
   seasonings?: RecipeIngredientDto[];
   steps?: RecipeStepDto[];
@@ -63,6 +65,7 @@ function toDto(
     difficulty: recipe.difficulty,
     tags: recipe.tags,
     isFavorite: recipe.isFavorite,
+    isStored: true,
     cookTime: formatCookTime(recipe.time),
     matchSummary,
     seasonings,
@@ -170,6 +173,7 @@ function toAiDto(recipe: AiGeneratedRecipe): RecipeDto {
     difficulty: recipe.difficulty,
     tags: recipe.tags,
     isFavorite: false,
+    isStored: false,
     cookTime: formatCookTime(recipe.time),
     matchSummary: "AI 推荐 · 根据现有食材生成",
     ingredients: recipe.ingredients,

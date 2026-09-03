@@ -81,3 +81,16 @@ export interface UpdateRecipeFavoriteRequest {
   isFavorite: boolean;
 }
 
+// Returned by GET /recipes/{id} (e.g. CookModePage's isStored=true lookup).
+export interface RecipeDetailResponse {
+  id: string;
+  name: string;
+  description: string | null;
+  difficulty: string | null;
+  tags: string[];
+  /** Formatted display string (e.g. "15 分钟"), not raw minutes. */
+  cookTime: string;
+  seasonings: SaveRecipeIngredientRequest[];
+  steps: SaveRecipeStepRequest[];
+}
+

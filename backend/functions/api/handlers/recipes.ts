@@ -1,10 +1,17 @@
 import { AppError } from "../../../shared/errors/AppError";
 import { successResponse } from "../../../shared/errors/httpResponse";
 import { requireAuth } from "../../../shared/auth";
-import { getRecipes, saveRecipeWithSteps, updateRecipeFavorite } from "../../../shared/database";
+import {
+  getRecipeById,
+  getRecipes,
+  getRecipeSeasonings,
+  getRecipeSteps,
+  saveRecipeWithSteps,
+  updateRecipeFavorite,
+} from "../../../shared/database";
 import type { HttpEvent, HttpResponse } from "../../../shared/types/api";
 import { getMethod, getQueryParams, parseJsonBody, requireString } from "../../../shared/validation/http";
-import type { SaveRecipeRequest, UpdateRecipeFavoriteRequest } from "../contracts";
+import type { RecipeDetailResponse, SaveRecipeRequest, UpdateRecipeFavoriteRequest } from "../contracts";
 
 const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
@@ -22,6 +29,12 @@ function parseCookTimeToMinutes(cookTime: string | undefined): number | null {
   const minutes = cookTime.match(/^(\d+(?:\.\d+)?)\s*分钟/);
   if (minutes) return Number(minutes[1]);
   return null;
+}
+
+// Mirrors parseCookTimeToMinutes's format, for the reverse direction (DB minutes -> display string).
+function formatCookTime(minutes: number | null): string {
+  if (minutes === null) return "时间待定";
+  return minutes >= 60 ? `${Math.round(minutes / 60)} 小时` : `${minutes} 分钟`;
 }
 
 function optionalStringArray(value: unknown, field: string): string[] {
@@ -45,6 +58,29 @@ export async function handleRecipes(event: HttpEvent): Promise<HttpResponse> {
     }
     const recipe = await updateRecipeFavorite(recipeId, userId, body.isFavorite);
     return successResponse({ updated: recipe !== null, recipe }, 200);
+  }
+
+  if (method === "GET" && recipeId) {
+    if (!uuidPattern.test(recipeId)) throw new AppError("RECIPE_NOT_FOUND", "Recipe was not found", 404);
+    const recipe = await getRecipeById(recipeId);
+    if (!recipe || recipe.userId !== userId) {
+      throw new AppError("RECIPE_NOT_FOUND", "Recipe was not found", 404);
+    }
+    const [seasonings, steps] = await Promise.all([
+      getRecipeSeasonings(recipe.id),
+      getRecipeSteps(recipe.id),
+    ]);
+    const detail: RecipeDetailResponse = {
+      id: recipe.id,
+      name: recipe.name,
+      description: recipe.description,
+      difficulty: recipe.difficulty,
+      tags: recipe.tags,
+      cookTime: formatCookTime(recipe.time),
+      seasonings: seasonings.map((seasoning) => ({ name: seasoning.name, quantity: seasoning.quantity ?? "" })),
+      steps: steps.map((step) => ({ title: step.title, detailedInstructions: step.detailedInstructions, time: step.time })),
+    };
+    return successResponse(detail, 200);
   }
 
   if (method === "GET") {

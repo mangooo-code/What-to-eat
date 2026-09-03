@@ -29,6 +29,9 @@ export interface RecipeDto {
   tags: string[];
   // Set client-side when the user toggles the 喜欢 button; not returned by /findrecipes.
   isFavorite?: boolean;
+  // Whether this id already exists as a real Recipes row (true for favorites, false for
+  // freshly AI-generated recipes that haven't been saved yet).
+  isStored?: boolean;
   // Only populated for AI-generated recipes for now.
   ingredients?: RecipeIngredientDto[];
   seasonings?: RecipeIngredientDto[];

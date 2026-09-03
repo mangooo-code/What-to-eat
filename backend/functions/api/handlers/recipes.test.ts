@@ -163,6 +163,51 @@ test("PATCH reports not updated when the recipe doesn't exist or isn't owned by 
   assert.equal(payload.data.recipe, null);
 });
 
+test("GET /recipes/{id} returns the recipe with its seasonings and steps", async () => {
+  const calls: Array<{ url: string; init?: RequestInit }> = [];
+  globalThis.fetch = (async (url: string | URL, init?: RequestInit) => {
+    const str = url.toString();
+    calls.push({ url: str, init });
+    if (/\/Recipes\?/.test(str)) return new Response(JSON.stringify([recipeRow]), { status: 200 });
+    if (/\/RecipeSeasonings\?/.test(str)) {
+      return new Response(JSON.stringify([{ id: "se1", recipeId: recipeRow.id, name: "盐", quantity: "适量", createdAt: "d", updatedAt: "d" }]), { status: 200 });
+    }
+    if (/\/RecipeSteps\?/.test(str)) {
+      return new Response(JSON.stringify([{ id: "st1", recipeId: recipeRow.id, stepNumber: 1, title: "备料", detailedInstructions: "洗净切块", time: "5", createdAt: "d", updatedAt: "d" }]), { status: 200 });
+    }
+    throw new Error(`Unexpected fetch call: ${str}`);
+  }) as typeof fetch;
+
+  const response = await handleRecipes({
+    httpMethod: "GET",
+    headers: authHeader(),
+    path: `/recipes/${recipeRow.id}`,
+  } as HttpEvent);
+
+  assert.equal(response.statusCode, 200);
+  const payload = JSON.parse(response.body) as {
+    data: { id: string; name: string; cookTime: string; seasonings: unknown; steps: unknown };
+  };
+  assert.equal(payload.data.id, recipeRow.id);
+  assert.equal(payload.data.name, "AI 推荐菜");
+  assert.equal(payload.data.cookTime, "20 分钟");
+  assert.deepEqual(payload.data.seasonings, [{ name: "盐", quantity: "适量" }]);
+  assert.deepEqual(payload.data.steps, [{ title: "备料", detailedInstructions: "洗净切块", time: 5 }]);
+});
+
+test("GET /recipes/{id} 404s when the recipe doesn't exist or isn't owned by the user", async () => {
+  globalThis.fetch = (async () => new Response("[]", { status: 200 })) as typeof fetch;
+
+  await assert.rejects(
+    handleRecipes({
+      httpMethod: "GET",
+      headers: authHeader(),
+      path: `/recipes/${recipeRow.id}`,
+    } as HttpEvent),
+    (error) => error instanceof AppError && error.code === "RECIPE_NOT_FOUND" && error.statusCode === 404,
+  );
+});
+
 test("requires authentication", async () => {
   await assert.rejects(
     handleRecipes({ httpMethod: "POST", headers: {}, body: JSON.stringify(baseBody()) } as HttpEvent),

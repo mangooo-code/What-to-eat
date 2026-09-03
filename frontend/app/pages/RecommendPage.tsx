@@ -57,7 +57,7 @@ export function RecommendPage() {
               <p>{r.description}</p>
               <button
                 className="secondary"
-                onClick={() => router.push(`/recipes/recommendations/recipe?id=${r.id}`)}
+                onClick={() => router.push(`/recipes/recommendations/currentRecipe?id=${r.id}`)}
               >
                 查看菜谱
               </button>

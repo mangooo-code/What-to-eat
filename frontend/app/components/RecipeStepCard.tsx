@@ -1,17 +1,18 @@
 "use client";
 import "../styles/components/recipe-step-card.css";
 import { useEffect, useState } from "react";
+import type { RecipeStepDto } from "../services/findRecipesService";
 
 export function RecipeStepCard({
   index,
-  data,
+  step,
   timer,
 }: {
   index: number;
-  data: string[];
+  step: RecipeStepDto;
   timer: boolean;
 }) {
-  const initial = index === 2 ? 300 : 180,
+  const initial = (step.time ?? 3) * 60,
     [complete, setComplete] = useState(false),
     [running, setRunning] = useState(false),
     [seconds, setSeconds] = useState(initial);
@@ -26,18 +27,18 @@ export function RecipeStepCard({
     },
     toggleComplete = () => {
       if (complete) reset();
+      else setRunning(false);
       setComplete((v) => !v);
     };
-  const name = data[0].split("｜")[1] || data[0];
   return (
     <article className={`detail-step ${complete ? "is-complete" : ""}`}>
       <div className="step-number">{index + 1}</div>
       <div className="step-content">
         <div className="step-title">
-          <h3>{name}</h3>
-          <strong>{data[2]}</strong>
+          <h3>{step.title}</h3>
+          {step.time !== null && <strong>{step.time} 分钟</strong>}
         </div>
-        <p>{data[1]}</p>
+        <p>{step.detailedInstructions}</p>
         {timer && (
           <div className="compact-timer">
             <b role="timer" aria-live="off">
@@ -45,10 +46,10 @@ export function RecipeStepCard({
               {String(seconds % 60).padStart(2, "0")}
             </b>
             <span>
-              <button type="button" aria-pressed={running} onClick={() => setRunning((v) => !v)}>
+              <button type="button" aria-pressed={running} disabled={complete} onClick={() => setRunning((v) => !v)}>
                 {running ? "暂停" : seconds === 0 ? "时间到啦" : "开始计时"}
               </button>
-              <button type="button" onClick={reset}>清零</button>
+              <button type="button" disabled={complete} onClick={reset}>清零</button>
             </span>
           </div>
         )}
@@ -59,3 +60,4 @@ export function RecipeStepCard({
     </article>
   );
 }
+

@@ -1,5 +1,5 @@
 import { apiClient } from "./apiClient";
-import type { RecipeIngredientDto } from "./findRecipesService";
+import type { RecipeIngredientDto, RecipeStepDto } from "./findRecipesService";
 
 export interface SaveRecipeStepInput {
   title: string;
@@ -46,8 +46,21 @@ export interface UpdateRecipeFavoriteResult {
   recipe: Recipe | null;
 }
 
+// Returned by GET /recipes/{id} (a single recipe with its seasonings/steps).
+export interface RecipeDetail {
+  id: string;
+  name: string;
+  description: string | null;
+  difficulty: string | null;
+  tags: string[];
+  cookTime: string;
+  seasonings: RecipeIngredientDto[];
+  steps: RecipeStepDto[];
+}
+
 export const recipeService = {
   save: (input: SaveRecipeInput) => apiClient.post<SavedRecipe, SaveRecipeInput>("/recipes", input),
+  getById: (id: string) => apiClient.get<RecipeDetail>(`/recipes/${encodeURIComponent(id)}`),
   listFavorites: () => apiClient.get<Recipe[]>("/recipes", { query: { isFavorite: true } }),
   updateFavorite: (id: string, isFavorite: boolean) =>
     apiClient.patch<UpdateRecipeFavoriteResult, { isFavorite: boolean }>(`/recipes/${encodeURIComponent(id)}`, { isFavorite }),
