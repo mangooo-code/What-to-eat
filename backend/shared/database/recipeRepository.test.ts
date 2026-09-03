@@ -3,10 +3,9 @@ import test from "node:test";
 import {
   findMatchingFavoriteRecipeIds,
   getRecipeById,
-  listRecipeIngredients,
-  listRecipeSeasonings,
-  listRecipeSteps,
-  listRecipes,
+  getRecipeIngredients,
+  getRecipeSeasonings,
+  getRecipeSteps,
   saveRecipeWithSteps,
 } from "./recipeRepository";
 
@@ -49,13 +48,6 @@ function mockFetch(body: unknown, status = 200) {
   }) as typeof fetch;
   return calls;
 }
-
-test("listRecipes maps time/rating strings to numbers", async () => {
-  mockFetch([recipeRow]);
-  const recipes = await listRecipes();
-  assert.equal(recipes[0].time, 20);
-  assert.equal(recipes[0].rating, 4.5);
-});
 
 test("getRecipeById returns the mapped recipe or null", async () => {
   mockFetch([recipeRow]);
@@ -109,24 +101,24 @@ test("saveRecipeWithSteps creates a new recipe, its steps, and its seasonings wh
   assert.equal(seasoningsBody[0].quantity, "适量");
 });
 
-test("listRecipeIngredients maps the quantity string to a number", async () => {
+test("getRecipeIngredients maps the quantity string to a number", async () => {
   mockFetch([{ id: 1, recipeId: "r1", ingredientId: null, nameSnapshot: "番茄", unitTypeId: 1, quantity: "2", isOptional: false }]);
-  const ingredients = await listRecipeIngredients("r1");
+  const ingredients = await getRecipeIngredients("r1");
   assert.equal(ingredients[0].quantity, 2);
 });
 
-test("listRecipeSteps maps rows in step order", async () => {
+test("getRecipeSteps maps rows in step order", async () => {
   mockFetch([{ id: "s1", recipeId: "r1", stepNumber: 1, title: "备料", detailedInstructions: "洗净切块", time: "5", createdAt: "d", updatedAt: "d" }]);
-  const steps = await listRecipeSteps("r1");
+  const steps = await getRecipeSteps("r1");
   assert.equal(steps[0].time, 5);
 });
 
-test("listRecipeSeasonings maps rows including a null quantity", async () => {
+test("getRecipeSeasonings maps rows including a null quantity", async () => {
   mockFetch([
     { id: "se1", recipeId: "r1", name: "盐", quantity: "适量", createdAt: "d", updatedAt: "d" },
     { id: "se2", recipeId: "r1", name: "白糖", quantity: null, createdAt: "d", updatedAt: "d" },
   ]);
-  const seasonings = await listRecipeSeasonings("r1");
+  const seasonings = await getRecipeSeasonings("r1");
   assert.equal(seasonings[0].quantity, "适量");
   assert.equal(seasonings[1].quantity, null);
 });

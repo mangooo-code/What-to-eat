@@ -75,3 +75,4 @@ export interface SaveRecipeRequest {
   seasonings?: SaveRecipeIngredientRequest[];
   steps?: SaveRecipeStepRequest[];
 }
+

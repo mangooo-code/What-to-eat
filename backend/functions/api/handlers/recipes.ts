@@ -1,9 +1,9 @@
 import { AppError } from "../../../shared/errors/AppError";
 import { successResponse } from "../../../shared/errors/httpResponse";
 import { requireAuth } from "../../../shared/auth";
-import { saveRecipeWithSteps } from "../../../shared/database";
+import { getRecipes, saveRecipeWithSteps } from "../../../shared/database";
 import type { HttpEvent, HttpResponse } from "../../../shared/types/api";
-import { getMethod, parseJsonBody, requireString } from "../../../shared/validation/http";
+import { getMethod, getQueryParams, parseJsonBody, requireString } from "../../../shared/validation/http";
 import type { SaveRecipeRequest } from "../contracts";
 
 const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -30,6 +30,15 @@ function optionalStringArray(value: unknown, field: string): string[] {
 export async function handleRecipes(event: HttpEvent): Promise<HttpResponse> {
   const method = getMethod(event);
   const userId = requireAuth(event);
+
+  if (method === "GET") {
+    const isFavoriteParam = getQueryParams(event).get("isFavorite");
+    if (isFavoriteParam !== "true" && isFavoriteParam !== "false") {
+      throw new AppError("VALIDATION_ERROR", "isFavorite query param must be 'true' or 'false'");
+    }
+    const recipes = await getRecipes(userId, isFavoriteParam === "true");
+    return successResponse(recipes, 200);
+  }
 
   if (method === "POST") {
     const body = parseJsonBody<SaveRecipeRequest>(event);

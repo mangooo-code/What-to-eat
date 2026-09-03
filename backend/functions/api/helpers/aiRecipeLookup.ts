@@ -3,10 +3,10 @@ import type { Recipe } from "../../../shared/types/domain";
 import {
   findMatchingFavoriteRecipeIds,
   getRecipeById,
+  getRecipeSeasonings,
+  getRecipeSteps,
   listIngredients,
   listMembers,
-  listRecipeSeasonings,
-  listRecipeSteps,
   MAX_RESULTS,
   type RecipeTimeRange,
 } from "../../../shared/database";
@@ -257,8 +257,8 @@ export async function search(submission: FindRecipesSubmission): Promise<RecipeD
     const recipes = matchingIds.length ? await Promise.all(matchingIds.map((id) => getRecipeById(id))) : [];
     const validRecipes = recipes.filter((recipe): recipe is Recipe => recipe !== null);
     const [seasoningsByRecipe, stepsByRecipe] = await Promise.all([
-      Promise.all(validRecipes.map((recipe) => listRecipeSeasonings(recipe.id))),
-      Promise.all(validRecipes.map((recipe) => listRecipeSteps(recipe.id))),
+      Promise.all(validRecipes.map((recipe) => getRecipeSeasonings(recipe.id))),
+      Promise.all(validRecipes.map((recipe) => getRecipeSteps(recipe.id))),
     ]);
     favoriteRecipes = validRecipes.map((recipe, index) =>
       toDto(

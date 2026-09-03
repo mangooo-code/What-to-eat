@@ -125,18 +125,18 @@ function mapRecipeSeasoning(row: RecipeSeasoningRow): RecipeSeasoning {
   };
 }
 
-export async function listRecipes(options: { limit?: number } = {}): Promise<Recipe[]> {
-  const rows = await postgrestRequest<RecipeRow[]>("Recipes", {
-    query: { select: recipeColumns, order: "updatedDate.desc,id.asc", limit: options.limit },
-  });
-  return rows.map(mapRecipe);
-}
-
 export async function getRecipeById(id: string): Promise<Recipe | null> {
   const rows = await postgrestRequest<RecipeRow[]>("Recipes", {
     query: { select: recipeColumns, id: `eq.${id}`, limit: 1 },
   });
   return rows[0] ? mapRecipe(rows[0]) : null;
+}
+
+export async function getRecipes(userId: string, isFavorite: boolean): Promise<Recipe[]> {
+  const rows = await postgrestRequest<RecipeRow[]>("Recipes", {
+    query: { select: recipeColumns, userId: `eq.${userId}`, isFavorite: `is.${isFavorite}`, order: "updatedDate.desc" },
+  });
+  return rows.map(mapRecipe);
 }
 
 export interface SaveRecipeInput {
@@ -216,21 +216,21 @@ export async function saveRecipeWithSteps(
   return created;
 }
 
-export async function listRecipeIngredients(recipeId: string): Promise<RecipeIngredient[]> {
+export async function getRecipeIngredients(recipeId: string): Promise<RecipeIngredient[]> {
   const rows = await postgrestRequest<RecipeIngredientRow[]>("RecipeIngredients", {
     query: { select: recipeIngredientColumns, recipeId: `eq.${recipeId}`, order: "id.asc" },
   });
   return rows.map(mapRecipeIngredient);
 }
 
-export async function listRecipeSteps(recipeId: string): Promise<RecipeStep[]> {
+export async function getRecipeSteps(recipeId: string): Promise<RecipeStep[]> {
   const rows = await postgrestRequest<RecipeStepRow[]>("RecipeSteps", {
     query: { select: recipeStepColumns, recipeId: `eq.${recipeId}`, order: "stepNumber.asc" },
   });
   return rows.map(mapRecipeStep);
 }
 
-export async function listRecipeSeasonings(recipeId: string): Promise<RecipeSeasoning[]> {
+export async function getRecipeSeasonings(recipeId: string): Promise<RecipeSeasoning[]> {
   const rows = await postgrestRequest<RecipeSeasoningRow[]>("RecipeSeasonings", {
     query: { select: recipeSeasoningColumns, recipeId: `eq.${recipeId}`, order: "createdAt.asc" },
   });
