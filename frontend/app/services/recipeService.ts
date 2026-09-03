@@ -53,6 +53,7 @@ export interface RecipeDetail {
   description: string | null;
   difficulty: string | null;
   tags: string[];
+  isFavorite: boolean;
   cookTime: string;
   // From RecipeIngredients; quantity is a real number here (unlike seasonings' free-text amounts).
   ingredients: Array<{ name: string; quantity: number; unit: string }>;

@@ -241,11 +241,12 @@ test("GET /recipes/{id} returns the recipe with its ingredients, seasonings, and
 
   assert.equal(response.statusCode, 200);
   const payload = JSON.parse(response.body) as {
-    data: { id: string; name: string; cookTime: string; ingredients: unknown; seasonings: unknown; steps: unknown };
+    data: { id: string; name: string; cookTime: string; isFavorite: boolean; ingredients: unknown; seasonings: unknown; steps: unknown };
   };
   assert.equal(payload.data.id, recipeRow.id);
   assert.equal(payload.data.name, "AI 推荐菜");
   assert.equal(payload.data.cookTime, "20 分钟");
+  assert.equal(payload.data.isFavorite, false);
   assert.deepEqual(payload.data.ingredients, [{ name: "番茄", quantity: 2, unit: "个" }]);
   assert.deepEqual(payload.data.seasonings, [{ name: "盐", quantity: "适量" }]);
   assert.deepEqual(payload.data.steps, [{ title: "备料", detailedInstructions: "洗净切块", time: 5 }]);

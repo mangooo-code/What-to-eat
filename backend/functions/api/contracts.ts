@@ -100,6 +100,7 @@ export interface RecipeDetailResponse {
   description: string | null;
   difficulty: string | null;
   tags: string[];
+  isFavorite: boolean;
   /** Formatted display string (e.g. "15 分钟"), not raw minutes. */
   cookTime: string;
   /** From RecipeIngredients; quantity is a real number here (unlike seasonings' free-text amounts). */

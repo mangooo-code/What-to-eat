@@ -110,6 +110,7 @@ export async function handleRecipes(event: HttpEvent): Promise<HttpResponse> {
       description: recipe.description,
       difficulty: recipe.difficulty,
       tags: recipe.tags,
+      isFavorite: recipe.isFavorite,
       cookTime: formatCookTime(recipe.time),
       ingredients: ingredients
         .filter((ingredient) => ingredient.nameSnapshot !== null)

@@ -4,19 +4,22 @@ import "../styles/components/recipe-card.css";
 import "../styles/components/tabs.css";
 import "../styles/components/loading.css";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { useApp } from "../context/AppContext";
 import { Header } from "../components/Header";
 import { Placeholder } from "../components/Placeholder";
 import { AssetImage } from "../components/AssetImage";
-import { recipesLiked } from "../lib/data";
 import { recipeService, type RecipeListItem } from "../services/recipeService";
 
 export function RecipesPage() {
-  const { page, setRecipeOrigin, go, goBack, recipesListOrigin } = useApp();
+  const { page, go, goBack, recipesListOrigin } = useApp();
+  const router = useRouter();
   const recipeTab: "done" | "liked" = page === "recipesFavorites" ? "liked" : "done";
 
   const [historyRecipes, setHistoryRecipes] = useState<RecipeListItem[]>([]);
   const [historyLoaded, setHistoryLoaded] = useState(false);
+  const [favoriteRecipes, setFavoriteRecipes] = useState<RecipeListItem[]>([]);
+  const [favoritesLoaded, setFavoritesLoaded] = useState(false);
 
   useEffect(() => {
     if (recipeTab !== "done") return;
@@ -37,6 +40,26 @@ export function RecipesPage() {
     };
   }, [recipeTab]);
 
+  useEffect(() => {
+    if (recipeTab !== "liked") return;
+    let cancelled = false;
+    recipeService
+      .listFavorites()
+      .then((items) => {
+        if (!cancelled) setFavoriteRecipes(items);
+      })
+      .catch(() => {
+        if (!cancelled) setFavoriteRecipes([]);
+      })
+      .finally(() => {
+        if (!cancelled) setFavoritesLoaded(true);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [recipeTab]);
+
+  const loaded = recipeTab === "done" ? historyLoaded : favoritesLoaded;
   const data =
     recipeTab === "done"
       ? historyRecipes.map((item) => ({
@@ -45,7 +68,12 @@ export function RecipesPage() {
           subtitle: [item.cookTime, item.difficulty].filter(Boolean).join(" · "),
           summary: item.matchSummary,
         }))
-      : recipesLiked.map(([name, subtitle, summary]) => ({ key: name, name, subtitle, summary }));
+      : favoriteRecipes.map((item) => ({
+          key: item.id,
+          name: item.name,
+          subtitle: [item.cookTime, item.difficulty].filter(Boolean).join(" · "),
+          summary: item.matchSummary,
+        }));
 
   return (
     <>
@@ -70,7 +98,7 @@ export function RecipesPage() {
           喜欢的菜谱
         </button>
       </div>
-      {recipeTab === "done" && !historyLoaded ? (
+      {!loaded ? (
         <div className="center-state" role="status" aria-live="polite">
           <span className="spinner" aria-hidden="true" />
         </div>
@@ -81,8 +109,7 @@ export function RecipesPage() {
             className="saved-card"
             key={x.key}
             onClick={() => {
-              setRecipeOrigin(recipeTab);
-              go("recipe");
+              router.push(`/recipes/${recipeTab === "done" ? "history" : "favorites"}/currentRecipe?id=${x.key}`);
             }}
           >
             <Placeholder wide />
