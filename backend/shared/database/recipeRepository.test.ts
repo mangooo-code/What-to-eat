@@ -6,6 +6,7 @@ import {
   getRecipeIngredients,
   getRecipeSeasonings,
   getRecipeSteps,
+  getRecipes,
   saveRecipeWithSteps,
 } from "./recipeRepository";
 
@@ -54,6 +55,21 @@ test("getRecipeById returns the mapped recipe or null", async () => {
   assert.equal((await getRecipeById("r1"))?.name, "番茄炒蛋");
   mockFetch([]);
   assert.equal(await getRecipeById("missing"), null);
+});
+
+test("getRecipes filters by isFavorite when provided", async () => {
+  const calls = mockFetch([recipeRow]);
+  const recipes = await getRecipes("u1", true);
+  assert.equal(recipes.length, 1);
+  assert.match(calls[0].url, /userId=eq\.u1/);
+  assert.match(calls[0].url, /isFavorite=is\.true/);
+});
+
+test("getRecipes returns all of the user's recipes when isFavorite is omitted", async () => {
+  const calls = mockFetch([recipeRow]);
+  await getRecipes("u1");
+  assert.match(calls[0].url, /userId=eq\.u1/);
+  assert.doesNotMatch(calls[0].url, /isFavorite=/);
 });
 
 test("saveRecipeWithSteps returns the existing recipe without creating a duplicate", async () => {

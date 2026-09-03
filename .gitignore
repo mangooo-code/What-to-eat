@@ -2,7 +2,7 @@
 .DS_Store
 .env
 .env*.local
-env.dev
+env.local
 env.*.local
 package-lock.json
 # Local symlink workaround: `tcb db pg migration` hardcodes ./cloudbase/migrations

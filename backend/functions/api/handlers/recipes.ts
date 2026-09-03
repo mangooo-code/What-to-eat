@@ -33,10 +33,10 @@ export async function handleRecipes(event: HttpEvent): Promise<HttpResponse> {
 
   if (method === "GET") {
     const isFavoriteParam = getQueryParams(event).get("isFavorite");
-    if (isFavoriteParam !== "true" && isFavoriteParam !== "false") {
+    if (isFavoriteParam !== null && isFavoriteParam !== "true" && isFavoriteParam !== "false") {
       throw new AppError("VALIDATION_ERROR", "isFavorite query param must be 'true' or 'false'");
     }
-    const recipes = await getRecipes(userId, isFavoriteParam === "true");
+    const recipes = await getRecipes(userId, isFavoriteParam === null ? undefined : isFavoriteParam === "true");
     return successResponse(recipes, 200);
   }
 

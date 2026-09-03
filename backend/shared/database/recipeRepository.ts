@@ -132,9 +132,14 @@ export async function getRecipeById(id: string): Promise<Recipe | null> {
   return rows[0] ? mapRecipe(rows[0]) : null;
 }
 
-export async function getRecipes(userId: string, isFavorite: boolean): Promise<Recipe[]> {
+export async function getRecipes(userId: string, isFavorite?: boolean | null): Promise<Recipe[]> {
   const rows = await postgrestRequest<RecipeRow[]>("Recipes", {
-    query: { select: recipeColumns, userId: `eq.${userId}`, isFavorite: `is.${isFavorite}`, order: "updatedDate.desc" },
+    query: {
+      select: recipeColumns,
+      userId: `eq.${userId}`,
+      isFavorite: isFavorite === undefined || isFavorite === null ? undefined : `is.${isFavorite}`,
+      order: "updatedDate.desc",
+    },
   });
   return rows.map(mapRecipe);
 }

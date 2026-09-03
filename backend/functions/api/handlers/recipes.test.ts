@@ -62,9 +62,9 @@ test("rejects unsupported methods", async () => {
   );
 });
 
-test("GET requires an isFavorite query param", async () => {
+test("GET rejects an invalid isFavorite query param", async () => {
   await assert.rejects(
-    handleRecipes({ httpMethod: "GET", headers: authHeader(), queryStringParameters: {} } as HttpEvent),
+    handleRecipes({ httpMethod: "GET", headers: authHeader(), queryStringParameters: { isFavorite: "yes" } } as HttpEvent),
     (error) => error instanceof AppError && error.code === "VALIDATION_ERROR",
   );
 });
@@ -89,6 +89,26 @@ test("GET returns the requesting user's recipes filtered by isFavorite", async (
   assert.equal(payload.data[0].isFavorite, true);
   assert.match(calls[0].url, /userId=eq\.u1/);
   assert.match(calls[0].url, /isFavorite=is\.true/);
+});
+
+test("GET without isFavorite returns all of the requesting user's recipes", async () => {
+  const calls: Array<{ url: string; init?: RequestInit }> = [];
+  globalThis.fetch = (async (url: string | URL, init?: RequestInit) => {
+    calls.push({ url: url.toString(), init });
+    return new Response(JSON.stringify([recipeRow, { ...recipeRow, id: "r2", isFavorite: true }]), { status: 200 });
+  }) as typeof fetch;
+
+  const response = await handleRecipes({
+    httpMethod: "GET",
+    headers: authHeader(),
+    queryStringParameters: {},
+  } as HttpEvent);
+
+  assert.equal(response.statusCode, 200);
+  const payload = JSON.parse(response.body) as { data: unknown[] };
+  assert.equal(payload.data.length, 2);
+  assert.match(calls[0].url, /userId=eq\.u1/);
+  assert.doesNotMatch(calls[0].url, /isFavorite=/);
 });
 
 test("requires authentication", async () => {
