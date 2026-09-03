@@ -6,6 +6,7 @@ import {
   listIngredients,
   listMembers,
   listRecipeSeasonings,
+  listRecipeSteps,
   MAX_RESULTS,
   type RecipeTimeRange,
 } from "../../../shared/database";
@@ -33,8 +34,9 @@ export interface RecipeStepDto {
 
 // API-facing shape: persisted Recipe fields relevant for display, plus fields computed at
 // request time (cookTime display string, ingredient match summary) that aren't stored in the DB.
-// ingredients/steps are only populated for AI-generated recipes for now; seasonings are
-// populated for both (favorites read theirs from RecipeSeasonings).
+// ingredients are only populated for AI-generated recipes for now (no clean match to the
+// NUMERIC+unitTypeId RecipeIngredients schema); seasonings/steps are populated for both
+// (favorites read theirs from RecipeSeasonings/RecipeSteps).
 export type RecipeDto = Pick<Recipe, "id" | "name" | "description" | "difficulty" | "tags"> & {
   cookTime: string;
   matchSummary: string;
@@ -48,7 +50,12 @@ function formatCookTime(minutes: number | null): string {
   return minutes >= 60 ? `${Math.round(minutes / 60)} 小时` : `${minutes} 分钟`;
 }
 
-function toDto(recipe: Recipe, matchSummary: string, seasonings: RecipeIngredientDto[]): RecipeDto {
+function toDto(
+  recipe: Recipe,
+  matchSummary: string,
+  seasonings: RecipeIngredientDto[],
+  steps: RecipeStepDto[],
+): RecipeDto {
   return {
     id: recipe.id,
     name: recipe.name,
@@ -58,6 +65,7 @@ function toDto(recipe: Recipe, matchSummary: string, seasonings: RecipeIngredien
     cookTime: formatCookTime(recipe.time),
     matchSummary,
     seasonings,
+    steps,
   };
 }
 
@@ -248,14 +256,16 @@ export async function search(submission: FindRecipesSubmission): Promise<RecipeD
     );
     const recipes = matchingIds.length ? await Promise.all(matchingIds.map((id) => getRecipeById(id))) : [];
     const validRecipes = recipes.filter((recipe): recipe is Recipe => recipe !== null);
-    const seasoningsByRecipe = await Promise.all(
-      validRecipes.map((recipe) => listRecipeSeasonings(recipe.id)),
-    );
+    const [seasoningsByRecipe, stepsByRecipe] = await Promise.all([
+      Promise.all(validRecipes.map((recipe) => listRecipeSeasonings(recipe.id))),
+      Promise.all(validRecipes.map((recipe) => listRecipeSteps(recipe.id))),
+    ]);
     favoriteRecipes = validRecipes.map((recipe, index) =>
       toDto(
         recipe,
         "已收藏 · 现有食材可以直接做",
         seasoningsByRecipe[index].map((seasoning) => ({ name: seasoning.name, quantity: seasoning.quantity ?? "" })),
+        stepsByRecipe[index].map((step) => ({ title: step.title, detailedInstructions: step.detailedInstructions, time: step.time })),
       ),
     );
     remaining -= favoriteRecipes.length;
