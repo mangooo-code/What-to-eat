@@ -10,3 +10,4 @@ package-lock.json
 /cloudbase/
 # pnpm's local package content-store cache; never project source.
 .pnpm-store/
+env.dev
