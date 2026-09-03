@@ -6,7 +6,6 @@ import "../styles/components/tabs.css";
 import { useApp } from "../context/AppContext";
 import { Header } from "../components/Header";
 import { AssetImage } from "../components/AssetImage";
-import { getRecognitionErrorMessage, recognitionService } from "../services/recognitionService";
 
 const SUPPORTED_IMAGE_TYPES = new Set(["image/jpeg", "image/png", "image/webp"]);
 
@@ -28,7 +27,6 @@ export function CapturePage() {
     go,
     goBack,
   } = useApp();
-  const [recognizing, setRecognizing] = useState(false);
   const [cameraOpen, setCameraOpen] = useState(false);
   const cameraInput = useRef<HTMLInputElement>(null);
   const albumInput = useRef<HTMLInputElement>(null);
@@ -216,26 +214,9 @@ export function CapturePage() {
       )}
       {isPhotoTab && (
         <>
-          <button type="button" className="primary sticky" disabled={!hasPhoto || recognizing} onClick={async () => {
-            if (!recognitionImageFile || recognizing) return;
-            setRecognizing(true);
-            try {
-              const result = await recognitionService.recognizeIngredients(recognitionImageFile);
-              setFoods(result.items.map((item) => ({
-                name: item.name,
-                normalizedName: item.normalizedName,
-                qty: item.quantity ?? 1,
-                unit: item.unit ?? "个",
-                place: fridgePlace,
-                days: null,
-                source: "recognition" as const,
-              })));
-              go("recognize");
-            } catch (error) {
-              say(getRecognitionErrorMessage(error));
-            } finally {
-              setRecognizing(false);
-            }
+          <button type="button" className="primary sticky" disabled={!hasPhoto} onClick={() => {
+            if (!recognitionImageFile) return;
+            go("recognize");
           }}>
             开始识别
           </button>

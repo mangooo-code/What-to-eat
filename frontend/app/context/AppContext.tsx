@@ -330,12 +330,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
   };
 
   useEffect(() => {
-    if (page === "recognize") {
-      const t = setTimeout(() => go("confirm"), 2000);
-      return () => clearTimeout(t);
-    }
-  }, [page]);
-  useEffect(() => {
     if (page !== "findrecipes") setFindRecipesSubmitting(false);
   }, [page]);
   const loadCurrentUser = async () => {
