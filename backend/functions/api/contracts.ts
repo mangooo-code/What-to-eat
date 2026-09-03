@@ -20,6 +20,18 @@ export interface CreateIngredientRequest {
 
 export type UpdateIngredientRequest = Partial<CreateIngredientRequest>;
 
+// Sent when the user finishes cooking a recipe, to deduct the ingredients it used
+// from their inventory (matched by name).
+export interface ConsumeIngredientItem {
+  name: string;
+  quantity: number;
+}
+
+export interface ConsumeIngredientsRequest {
+  items: ConsumeIngredientItem[];
+}
+
+
 export interface CreateMemberRequest {
   name: string;
   relationship: string;
@@ -90,6 +102,8 @@ export interface RecipeDetailResponse {
   tags: string[];
   /** Formatted display string (e.g. "15 分钟"), not raw minutes. */
   cookTime: string;
+  /** From RecipeIngredients; quantity is a real number here (unlike seasonings' free-text amounts). */
+  ingredients: Array<{ name: string; quantity: number; unit: string }>;
   seasonings: SaveRecipeIngredientRequest[];
   steps: SaveRecipeStepRequest[];
 }

@@ -9,6 +9,7 @@ const baseProps = {
   showOtherRecipesLink: false,
   onOtherRecipesClick: vi.fn(),
   steps: [],
+  ingredients: [],
   consumeOpen: false,
   onStartConsume: vi.fn(),
   onCloseConsume: vi.fn(),
@@ -77,8 +78,15 @@ describe("CookSession", () => {
 
   it("forwards consumption confirmation via onConsumeDone", () => {
     const onConsumeDone = vi.fn();
-    render(<CookSession {...baseProps} consumeOpen onConsumeDone={onConsumeDone} />);
+    render(
+      <CookSession
+        {...baseProps}
+        consumeOpen
+        ingredients={[{ name: "番茄", quantity: 2, unit: "个" }]}
+        onConsumeDone={onConsumeDone}
+      />,
+    );
     fireEvent.click(screen.getByText("确认食材消耗"));
-    expect(onConsumeDone).toHaveBeenCalledTimes(1);
+    expect(onConsumeDone).toHaveBeenCalledWith([{ name: "番茄", quantity: 2 }]);
   });
 });

@@ -46,7 +46,7 @@ export interface UpdateRecipeFavoriteResult {
   recipe: Recipe | null;
 }
 
-// Returned by GET /recipes/{id} (a single recipe with its seasonings/steps).
+// Returned by GET /recipes/{id} (a single recipe with its ingredients/seasonings/steps).
 export interface RecipeDetail {
   id: string;
   name: string;
@@ -54,6 +54,8 @@ export interface RecipeDetail {
   difficulty: string | null;
   tags: string[];
   cookTime: string;
+  // From RecipeIngredients; quantity is a real number here (unlike seasonings' free-text amounts).
+  ingredients: Array<{ name: string; quantity: number; unit: string }>;
   seasonings: RecipeIngredientDto[];
   steps: RecipeStepDto[];
 }

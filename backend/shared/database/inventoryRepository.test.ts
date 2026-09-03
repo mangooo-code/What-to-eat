@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import {
+  consumeIngredientByName,
   createIngredient,
   deleteIngredient,
   hasAnyIngredients,
@@ -111,4 +112,59 @@ test("deleteIngredient reports whether a row was deleted", async () => {
   assert.equal(await deleteIngredient("i1", "u1"), true);
   mockFetch([]);
   assert.equal(await deleteIngredient("i1", "u1"), false);
+});
+
+function mockFetchSequence(responses: unknown[]) {
+  const calls: Array<{ url: string; init?: RequestInit }> = [];
+  let call = 0;
+  globalThis.fetch = (async (url: string | URL, init?: RequestInit) => {
+    calls.push({ url: url.toString(), init });
+    const body = responses[Math.min(call, responses.length - 1)];
+    call++;
+    return new Response(JSON.stringify(body), { status: 200 });
+  }) as typeof fetch;
+  return calls;
+}
+
+test("consumeIngredientByName deletes a row that's fully used up", async () => {
+  const calls = mockFetchSequence([[{ ...row, id: "i1", quantity: "2" }], [{ id: "i1" }]]);
+  await consumeIngredientByName("u1", "番茄", 2);
+  assert.equal(calls[1].init?.method, "DELETE");
+});
+
+test("consumeIngredientByName updates a row that has leftover quantity", async () => {
+  const calls = mockFetchSequence([[{ ...row, id: "i1", quantity: "5" }], [{ ...row, id: "i1", quantity: "3" }]]);
+  await consumeIngredientByName("u1", "番茄", 2);
+  assert.equal(calls[1].init?.method, "PATCH");
+  assert.deepEqual(JSON.parse(String(calls[1].init?.body)).quantity, 3);
+});
+
+test("consumeIngredientByName recurses onto the next matching row until the amount is used up", async () => {
+  const calls = mockFetchSequence([
+    [
+      { ...row, id: "i1", name: "番茄", normalizedName: null, quantity: "1" },
+      { ...row, id: "i2", name: "番茄", normalizedName: null, quantity: "5" },
+    ],
+    [{ id: "i1" }],
+    [{ ...row, id: "i2", quantity: "2" }],
+  ]);
+  await consumeIngredientByName("u1", "番茄", 4);
+  assert.equal(calls.length, 3);
+  assert.equal(calls[1].init?.method, "DELETE");
+  assert.match(calls[1].url, /id=eq\.i1/);
+  assert.equal(calls[2].init?.method, "PATCH");
+  assert.match(calls[2].url, /id=eq\.i2/);
+  assert.deepEqual(JSON.parse(String(calls[2].init?.body)).quantity, 2);
+});
+
+test("consumeIngredientByName does nothing once no matching rows remain", async () => {
+  const calls = mockFetchSequence([[{ ...row, id: "i1", name: "番茄", quantity: "1" }], [{ id: "i1" }]]);
+  await consumeIngredientByName("u1", "番茄", 10);
+  assert.equal(calls.length, 2);
+});
+
+test("consumeIngredientByName is a no-op when nothing matches by name", async () => {
+  const calls = mockFetchSequence([[{ ...row, id: "i1", name: "鸡蛋" }]]);
+  await consumeIngredientByName("u1", "番茄", 1);
+  assert.equal(calls.length, 1);
 });

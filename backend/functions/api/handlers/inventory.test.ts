@@ -67,6 +67,29 @@ test("GET /inventory/exists reports whether the user has any ingredients", async
   assert.deepEqual(JSON.parse(empty.body), { success: true, data: { hasItems: false } });
 });
 
+test("POST /inventory/consume validates the items array", async () => {
+  await assert.rejects(
+    handleInventory({
+      httpMethod: "POST",
+      headers: authHeader(),
+      path: "/inventory/consume",
+      body: JSON.stringify({ items: [{ name: "番茄" }] }),
+    } as HttpEvent),
+    (error) => error instanceof AppError && error.code === "VALIDATION_ERROR",
+  );
+});
+
+test("POST /inventory/consume deducts inventory for each item", async () => {
+  mockFetchByResource({ Ingredients: [ingredientRow] });
+  const response = await handleInventory({
+    httpMethod: "POST",
+    headers: authHeader(),
+    path: "/inventory/consume",
+    body: JSON.stringify({ items: [{ name: "番茄", quantity: 1 }] }),
+  } as HttpEvent);
+  assert.deepEqual(JSON.parse(response.body), { success: true, data: { consumed: true } });
+});
+
 test("GET returns items, locations, and unit types together", async () => {
   mockFetchByResource({
     Ingredients: [ingredientRow],

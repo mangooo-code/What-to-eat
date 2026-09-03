@@ -2,6 +2,7 @@ import { AppError } from "../../../shared/errors/AppError";
 import { successResponse } from "../../../shared/errors/httpResponse";
 import { requireAuth } from "../../../shared/auth";
 import {
+  consumeIngredientByName,
   createIngredient,
   deleteIngredient,
   hasAnyIngredients,
@@ -13,7 +14,7 @@ import {
 } from "../../../shared/database/inventoryRepository";
 import type { HttpEvent, HttpResponse } from "../../../shared/types/api";
 import { getMethod, parseJsonBody, requireString } from "../../../shared/validation/http";
-import type { CreateIngredientRequest, UpdateIngredientRequest } from "../contracts";
+import type { ConsumeIngredientsRequest, CreateIngredientRequest, UpdateIngredientRequest } from "../contracts";
 
 const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
@@ -49,6 +50,20 @@ function validateSource(value: unknown): "manual" | "recognition" | "import" {
   throw new AppError("VALIDATION_ERROR", "source is invalid");
 }
 
+function parseConsumeItems(value: unknown): Array<{ name: string; quantity: number }> {
+  if (!Array.isArray(value)) throw new AppError("VALIDATION_ERROR", "items must be an array");
+  return value.map((item, index) => {
+    if (typeof item !== "object" || item === null) {
+      throw new AppError("VALIDATION_ERROR", `items[${index}] must be an object`);
+    }
+    const { name, quantity } = item as Record<string, unknown>;
+    return {
+      name: requireString(name, `items[${index}].name`),
+      quantity: requireNumber(quantity, `items[${index}].quantity`),
+    };
+  });
+}
+
 async function assertLocationBelongsToUser(locationId: string, userId: string): Promise<void> {
   if (!uuidPattern.test(locationId) || !(await locationBelongsToUser(locationId, userId))) {
     throw new AppError("LOCATION_NOT_FOUND", "Location was not found", 404);
@@ -61,6 +76,15 @@ export async function handleInventory(event: HttpEvent): Promise<HttpResponse> {
 
   if (method === "GET" && (event.path ?? "").includes("/inventory/exists")) {
     return successResponse({ hasItems: await hasAnyIngredients(userId) });
+  }
+
+  if (method === "POST" && (event.path ?? "").includes("/inventory/consume")) {
+    const body = parseJsonBody<ConsumeIngredientsRequest>(event);
+    const items = parseConsumeItems(body.items);
+    for (const item of items) {
+      await consumeIngredientByName(userId, item.name, item.quantity);
+    }
+    return successResponse({ consumed: true });
   }
 
   const ingredientId = ingredientIdFromPath(event.path);

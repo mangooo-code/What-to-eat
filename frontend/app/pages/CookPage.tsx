@@ -9,6 +9,11 @@ const legacySteps = [
   { title: "混合调味", detailedInstructions: "将炒好的鸡蛋倒回锅中，与番茄翻炒均匀，让汤汁均匀裹住鸡蛋后即可出锅。", time: 2 },
 ];
 
+const legacyIngredients = [
+  { name: "番茄", quantity: 2, unit: "个" },
+  { name: "鸡蛋", quantity: 3, unit: "个" },
+];
+
 export function CookPage() {
   const {
     recipeOrigin,
@@ -27,11 +32,14 @@ export function CookPage() {
       showOtherRecipesLink={recipeOrigin === "recommend"}
       onOtherRecipesClick={() => go("recommend")}
       steps={legacySteps}
+      ingredients={legacyIngredients}
       consumeOpen={consumeOpen}
       onStartConsume={() => setConsumeOpen(true)}
       onCloseConsume={() => setConsumeOpen(false)}
       onEndCooking={() => setDialog("确定结束这次制作吗？")}
-      onConsumeDone={(tomato, egg) => {
+      onConsumeDone={(consumed) => {
+        const tomato = consumed.find((item) => item.name === "番茄")?.quantity ?? 0;
+        const egg = consumed.find((item) => item.name === "鸡蛋")?.quantity ?? 0;
         setFoods((a) =>
           a.flatMap((f) =>
             f.name === "番茄"

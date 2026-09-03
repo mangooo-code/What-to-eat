@@ -143,3 +143,33 @@ export async function deleteIngredient(id: string, userId: string): Promise<bool
   });
   return rows.length > 0;
 }
+
+// Deducts `quantityUsed` from the user's inventory rows matching `name` (compared via
+// normalizedName/name, trimmed+lowercased, same convention as recipeRepository's ingredient
+// matching). Consumes the smallest rows first; a row hitting 0 is deleted outright rather than
+// left at 0. If the amount used exceeds a single row's quantity, the remainder recurses onto
+// the next matching row, until either it's fully accounted for or no matching rows remain.
+export async function consumeIngredientByName(userId: string, name: string, quantityUsed: number): Promise<void> {
+  const target = name.trim().toLowerCase();
+  const rows = await postgrestRequest<IngredientRow[]>("Ingredients", {
+    query: { select: ingredientColumns, userId: `eq.${userId}`, order: "quantity.asc" },
+  });
+  const matches = rows.filter((row) => (row.normalizedName ?? row.name).trim().toLowerCase() === target);
+
+  let remaining = quantityUsed;
+  for (const row of matches) {
+    if (remaining <= 0) break;
+    const available = Number(row.quantity);
+    if (available <= remaining) {
+      await deleteIngredient(row.id, userId);
+      remaining -= available;
+    } else {
+      await postgrestRequest("Ingredients", {
+        method: "PATCH",
+        query: { id: `eq.${row.id}`, userId: `eq.${userId}` },
+        body: { quantity: available - remaining, updatedDate: new Date().toISOString() },
+      });
+      remaining = 0;
+    }
+  }
+}

@@ -1,6 +1,7 @@
 export { closePool, getPool, query, withTransaction } from "./client";
 export { getDatabaseConfig } from "./config";
 export {
+  consumeIngredientByName,
   createIngredient,
   deleteIngredient,
   hasAnyIngredients,

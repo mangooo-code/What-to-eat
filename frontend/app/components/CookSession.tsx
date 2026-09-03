@@ -1,7 +1,7 @@
 "use client";
 import "../styles/pages/cook.css";
 import "../styles/components/recipe-step-card.css";
-import { Consume } from "./Consume";
+import { Consume, type ConsumeIngredient } from "./Consume";
 import { Header } from "./Header";
 import { RecipeStepCard } from "./RecipeStepCard";
 import type { RecipeStepDto } from "../services/findRecipesService";
@@ -13,6 +13,7 @@ export function CookSession({
   showOtherRecipesLink,
   onOtherRecipesClick,
   steps,
+  ingredients,
   consumeOpen,
   onStartConsume,
   onCloseConsume,
@@ -25,11 +26,12 @@ export function CookSession({
   showOtherRecipesLink: boolean;
   onOtherRecipesClick: () => void;
   steps: RecipeStepDto[];
+  ingredients: ConsumeIngredient[];
   consumeOpen: boolean;
   onStartConsume: () => void;
   onCloseConsume: () => void;
   onEndCooking: () => void;
-  onConsumeDone: (tomato: number, egg: number) => void;
+  onConsumeDone: (consumed: Array<{ name: string; quantity: number }>) => void;
 }) {
   return (
     <>
@@ -69,7 +71,7 @@ export function CookSession({
             >
               ×
             </button>
-            <Consume onDone={onConsumeDone} />
+            <Consume ingredients={ingredients} onDone={onConsumeDone} />
           </div>
         </div>
       )}

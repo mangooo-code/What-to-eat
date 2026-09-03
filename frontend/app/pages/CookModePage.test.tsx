@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { CookModePage } from "./CookModePage";
 import { useApp } from "../context/AppContext";
 import { currentlyCookingStorage } from "../services/currentlyCookingStorage";
+import { inventoryService } from "../services/inventoryService";
 import { recipeService } from "../services/recipeService";
 import { createAppState } from "../tests/mockApp";
 
@@ -17,10 +18,12 @@ vi.mock("../services/recipeService", () => ({ recipeService: { getById: vi.fn(),
 vi.mock("../services/currentlyCookingStorage", () => ({
   currentlyCookingStorage: { get: vi.fn(), set: vi.fn(), clear: vi.fn() },
 }));
+vi.mock("../services/inventoryService", () => ({ inventoryService: { consume: vi.fn() } }));
 const mockedUseApp = vi.mocked(useApp);
 const mockedGetById = vi.mocked(recipeService.getById);
 const mockedSave = vi.mocked(recipeService.save);
 const mockedSet = vi.mocked(currentlyCookingStorage.set);
+const mockedConsume = vi.mocked(inventoryService.consume);
 
 async function mockSearchParams(query: string) {
   const { useSearchParams } = await import("next/navigation");
@@ -39,6 +42,7 @@ describe("CookModePage", () => {
     mockedGetById.mockReset();
     mockedSave.mockReset();
     mockedSet.mockReset();
+    mockedConsume.mockReset().mockResolvedValue({ consumed: true });
   });
 
   it("goes to home when no recipe matches the id in localStorage", async () => {
@@ -65,6 +69,7 @@ describe("CookModePage", () => {
       difficulty: "简单",
       tags: [],
       cookTime: "20 分钟",
+      ingredients: [],
       seasonings: [],
       steps: [],
     });
@@ -72,6 +77,47 @@ describe("CookModePage", () => {
     await act(async () => {});
     expect(mockedGetById).toHaveBeenCalledWith("8b412e45-1acd-412c-ae89-4028704fb9a1");
     expect(screen.getByText(/黑椒牛柳 · 预计 20 分钟/)).toBeInTheDocument();
+  });
+
+  it("loads the recipe's required ingredients from the backend when isStored=true", async () => {
+    await mockSearchParams("id=8b412e45-1acd-412c-ae89-4028704fb9a1&isStored=true");
+    mockedGetById.mockResolvedValue({
+      id: "8b412e45-1acd-412c-ae89-4028704fb9a1",
+      name: "黑椒牛柳",
+      description: null,
+      difficulty: "简单",
+      tags: [],
+      cookTime: "20 分钟",
+      ingredients: [{ name: "牛柳", quantity: 300 }],
+      seasonings: [],
+      steps: [],
+    });
+    render(<CookModePage />);
+    await act(async () => {});
+    await expect(mockedGetById.mock.results[0].value).resolves.toMatchObject({
+      ingredients: [{ name: "牛柳", quantity: 300 }],
+    });
+  });
+
+  it("loads the recipe's required ingredients from localStorage when isStored is false", async () => {
+    await mockSearchParams("id=9e2b8f2a-2f8a-4b2b-9b8f-2a2f8a4b2b9b");
+    mockApp({
+      recommendedRecipes: [
+        {
+          id: "9e2b8f2a-2f8a-4b2b-9b8f-2a2f8a4b2b9b",
+          name: "番茄炒蛋",
+          cookTime: "15 分钟",
+          difficulty: "简单",
+          matchSummary: "",
+          description: "",
+          tags: [],
+          ingredients: [{ name: "番茄", quantity: "2 个" }],
+        },
+      ],
+    });
+    render(<CookModePage />);
+    expect(mockedGetById).not.toHaveBeenCalled();
+    expect(screen.getByText(/番茄炒蛋 · 预计 15 分钟/)).toBeInTheDocument();
   });
 
   it("goes to home when isStored=true and the backend lookup fails", async () => {
@@ -122,6 +168,7 @@ describe("CookModePage", () => {
       difficulty: "简单",
       tags: [],
       cookTime: "20 分钟",
+      ingredients: [],
       seasonings: [],
       steps: [],
     });
@@ -150,6 +197,54 @@ describe("CookModePage", () => {
     fireEvent.click(screen.getByText("确认食材消耗"));
     expect(setConsumeOpen).toHaveBeenCalledWith(false);
     expect(go).toHaveBeenCalledWith("feedback");
+  });
+
+  it("shows the recipe's real ingredients (split into quantity/unit) and deducts the entered amounts when isStored is false", async () => {
+    await mockSearchParams("id=9e2b8f2a-2f8a-4b2b-9b8f-2a2f8a4b2b9b&isStored=false");
+    mockApp({
+      consumeOpen: true,
+      recommendedRecipes: [
+        {
+          id: "9e2b8f2a-2f8a-4b2b-9b8f-2a2f8a4b2b9b",
+          name: "番茄炒蛋",
+          cookTime: "15 分钟",
+          difficulty: "简单",
+          matchSummary: "",
+          description: "",
+          tags: [],
+          ingredients: [{ name: "番茄", quantity: "2 个" }],
+        },
+      ],
+    });
+    render(<CookModePage />);
+    expect(screen.getByText(/预计消耗 2 个/)).toBeInTheDocument();
+    const [input] = screen.getAllByRole("spinbutton");
+    fireEvent.change(input, { target: { value: "1" } });
+    fireEvent.click(screen.getByText("确认食材消耗"));
+    expect(mockedConsume).toHaveBeenCalledWith([{ name: "番茄", quantity: 1 }]);
+  });
+
+  it("shows the recipe's real ingredients from the DB and deducts the entered amounts when isStored is true", async () => {
+    await mockSearchParams("id=8b412e45-1acd-412c-ae89-4028704fb9a1&isStored=true");
+    mockApp({ consumeOpen: true });
+    mockedGetById.mockResolvedValue({
+      id: "8b412e45-1acd-412c-ae89-4028704fb9a1",
+      name: "黑椒牛柳",
+      description: null,
+      difficulty: "简单",
+      tags: [],
+      cookTime: "20 分钟",
+      ingredients: [{ name: "牛柳", quantity: 300, unit: "克" }],
+      seasonings: [],
+      steps: [],
+    });
+    render(<CookModePage />);
+    await act(async () => {});
+    expect(screen.getByText(/预计消耗 300 克/)).toBeInTheDocument();
+    const [input] = screen.getAllByRole("spinbutton");
+    fireEvent.change(input, { target: { value: "250" } });
+    fireEvent.click(screen.getByText("确认食材消耗"));
+    expect(mockedConsume).toHaveBeenCalledWith([{ name: "牛柳", quantity: 250 }]);
   });
 
   it("closes the consume modal", async () => {

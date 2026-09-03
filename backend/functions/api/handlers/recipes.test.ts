@@ -163,12 +163,18 @@ test("PATCH reports not updated when the recipe doesn't exist or isn't owned by 
   assert.equal(payload.data.recipe, null);
 });
 
-test("GET /recipes/{id} returns the recipe with its seasonings and steps", async () => {
+test("GET /recipes/{id} returns the recipe with its ingredients, seasonings, and steps", async () => {
   const calls: Array<{ url: string; init?: RequestInit }> = [];
   globalThis.fetch = (async (url: string | URL, init?: RequestInit) => {
     const str = url.toString();
     calls.push({ url: str, init });
     if (/\/Recipes\?/.test(str)) return new Response(JSON.stringify([recipeRow]), { status: 200 });
+    if (/\/RecipeIngredients\?/.test(str)) {
+      return new Response(JSON.stringify([{ id: 1, recipeId: recipeRow.id, ingredientId: null, nameSnapshot: "番茄", unitTypeId: 1, quantity: "2", isOptional: false }]), { status: 200 });
+    }
+    if (/\/IngredientUnitTypes\?/.test(str)) {
+      return new Response(JSON.stringify([{ id: 1, name: "个" }]), { status: 200 });
+    }
     if (/\/RecipeSeasonings\?/.test(str)) {
       return new Response(JSON.stringify([{ id: "se1", recipeId: recipeRow.id, name: "盐", quantity: "适量", createdAt: "d", updatedAt: "d" }]), { status: 200 });
     }
@@ -186,11 +192,12 @@ test("GET /recipes/{id} returns the recipe with its seasonings and steps", async
 
   assert.equal(response.statusCode, 200);
   const payload = JSON.parse(response.body) as {
-    data: { id: string; name: string; cookTime: string; seasonings: unknown; steps: unknown };
+    data: { id: string; name: string; cookTime: string; ingredients: unknown; seasonings: unknown; steps: unknown };
   };
   assert.equal(payload.data.id, recipeRow.id);
   assert.equal(payload.data.name, "AI 推荐菜");
   assert.equal(payload.data.cookTime, "20 分钟");
+  assert.deepEqual(payload.data.ingredients, [{ name: "番茄", quantity: 2, unit: "个" }]);
   assert.deepEqual(payload.data.seasonings, [{ name: "盐", quantity: "适量" }]);
   assert.deepEqual(payload.data.steps, [{ title: "备料", detailedInstructions: "洗净切块", time: 5 }]);
 });

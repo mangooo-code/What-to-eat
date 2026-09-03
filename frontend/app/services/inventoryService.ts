@@ -26,6 +26,11 @@ export interface InventorySnapshot {
   unitTypes: IngredientUnitType[];
 }
 
+export interface ConsumeIngredientItem {
+  name: string;
+  quantity: number;
+}
+
 export const inventoryService = {
   list: (params: ListIngredientsParams = {}) => apiClient.get<InventorySnapshot>("/inventory", {
     query: {
@@ -38,4 +43,5 @@ export const inventoryService = {
   create: (input: CreateIngredientInput) => apiClient.post<Ingredient, CreateIngredientInput>("/inventory", input),
   update: (id: string, input: UpdateIngredientInput) => apiClient.patch<Ingredient, UpdateIngredientInput>(`/inventory/${encodeURIComponent(id)}`, input),
   remove: (id: string) => apiClient.delete<void>(`/inventory/${encodeURIComponent(id)}`),
+  consume: (items: ConsumeIngredientItem[]) => apiClient.post<{ consumed: boolean }, { items: ConsumeIngredientItem[] }>("/inventory/consume", { items }),
 };

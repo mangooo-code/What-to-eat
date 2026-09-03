@@ -3,9 +3,11 @@ import { successResponse } from "../../../shared/errors/httpResponse";
 import { requireAuth } from "../../../shared/auth";
 import {
   getRecipeById,
+  getRecipeIngredients,
   getRecipes,
   getRecipeSeasonings,
   getRecipeSteps,
+  listUnitTypes,
   saveRecipeWithSteps,
   updateRecipeFavorite,
 } from "../../../shared/database";
@@ -66,10 +68,13 @@ export async function handleRecipes(event: HttpEvent): Promise<HttpResponse> {
     if (!recipe || recipe.userId !== userId) {
       throw new AppError("RECIPE_NOT_FOUND", "Recipe was not found", 404);
     }
-    const [seasonings, steps] = await Promise.all([
+    const [ingredients, seasonings, steps, unitTypes] = await Promise.all([
+      getRecipeIngredients(recipe.id),
       getRecipeSeasonings(recipe.id),
       getRecipeSteps(recipe.id),
+      listUnitTypes(),
     ]);
+    const unitNameById = new Map(unitTypes.map((unitType) => [unitType.id, unitType.name]));
     const detail: RecipeDetailResponse = {
       id: recipe.id,
       name: recipe.name,
@@ -77,6 +82,13 @@ export async function handleRecipes(event: HttpEvent): Promise<HttpResponse> {
       difficulty: recipe.difficulty,
       tags: recipe.tags,
       cookTime: formatCookTime(recipe.time),
+      ingredients: ingredients
+        .filter((ingredient) => ingredient.nameSnapshot !== null)
+        .map((ingredient) => ({
+          name: ingredient.nameSnapshot as string,
+          quantity: ingredient.quantity,
+          unit: ingredient.unitTypeId === null ? "" : unitNameById.get(ingredient.unitTypeId) ?? "",
+        })),
       seasonings: seasonings.map((seasoning) => ({ name: seasoning.name, quantity: seasoning.quantity ?? "" })),
       steps: steps.map((step) => ({ title: step.title, detailedInstructions: step.detailedInstructions, time: step.time })),
     };
