@@ -76,11 +76,18 @@ export interface RecipeListItem {
   hasEnoughIngredients: boolean;
 }
 
+// Returned by GET /recipes/counts (profile page's 历史菜谱/喜欢的菜谱 tallies).
+export interface RecipeCounts {
+  totalCount: number;
+  favoriteCount: number;
+}
+
 export const recipeService = {
   save: (input: SaveRecipeInput) => apiClient.post<SavedRecipe, SaveRecipeInput>("/recipes", input),
   getById: (id: string) => apiClient.get<RecipeDetail>(`/recipes/${encodeURIComponent(id)}`),
   list: () => apiClient.get<RecipeListItem[]>("/recipes"),
   listFavorites: () => apiClient.get<RecipeListItem[]>("/recipes", { query: { isFavorite: true } }),
+  counts: () => apiClient.get<RecipeCounts>("/recipes/counts"),
   updateFavorite: (id: string, isFavorite: boolean) =>
     apiClient.patch<UpdateRecipeFavoriteResult, { isFavorite: boolean }>(`/recipes/${encodeURIComponent(id)}`, { isFavorite }),
 };

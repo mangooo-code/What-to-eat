@@ -1,12 +1,29 @@
 "use client";
+import { useEffect, useState } from "react";
 import "../styles/pages/profile.css";
 import { useApp } from "../context/AppContext";
 import { Header } from "../components/Header";
 import { AssetImage } from "../components/AssetImage";
+import { recipeService, type RecipeCounts } from "../services/recipeService";
 
 export function ProfilePage() {
   const { householdMembers, membersLoading, currentUser, openRecipes, openMember, openDiet, setDialog } =
     useApp();
+  const [recipeCounts, setRecipeCounts] = useState<RecipeCounts | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    recipeService
+      .counts()
+      .then((counts) => {
+        if (!cancelled) setRecipeCounts(counts);
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   return (
     <>
       <Header title="我的" />
@@ -27,7 +44,7 @@ export function ProfilePage() {
             <AssetImage name="recipe-history.png" alt="历史菜谱" />
             <span>
               <strong>历史菜谱</strong>
-              <small>8 条做饭记录</small>
+              <small>{recipeCounts ? `${recipeCounts.totalCount} 条做饭记录` : "加载中……"}</small>
             </span>
             <b>›</b>
           </button>
@@ -35,7 +52,7 @@ export function ProfilePage() {
             <AssetImage name="favorite-recipes.png" alt="喜欢的菜谱" />
             <span>
               <strong>喜欢的菜谱</strong>
-              <small>5 道心水菜</small>
+              <small>{recipeCounts ? `${recipeCounts.favoriteCount} 道心水菜` : "加载中……"}</small>
             </span>
             <b>›</b>
           </button>

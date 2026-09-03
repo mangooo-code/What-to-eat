@@ -3,6 +3,7 @@ import { successResponse } from "../../../shared/errors/httpResponse";
 import { requireAuth } from "../../../shared/auth";
 import {
   getRecipeById,
+  getRecipeCounts,
   getRecipeIngredients,
   getRecipes,
   getRecipeSeasonings,
@@ -14,7 +15,7 @@ import {
 } from "../../../shared/database";
 import type { HttpEvent, HttpResponse } from "../../../shared/types/api";
 import { getMethod, getQueryParams, parseJsonBody, requireString } from "../../../shared/validation/http";
-import type { RecipeDetailResponse, RecipeListItem, SaveRecipeRequest, UpdateRecipeFavoriteRequest } from "../contracts";
+import type { RecipeCountsResponse, RecipeDetailResponse, RecipeListItem, SaveRecipeRequest, UpdateRecipeFavoriteRequest } from "../contracts";
 import type { Ingredient, RecipeIngredient } from "../../../shared/types/domain";
 
 const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -79,6 +80,14 @@ function checkIngredientAvailability(
 export async function handleRecipes(event: HttpEvent): Promise<HttpResponse> {
   const method = getMethod(event);
   const userId = requireAuth(event);
+
+  // Checked before recipeIdFromPath, else "counts" gets mistaken for a recipe id
+  // (same gotcha as /inventory/exists vs ingredientIdFromPath).
+  if (method === "GET" && (event.path ?? "").includes("/recipes/counts")) {
+    const counts: RecipeCountsResponse = await getRecipeCounts(userId);
+    return successResponse(counts, 200);
+  }
+
   const recipeId = recipeIdFromPath(event.path);
 
   if (method === "PATCH" && recipeId) {

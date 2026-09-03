@@ -1,11 +1,14 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ProfilePage } from "./ProfilePage";
 import { useApp } from "../context/AppContext";
+import { recipeService } from "../services/recipeService";
 import { createAppState } from "../tests/mockApp";
 
 vi.mock("../context/AppContext", () => ({ useApp: vi.fn() }));
+vi.mock("../services/recipeService", () => ({ recipeService: { counts: vi.fn() } }));
 const mockedUseApp = vi.mocked(useApp);
+const mockedCounts = vi.mocked(recipeService.counts);
 
 function mockApp(overrides: Parameters<typeof createAppState>[0] = {}) {
   mockedUseApp.mockReturnValue(createAppState(overrides));
@@ -14,6 +17,7 @@ function mockApp(overrides: Parameters<typeof createAppState>[0] = {}) {
 describe("ProfilePage", () => {
   beforeEach(() => {
     mockApp();
+    mockedCounts.mockReset().mockResolvedValue({ totalCount: 8, favoriteCount: 5 });
   });
 
   it("lists every household member's profile summary", () => {
@@ -21,6 +25,13 @@ describe("ProfilePage", () => {
     expect(screen.getByText("我")).toBeInTheDocument();
     expect(screen.getByText("阳")).toBeInTheDocument();
     expect(screen.getByText("妈妈")).toBeInTheDocument();
+  });
+
+  it("shows real cooked and liked recipe counts from the backend", async () => {
+    render(<ProfilePage />);
+    await act(async () => {});
+    expect(screen.getByText("8 条做饭记录")).toBeInTheDocument();
+    expect(screen.getByText("5 道心水菜")).toBeInTheDocument();
   });
 
   it("opens saved-recipe shortcuts", () => {

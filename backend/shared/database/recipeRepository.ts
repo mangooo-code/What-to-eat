@@ -145,6 +145,24 @@ export async function getRecipes(userId: string, isFavorite?: boolean | null): P
   return rows.map(mapRecipe);
 }
 
+export interface RecipeCounts {
+  totalCount: number;
+  favoriteCount: number;
+}
+
+// Single round trip (just the isFavorite column) instead of two separate count queries;
+// totalCount = every Recipes row the user owns (a row only exists once they've actually
+// cooked/saved or favorited it), favoriteCount = the subset with isFavorite = true.
+export async function getRecipeCounts(userId: string): Promise<RecipeCounts> {
+  const rows = await postgrestRequest<Array<{ isFavorite: boolean }>>("Recipes", {
+    query: { select: "isFavorite", userId: `eq.${userId}` },
+  });
+  return {
+    totalCount: rows.length,
+    favoriteCount: rows.filter((row) => row.isFavorite).length,
+  };
+}
+
 // Scoped to the owning user via the userId filter, so this both enforces ownership and
 // naturally returns null when the recipe doesn't exist (yet) or belongs to someone else.
 export async function updateRecipeFavorite(id: string, userId: string, isFavorite: boolean): Promise<Recipe | null> {

@@ -69,6 +69,29 @@ test("GET rejects an invalid isFavorite query param", async () => {
   );
 });
 
+test("GET /recipes/counts returns total and favorite tallies", async () => {
+  globalThis.fetch = (async (url: string | URL) => {
+    const str = url.toString();
+    if (/\/Recipes\?/.test(str)) {
+      return new Response(
+        JSON.stringify([{ isFavorite: true }, { isFavorite: false }, { isFavorite: true }]),
+        { status: 200 },
+      );
+    }
+    throw new Error(`Unexpected fetch call: ${str}`);
+  }) as typeof fetch;
+
+  const result = await handleRecipes({
+    httpMethod: "GET",
+    headers: authHeader(),
+    path: "/recipes/counts",
+  } as HttpEvent);
+
+  assert.equal(result.statusCode, 200);
+  const body = JSON.parse(result.body);
+  assert.deepEqual(body.data, { totalCount: 3, favoriteCount: 2 });
+});
+
 test("GET returns the requesting user's recipes filtered by isFavorite", async () => {
   const calls: Array<{ url: string; init?: RequestInit }> = [];
   globalThis.fetch = (async (url: string | URL, init?: RequestInit) => {

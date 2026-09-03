@@ -31,6 +31,7 @@ export {
 export {
   findMatchingFavoriteRecipeIds,
   getRecipeById,
+  getRecipeCounts,
   getRecipes,
   getRecipeIngredients,
   getRecipeSeasonings,
@@ -38,6 +39,7 @@ export {
   saveRecipeWithSteps,
   updateRecipeFavorite,
   MAX_RESULTS,
+  type RecipeCounts,
   type RecipeTimeRange,
   type SaveRecipeInput,
   type SaveRecipeIngredientInput,

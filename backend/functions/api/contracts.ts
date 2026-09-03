@@ -110,6 +110,12 @@ export interface RecipeDetailResponse {
   steps: SaveRecipeStepRequest[];
 }
 
+// Returned by GET /recipes/counts (profile page's 历史菜谱/喜欢的菜谱 tallies).
+export interface RecipeCountsResponse {
+  totalCount: number;
+  favoriteCount: number;
+}
+
 // Returned by GET /recipes (list): a lightweight card view for 我的菜谱, enriched with a
 // live ingredient-availability check (RecipeIngredients matched against the user's current
 // Ingredients by name) instead of anything precomputed/stored.
