@@ -111,6 +111,58 @@ test("GET without isFavorite returns all of the requesting user's recipes", asyn
   assert.doesNotMatch(calls[0].url, /isFavorite=/);
 });
 
+test("PATCH rejects a non-boolean isFavorite", async () => {
+  await assert.rejects(
+    handleRecipes({
+      httpMethod: "PATCH",
+      headers: authHeader(),
+      path: `/recipes/${recipeRow.id}`,
+      body: JSON.stringify({ isFavorite: "yes" }),
+    } as HttpEvent),
+    (error) => error instanceof AppError && error.code === "VALIDATION_ERROR",
+  );
+});
+
+test("PATCH updates isFavorite when the recipe exists and belongs to the user", async () => {
+  const calls: Array<{ url: string; init?: RequestInit }> = [];
+  globalThis.fetch = (async (url: string | URL, init?: RequestInit) => {
+    calls.push({ url: url.toString(), init });
+    return new Response(JSON.stringify([{ ...recipeRow, isFavorite: true }]), { status: 200 });
+  }) as typeof fetch;
+
+  const response = await handleRecipes({
+    httpMethod: "PATCH",
+    headers: authHeader(),
+    path: `/recipes/${recipeRow.id}`,
+    body: JSON.stringify({ isFavorite: true }),
+  } as HttpEvent);
+
+  assert.equal(response.statusCode, 200);
+  const payload = JSON.parse(response.body) as { data: { updated: boolean; recipe: { isFavorite: boolean } } };
+  assert.equal(payload.data.updated, true);
+  assert.equal(payload.data.recipe.isFavorite, true);
+  assert.equal(calls[0].init?.method, "PATCH");
+  assert.match(calls[0].url, /id=eq\.10000000-0000-4000-8000-000000000201/);
+  assert.match(calls[0].url, /userId=eq\.u1/);
+  assert.deepEqual(JSON.parse(String(calls[0].init?.body)), { isFavorite: true });
+});
+
+test("PATCH reports not updated when the recipe doesn't exist or isn't owned by the user", async () => {
+  globalThis.fetch = (async () => new Response("[]", { status: 200 })) as typeof fetch;
+
+  const response = await handleRecipes({
+    httpMethod: "PATCH",
+    headers: authHeader(),
+    path: `/recipes/${recipeRow.id}`,
+    body: JSON.stringify({ isFavorite: true }),
+  } as HttpEvent);
+
+  assert.equal(response.statusCode, 200);
+  const payload = JSON.parse(response.body) as { data: { updated: boolean; recipe: unknown } };
+  assert.equal(payload.data.updated, false);
+  assert.equal(payload.data.recipe, null);
+});
+
 test("requires authentication", async () => {
   await assert.rejects(
     handleRecipes({ httpMethod: "POST", headers: {}, body: JSON.stringify(baseBody()) } as HttpEvent),

@@ -41,7 +41,14 @@ export interface Recipe {
   updatedDate: string;
 }
 
+export interface UpdateRecipeFavoriteResult {
+  updated: boolean;
+  recipe: Recipe | null;
+}
+
 export const recipeService = {
   save: (input: SaveRecipeInput) => apiClient.post<SavedRecipe, SaveRecipeInput>("/recipes", input),
   listFavorites: () => apiClient.get<Recipe[]>("/recipes", { query: { isFavorite: true } }),
+  updateFavorite: (id: string, isFavorite: boolean) =>
+    apiClient.patch<UpdateRecipeFavoriteResult, { isFavorite: boolean }>(`/recipes/${encodeURIComponent(id)}`, { isFavorite }),
 };

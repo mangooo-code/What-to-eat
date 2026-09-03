@@ -37,7 +37,7 @@ export interface RecipeStepDto {
 // ingredients are only populated for AI-generated recipes for now (no clean match to the
 // NUMERIC+unitTypeId RecipeIngredients schema); seasonings/steps are populated for both
 // (favorites read theirs from RecipeSeasonings/RecipeSteps).
-export type RecipeDto = Pick<Recipe, "id" | "name" | "description" | "difficulty" | "tags"> & {
+export type RecipeDto = Pick<Recipe, "id" | "name" | "description" | "difficulty" | "tags" | "isFavorite"> & {
   cookTime: string;
   matchSummary: string;
   ingredients?: RecipeIngredientDto[];
@@ -62,6 +62,7 @@ function toDto(
     description: recipe.description,
     difficulty: recipe.difficulty,
     tags: recipe.tags,
+    isFavorite: recipe.isFavorite,
     cookTime: formatCookTime(recipe.time),
     matchSummary,
     seasonings,
@@ -168,6 +169,7 @@ function toAiDto(recipe: AiGeneratedRecipe): RecipeDto {
     description: recipe.description,
     difficulty: recipe.difficulty,
     tags: recipe.tags,
+    isFavorite: false,
     cookTime: formatCookTime(recipe.time),
     matchSummary: "AI 推荐 · 根据现有食材生成",
     ingredients: recipe.ingredients,

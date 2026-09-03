@@ -76,3 +76,8 @@ export interface SaveRecipeRequest {
   steps?: SaveRecipeStepRequest[];
 }
 
+// Sent when the user toggles the 喜欢 (favorite) button on a recipe screen.
+export interface UpdateRecipeFavoriteRequest {
+  isFavorite: boolean;
+}
+

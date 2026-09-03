@@ -144,6 +144,18 @@ export async function getRecipes(userId: string, isFavorite?: boolean | null): P
   return rows.map(mapRecipe);
 }
 
+// Scoped to the owning user via the userId filter, so this both enforces ownership and
+// naturally returns null when the recipe doesn't exist (yet) or belongs to someone else.
+export async function updateRecipeFavorite(id: string, userId: string, isFavorite: boolean): Promise<Recipe | null> {
+  const rows = await postgrestRequest<RecipeRow[]>("Recipes", {
+    method: "PATCH",
+    query: { select: recipeColumns, id: `eq.${id}`, userId: `eq.${userId}` },
+    prefer: "return=representation",
+    body: { isFavorite },
+  });
+  return rows[0] ? mapRecipe(rows[0]) : null;
+}
+
 export interface SaveRecipeInput {
   id: string;
   name: string;

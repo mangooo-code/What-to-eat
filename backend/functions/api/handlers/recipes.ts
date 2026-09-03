@@ -1,12 +1,17 @@
 import { AppError } from "../../../shared/errors/AppError";
 import { successResponse } from "../../../shared/errors/httpResponse";
 import { requireAuth } from "../../../shared/auth";
-import { getRecipes, saveRecipeWithSteps } from "../../../shared/database";
+import { getRecipes, saveRecipeWithSteps, updateRecipeFavorite } from "../../../shared/database";
 import type { HttpEvent, HttpResponse } from "../../../shared/types/api";
 import { getMethod, getQueryParams, parseJsonBody, requireString } from "../../../shared/validation/http";
-import type { SaveRecipeRequest } from "../contracts";
+import type { SaveRecipeRequest, UpdateRecipeFavoriteRequest } from "../contracts";
 
 const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+function recipeIdFromPath(path: string | undefined): string | null {
+  const match = (path ?? "").match(/\/recipes\/([^/?]+)\/?$/);
+  return match ? decodeURIComponent(match[1]) : null;
+}
 
 // Reverses formatCookTime()'s output ("N 分钟" / "N 小时") on a best-effort basis;
 // falls back to null (the column is nullable) for anything else.
@@ -30,6 +35,17 @@ function optionalStringArray(value: unknown, field: string): string[] {
 export async function handleRecipes(event: HttpEvent): Promise<HttpResponse> {
   const method = getMethod(event);
   const userId = requireAuth(event);
+  const recipeId = recipeIdFromPath(event.path);
+
+  if (method === "PATCH" && recipeId) {
+    if (!uuidPattern.test(recipeId)) throw new AppError("VALIDATION_ERROR", "id must be a valid uuid");
+    const body = parseJsonBody<UpdateRecipeFavoriteRequest>(event);
+    if (typeof body.isFavorite !== "boolean") {
+      throw new AppError("VALIDATION_ERROR", "isFavorite must be a boolean");
+    }
+    const recipe = await updateRecipeFavorite(recipeId, userId, body.isFavorite);
+    return successResponse({ updated: recipe !== null, recipe }, 200);
+  }
 
   if (method === "GET") {
     const isFavoriteParam = getQueryParams(event).get("isFavorite");

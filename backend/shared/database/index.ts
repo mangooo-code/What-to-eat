@@ -35,6 +35,7 @@ export {
   getRecipeSeasonings,
   getRecipeSteps,
   saveRecipeWithSteps,
+  updateRecipeFavorite,
   MAX_RESULTS,
   type RecipeTimeRange,
   type SaveRecipeInput,

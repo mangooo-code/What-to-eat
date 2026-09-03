@@ -8,6 +8,7 @@ import {
   getRecipeSteps,
   getRecipes,
   saveRecipeWithSteps,
+  updateRecipeFavorite,
 } from "./recipeRepository";
 
 let originalFetch: typeof fetch;
@@ -70,6 +71,21 @@ test("getRecipes returns all of the user's recipes when isFavorite is omitted", 
   await getRecipes("u1");
   assert.match(calls[0].url, /userId=eq\.u1/);
   assert.doesNotMatch(calls[0].url, /isFavorite=/);
+});
+
+test("updateRecipeFavorite updates isFavorite scoped to the owning user", async () => {
+  const calls = mockFetch([{ ...recipeRow, isFavorite: false }]);
+  const recipe = await updateRecipeFavorite("r1", "u1", false);
+  assert.equal(recipe?.isFavorite, false);
+  assert.equal(calls[0].init?.method, "PATCH");
+  assert.match(calls[0].url, /id=eq\.r1/);
+  assert.match(calls[0].url, /userId=eq\.u1/);
+  assert.deepEqual(JSON.parse(String(calls[0].init?.body)), { isFavorite: false });
+});
+
+test("updateRecipeFavorite returns null when no matching row is updated", async () => {
+  mockFetch([]);
+  assert.equal(await updateRecipeFavorite("missing", "u1", true), null);
 });
 
 test("saveRecipeWithSteps returns the existing recipe without creating a duplicate", async () => {

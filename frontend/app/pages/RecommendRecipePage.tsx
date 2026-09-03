@@ -7,7 +7,7 @@ import { currentlyCookingStorage } from "../services/currentlyCookingStorage";
 import { recipeService } from "../services/recipeService";
 
 export function RecommendRecipePage() {
-  const { recommendedRecipes, likedRecipes, setLikedRecipes, go, goBack } = useApp();
+  const { recommendedRecipes, setRecommendedRecipes, setLikedRecipes, go, goBack } = useApp();
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
   const recipe = recommendedRecipes.find((r) => r.id === id);
@@ -20,6 +20,22 @@ export function RecommendRecipePage() {
       </>
     );
   }
+
+  const liked = recipe.isFavorite === true;
+
+  const handleToggleLike = () => {
+    const nextIsFavorite = !liked;
+    setLikedRecipes((a) =>
+      nextIsFavorite ? [...a, recipe.id] : a.filter((x) => x !== recipe.id),
+    );
+    if (recommendedRecipes.some((r) => r.id === recipe.id)) {
+      setRecommendedRecipes(
+        recommendedRecipes.map((r) => (r.id === recipe.id ? { ...r, isFavorite: nextIsFavorite } : r)),
+      );
+    }
+    // Best-effort: only updates something server-side if this id is already a real, owned recipe.
+    recipeService.updateFavorite(recipe.id, nextIsFavorite).catch(() => {});
+  };
 
   const handleStartCooking = async () => {
     try {
@@ -45,12 +61,8 @@ export function RecommendRecipePage() {
       <Header title="菜谱详情" back={() => goBack()} />
       <RecipeDetail
         recipe={recipe}
-        liked={likedRecipes.includes(recipe.id)}
-        onToggleLike={() =>
-          setLikedRecipes((a) =>
-            a.includes(recipe.id) ? a.filter((x) => x !== recipe.id) : [...a, recipe.id],
-          )
-        }
+        liked={liked}
+        onToggleLike={handleToggleLike}
         primaryLabel="就做这道"
         onPrimary={handleStartCooking}
       />

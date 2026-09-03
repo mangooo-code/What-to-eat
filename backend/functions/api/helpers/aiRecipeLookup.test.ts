@@ -63,6 +63,7 @@ test("generates AI recipes to fill all result slots when favorites aren't reques
   const recipes = await search(baseSubmission());
   assert.equal(recipes.length, 3);
   assert.ok(recipes.every((recipe) => recipe.matchSummary === "AI 推荐 · 根据现有食材生成"));
+  assert.ok(recipes.every((recipe) => recipe.isFavorite === false));
   assert.deepEqual(recipes[0].ingredients, [{ name: "番茄", quantity: "2 个" }]);
   assert.deepEqual(recipes[0].steps, [{ title: "备料", detailedInstructions: "洗净切块", time: 5 }]);
 });
@@ -99,9 +100,11 @@ test("tops up remaining slots with AI recipes after favorites are found", async 
   assert.equal(recipes.length, 3);
   assert.equal(recipes[0].name, "收藏菜");
   assert.equal(recipes[0].matchSummary, "已收藏 · 现有食材可以直接做");
+  assert.equal(recipes[0].isFavorite, true);
   assert.deepEqual(recipes[0].seasonings, [{ name: "盐", quantity: "适量" }]);
   assert.deepEqual(recipes[0].steps, [{ title: "备料", detailedInstructions: "洗净切块", time: 5 }]);
   assert.ok(recipes.slice(1).every((recipe) => recipe.matchSummary === "AI 推荐 · 根据现有食材生成"));
+  assert.ok(recipes.slice(1).every((recipe) => recipe.isFavorite === false));
 });
 
 test("keeps successful AI recipes when some parallel AI calls fail", async () => {

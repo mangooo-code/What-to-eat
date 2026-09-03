@@ -1,5 +1,6 @@
 "use client";
 import "../styles/pages/recipe.css";
+import "../styles/components/recipe-card.css";
 import "../styles/components/recipe-step-card.css";
 import { FoodEmoji } from "./FoodEmoji";
 import { Placeholder } from "./Placeholder";

@@ -27,6 +27,8 @@ export interface RecipeDto {
   matchSummary: string;
   description: string;
   tags: string[];
+  // Set client-side when the user toggles the 喜欢 button; not returned by /findrecipes.
+  isFavorite?: boolean;
   // Only populated for AI-generated recipes for now.
   ingredients?: RecipeIngredientDto[];
   seasonings?: RecipeIngredientDto[];
