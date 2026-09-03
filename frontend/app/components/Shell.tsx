@@ -8,7 +8,7 @@ import { ProfileForm } from "./ProfileForm";
 import { inventoryService } from "../services/inventoryService";
 
 // Pages that show the persistent bottom tab bar.
-const NAV_PAGES = new Set(["home", "fridge", "profile", "findrecipes", "recommend"]);
+const NAV_PAGES = new Set(["home", "fridge", "profile", "findrecipes", "recommend", "recipesHistory", "recipesFavorites"]);
 
 export function Shell({
   children,
