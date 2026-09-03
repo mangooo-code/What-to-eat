@@ -68,6 +68,20 @@ describe("Shell", () => {
     expect(screen.getByText("今天吃什么")).toBeInTheDocument();
   });
 
+  it("highlights the tab recipes/history's back button leads to (home)", () => {
+    mockApp({ page: "recipesHistory", recipesListOrigin: "home" });
+    render(<Shell>内容</Shell>);
+    expect(screen.getByRole("button", { name: /今天吃什么/ })).toHaveAttribute("aria-current", "page");
+    expect(screen.getByRole("button", { name: /我的/ })).not.toHaveAttribute("aria-current");
+  });
+
+  it("highlights the tab recipes/favorites' back button leads to (profile)", () => {
+    mockApp({ page: "recipesFavorites", recipesListOrigin: "profile" });
+    render(<Shell>内容</Shell>);
+    expect(screen.getByRole("button", { name: /我的/ })).toHaveAttribute("aria-current", "page");
+    expect(screen.getByRole("button", { name: /今天吃什么/ })).not.toHaveAttribute("aria-current");
+  });
+
   it("shows the toast when present", () => {
     mockApp({ toast: "已保存" });
     render(<Shell>内容</Shell>);

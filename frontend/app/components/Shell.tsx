@@ -21,6 +21,7 @@ export function Shell({
     page,
     authChecked,
     findRecipesSubmitting,
+    recipesListOrigin,
     go,
     toast,
     legal,
@@ -51,7 +52,13 @@ export function Shell({
     editIndex,
   } = useApp();
   const [deleting, setDeleting] = useState(false);
-  const homeActive = page === "home" || page === "findrecipes" || page === "recommend";
+  // recipes/history and recipes/favorites don't belong to a tab themselves - their back
+  // button leads to wherever they were opened from, so highlight that tab instead.
+  const onRecipesList = page === "recipesHistory" || page === "recipesFavorites";
+  const homeActive =
+    page === "home" || page === "findrecipes" || page === "recommend" ||
+    (onRecipesList && recipesListOrigin === "home");
+  const profileActive = page === "profile" || (onRecipesList && recipesListOrigin === "profile");
 
   const nav = (
     <nav className="bottom-nav" aria-label="主导航">
@@ -75,8 +82,8 @@ export function Shell({
       </button>
       <button
         type="button"
-        className={page === "profile" ? "active" : ""}
-        aria-current={page === "profile" ? "page" : undefined}
+        className={profileActive ? "active" : ""}
+        aria-current={profileActive ? "page" : undefined}
         onClick={() => go("profile")}
       >
         <AssetImage name="profile.png" alt="" />

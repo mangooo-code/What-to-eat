@@ -2,6 +2,7 @@
 import "../styles/pages/recipes.css";
 import "../styles/components/recipe-card.css";
 import "../styles/components/tabs.css";
+import "../styles/components/loading.css";
 import { useEffect, useState } from "react";
 import { useApp } from "../context/AppContext";
 import { Header } from "../components/Header";
@@ -69,7 +70,11 @@ export function RecipesPage() {
           喜欢的菜谱
         </button>
       </div>
-      {data.length ? <div className="recipe-grid">
+      {recipeTab === "done" && !historyLoaded ? (
+        <div className="center-state" role="status" aria-live="polite">
+          <span className="spinner" aria-hidden="true" />
+        </div>
+      ) : data.length ? <div className="recipe-grid">
         {data.map((x) => (
           <button
             type="button"
@@ -89,7 +94,7 @@ export function RecipesPage() {
             </span>
           </button>
         ))}
-      </div> : (recipeTab === "done" && !historyLoaded ? null : <div className="recipes-empty"><AssetImage name="empty-recipes-state.png" alt="" className="asset-state" /><h2>{recipeTab === "done" ? "还没有做过的菜谱" : "还没有喜欢的菜谱"}</h2><p>之后的菜谱会出现在这里。</p></div>)}
+      </div> : <div className="recipes-empty"><AssetImage name="empty-recipes-state.png" alt="" className="asset-state" /><h2>{recipeTab === "done" ? "还没有做过的菜谱" : "还没有喜欢的菜谱"}</h2><p>之后的菜谱会出现在这里。</p></div>}
     </>
   );
 }

@@ -74,9 +74,10 @@ describe("RecipesPage", () => {
     expect(goBack).toHaveBeenCalledWith("profile");
   });
 
-  it("shows nothing (no empty-state flash) while history is still loading", () => {
+  it("shows a spinner (no empty-state flash) while history is still loading", () => {
     mockApp({ page: "recipesHistory" });
     render(<RecipesPage />);
+    expect(screen.getByRole("status")).toBeInTheDocument();
     expect(screen.queryByText("还没有做过的菜谱")).not.toBeInTheDocument();
   });
 
