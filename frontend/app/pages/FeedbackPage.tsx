@@ -37,7 +37,7 @@ export function FeedbackPage() {
           ))}
         </div>
       </section>
-      <label className="label">
+      <label className="label feedback-comment-field">
         还有什么想说的？
         <textarea placeholder="很好吃，就是有点甜……" />
       </label>
