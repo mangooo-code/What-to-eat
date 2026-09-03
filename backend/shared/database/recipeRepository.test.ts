@@ -133,6 +133,59 @@ test("saveRecipeWithSteps creates a new recipe, its steps, and its seasonings wh
   assert.equal(seasoningsBody[0].quantity, "适量");
 });
 
+test("saveRecipeWithSteps splits ingredient quantities, saves them into ReferenceIngredients, and links RecipeIngredients to the new rows", async () => {
+  const newRecipeRow = { ...recipeRow, id: "r3", name: "新菜谱" };
+  const calls: Array<{ url: string; init?: RequestInit }> = [];
+  let call = 0;
+  globalThis.fetch = (async (url: string | URL, init?: RequestInit) => {
+    calls.push({ url: url.toString(), init });
+    call++;
+    if (call === 1) return new Response("[]", { status: 200 }); // getRecipeById: not found
+    if (call === 2) return new Response(JSON.stringify([newRecipeRow]), { status: 201 }); // create Recipes row
+    if (call === 3) return new Response(JSON.stringify([{ id: 1, name: "个" }, { id: 2, name: "克" }]), { status: 200 }); // listUnitTypes
+    if (call === 4) return new Response(JSON.stringify([{ id: "ref-1" }, { id: "ref-2" }]), { status: 201 }); // create ReferenceIngredients rows
+    return new Response("[]", { status: 201 }); // create RecipeIngredients rows
+  }) as typeof fetch;
+
+  const recipe = await saveRecipeWithSteps(
+    "u1",
+    { id: "r3", name: "新菜谱", description: null, difficulty: null, tags: [], time: 20, source: "ai_generated" },
+    [],
+    [],
+    [
+      { name: "牛肉", quantity: "300 克" },
+      { name: "神秘食材", quantity: "1 桶" },
+    ],
+  );
+
+  assert.equal(recipe.id, "r3");
+  assert.equal(calls.length, 5);
+  assert.equal(calls[3].init?.method, "POST");
+  assert.equal(calls[4].init?.method, "POST");
+
+  const referenceBody = JSON.parse(String(calls[3].init?.body)) as Array<{
+    name: string;
+    quantity: number;
+    unitTypeId: number;
+    userId: string;
+  }>;
+  assert.deepEqual(referenceBody, [
+    { name: "牛肉", quantity: 300, unitTypeId: 2, userId: "u1" },
+    { name: "神秘食材", quantity: 1, unitTypeId: 1, userId: "u1" }, // "桶" has no match -> defaults to unitType 1
+  ]);
+
+  const recipeIngredientsBody = JSON.parse(String(calls[4].init?.body)) as Array<{
+    recipeId: string;
+    ingredientId: string;
+    nameSnapshot: string;
+    quantity: number;
+  }>;
+  assert.deepEqual(recipeIngredientsBody, [
+    { recipeId: "r3", ingredientId: "ref-1", nameSnapshot: "牛肉", unitTypeId: 2, quantity: 300, isOptional: false },
+    { recipeId: "r3", ingredientId: "ref-2", nameSnapshot: "神秘食材", unitTypeId: 1, quantity: 1, isOptional: false },
+  ]);
+});
+
 test("getRecipeIngredients maps the quantity string to a number", async () => {
   mockFetch([{ id: 1, recipeId: "r1", ingredientId: null, nameSnapshot: "番茄", unitTypeId: 1, quantity: "2", isOptional: false }]);
   const ingredients = await getRecipeIngredients("r1");

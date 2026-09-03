@@ -121,7 +121,7 @@ export function RecipesPage() {
             </span>
           </button>
         ))}
-      </div> : <div className="recipes-empty"><AssetImage name="empty-recipes-state.png" alt="" className="asset-state" /><h2>{recipeTab === "done" ? "还没有做过的菜谱" : "还没有喜欢的菜谱"}</h2><p>之后的菜谱会出现在这里。</p></div>}
+      </div> : <div className="recipes-empty"><AssetImage name="empty-recipes-state.png" alt="" className="asset-state" /><h2>{recipeTab === "done" ? "还没有做过的菜谱" : "还没有喜欢的菜谱"}</h2></div>}
     </>
   );
 }

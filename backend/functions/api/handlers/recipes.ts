@@ -162,6 +162,10 @@ export async function handleRecipes(event: HttpEvent): Promise<HttpResponse> {
       name: item.name,
       quantity: item.quantity ?? null,
     }));
+    const ingredients = (Array.isArray(body.ingredients) ? body.ingredients : []).map((item) => ({
+      name: item.name,
+      quantity: item.quantity,
+    }));
     const steps = (Array.isArray(body.steps) ? body.steps : []).map((step) => ({
       title: step.title,
       detailedInstructions: step.detailedInstructions,
@@ -181,6 +185,7 @@ export async function handleRecipes(event: HttpEvent): Promise<HttpResponse> {
       },
       steps,
       seasonings,
+      ingredients,
     );
     return successResponse(recipe, 201);
   }

@@ -85,6 +85,7 @@ export interface SaveRecipeRequest {
   /** Formatted display string (e.g. "15 分钟"), not raw minutes. */
   cookTime?: string;
   seasonings?: SaveRecipeIngredientRequest[];
+  ingredients?: SaveRecipeIngredientRequest[];
   steps?: SaveRecipeStepRequest[];
 }
 

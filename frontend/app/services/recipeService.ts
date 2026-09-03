@@ -15,6 +15,7 @@ export interface SaveRecipeInput {
   tags?: string[];
   cookTime?: string;
   seasonings?: RecipeIngredientDto[];
+  ingredients?: RecipeIngredientDto[];
   steps?: SaveRecipeStepInput[];
 }
 

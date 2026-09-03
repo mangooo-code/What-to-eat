@@ -79,6 +79,7 @@ export function CookModePage() {
           tags: recipe.tags,
           cookTime: recipe.cookTime,
           seasonings: recipe.seasonings,
+          ingredients: localRecipe?.ingredients,
           steps: recipe.steps,
         })
         .then((saved) => currentlyCookingStorage.set(saved.id))

@@ -40,6 +40,7 @@ export {
   MAX_RESULTS,
   type RecipeTimeRange,
   type SaveRecipeInput,
+  type SaveRecipeIngredientInput,
   type SaveRecipeSeasoningInput,
   type SaveRecipeStepInput,
 } from "./recipeRepository";

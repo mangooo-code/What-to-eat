@@ -1,5 +1,6 @@
 import type { Recipe, RecipeIngredient, RecipeSeasoning, RecipeStep } from "../types/domain";
 import { postgrestRequest } from "./postgrestClient";
+import { listUnitTypes } from "./inventoryRepository";
 
 interface RecipeRow {
   id: string;
@@ -177,6 +178,25 @@ export interface SaveRecipeSeasoningInput {
   quantity: string | null;
 }
 
+export interface SaveRecipeIngredientInput {
+  name: string;
+  /** Free-text amount like "2 个"/"300 克", same shape as seasonings. */
+  quantity: string;
+}
+
+interface ReferenceIngredientRow {
+  id: string;
+}
+
+// Best-effort: splits a free-text quantity like "2 个"/"300 克" into a leading number and
+// the remaining unit text; amounts with no leading number (e.g. "适量") become quantity 0
+// with the whole string kept as the unit label (mirrors the frontend's splitQuantity helper).
+function splitIngredientQuantity(raw: string): { quantity: number; unit: string } {
+  const match = raw.match(/^(\d+(?:\.\d+)?)\s*(.*)$/);
+  if (match) return { quantity: Number(match[1]), unit: match[2].trim() };
+  return { quantity: 0, unit: raw.trim() };
+}
+
 // Idempotent by id: if the recipe already exists (e.g. an already-favorited recipe
 // picked from findrecipes), returns it as-is instead of creating a duplicate.
 export async function saveRecipeWithSteps(
@@ -184,6 +204,7 @@ export async function saveRecipeWithSteps(
   recipe: SaveRecipeInput,
   steps: SaveRecipeStepInput[],
   seasonings: SaveRecipeSeasoningInput[] = [],
+  ingredients: SaveRecipeIngredientInput[] = [],
 ): Promise<Recipe> {
   const existing = await getRecipeById(recipe.id);
   if (existing) return existing;
@@ -205,6 +226,40 @@ export async function saveRecipeWithSteps(
     },
   });
   const created = mapRecipe(rows[0]);
+
+  // Ingredients are required to cook the recipe (and get consumed from the user's real
+  // Ingredients inventory at cook-time) but must NOT reference a live inventory row directly -
+  // that row gets DELETEd once fully consumed. ReferenceIngredients holds a stable snapshot
+  // instead, so RecipeIngredients.ingredientId never dangles.
+  if (ingredients.length) {
+    const unitTypes = await listUnitTypes();
+    const unitIdByName = new Map(unitTypes.map((unitType) => [unitType.name, unitType.id]));
+    const parsed = ingredients.map((item) => ({ name: item.name, ...splitIngredientQuantity(item.quantity) }));
+
+    const referenceRows = await postgrestRequest<ReferenceIngredientRow[]>("ReferenceIngredients", {
+      method: "POST",
+      query: { select: "id" },
+      prefer: "return=representation",
+      body: parsed.map((item) => ({
+        name: item.name,
+        quantity: item.quantity,
+        unitTypeId: unitIdByName.get(item.unit) ?? 1,
+        userId,
+      })),
+    });
+
+    await postgrestRequest("RecipeIngredients", {
+      method: "POST",
+      body: parsed.map((item, index) => ({
+        recipeId: created.id,
+        ingredientId: referenceRows[index].id,
+        nameSnapshot: item.name,
+        unitTypeId: unitIdByName.get(item.unit) ?? 1,
+        quantity: item.quantity,
+        isOptional: false,
+      })),
+    });
+  }
 
   if (steps.length) {
     await postgrestRequest("RecipeSteps", {

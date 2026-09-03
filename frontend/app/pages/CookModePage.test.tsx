@@ -163,6 +163,33 @@ describe("CookModePage", () => {
     expect(mockedSet).toHaveBeenCalledWith("9e2b8f2a-2f8a-4b2b-9b8f-2a2f8a4b2b9b");
   });
 
+  it("forwards the local recipe's ingredients (still as free-text quantity strings) to the save call", async () => {
+    await mockSearchParams("id=9e2b8f2a-2f8a-4b2b-9b8f-2a2f8a4b2b9b&isStored=false");
+    mockedSave.mockResolvedValue({ id: "9e2b8f2a-2f8a-4b2b-9b8f-2a2f8a4b2b9b" });
+    mockApp({
+      consumeOpen: true,
+      recommendedRecipes: [
+        {
+          id: "9e2b8f2a-2f8a-4b2b-9b8f-2a2f8a4b2b9b",
+          name: "番茄炒蛋",
+          cookTime: "15 分钟",
+          difficulty: "简单",
+          matchSummary: "",
+          description: "",
+          tags: [],
+          ingredients: [{ name: "番茄", quantity: "2 个" }],
+        },
+      ],
+    });
+    render(<CookModePage />);
+    await act(async () => {
+      fireEvent.click(screen.getByText("确认食材消耗"));
+    });
+    expect(mockedSave).toHaveBeenCalledWith(
+      expect.objectContaining({ ingredients: [{ name: "番茄", quantity: "2 个" }] }),
+    );
+  });
+
   it("does not save again when isStored is true, when consumption is confirmed", async () => {
     await mockSearchParams("id=8b412e45-1acd-412c-ae89-4028704fb9a1&isStored=true");
     mockedGetById.mockResolvedValue({
