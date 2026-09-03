@@ -72,8 +72,12 @@ test("GET rejects an invalid isFavorite query param", async () => {
 test("GET returns the requesting user's recipes filtered by isFavorite", async () => {
   const calls: Array<{ url: string; init?: RequestInit }> = [];
   globalThis.fetch = (async (url: string | URL, init?: RequestInit) => {
-    calls.push({ url: url.toString(), init });
-    return new Response(JSON.stringify([{ ...recipeRow, isFavorite: true }]), { status: 200 });
+    const str = url.toString();
+    calls.push({ url: str, init });
+    if (/\/Recipes\?/.test(str)) return new Response(JSON.stringify([{ ...recipeRow, isFavorite: true }]), { status: 200 });
+    if (/\/Ingredients\?/.test(str)) return new Response("[]", { status: 200 });
+    if (/\/RecipeIngredients\?/.test(str)) return new Response("[]", { status: 200 });
+    throw new Error(`Unexpected fetch call: ${str}`);
   }) as typeof fetch;
 
   const response = await handleRecipes({
@@ -94,8 +98,12 @@ test("GET returns the requesting user's recipes filtered by isFavorite", async (
 test("GET without isFavorite returns all of the requesting user's recipes", async () => {
   const calls: Array<{ url: string; init?: RequestInit }> = [];
   globalThis.fetch = (async (url: string | URL, init?: RequestInit) => {
-    calls.push({ url: url.toString(), init });
-    return new Response(JSON.stringify([recipeRow, { ...recipeRow, id: "r2", isFavorite: true }]), { status: 200 });
+    const str = url.toString();
+    calls.push({ url: str, init });
+    if (/\/Recipes\?/.test(str)) return new Response(JSON.stringify([recipeRow, { ...recipeRow, id: "r2", isFavorite: true }]), { status: 200 });
+    if (/\/Ingredients\?/.test(str)) return new Response("[]", { status: 200 });
+    if (/\/RecipeIngredients\?/.test(str)) return new Response("[]", { status: 200 });
+    throw new Error(`Unexpected fetch call: ${str}`);
   }) as typeof fetch;
 
   const response = await handleRecipes({
@@ -109,6 +117,47 @@ test("GET without isFavorite returns all of the requesting user's recipes", asyn
   assert.equal(payload.data.length, 2);
   assert.match(calls[0].url, /userId=eq\.u1/);
   assert.doesNotMatch(calls[0].url, /isFavorite=/);
+});
+
+test("GET computes matchSummary/hasEnoughIngredients from the user's on-hand inventory", async () => {
+  globalThis.fetch = (async (url: string | URL) => {
+    const str = url.toString();
+    if (/\/Recipes\?/.test(str)) return new Response(JSON.stringify([recipeRow]), { status: 200 });
+    if (/\/Ingredients\?/.test(str)) {
+      return new Response(
+        JSON.stringify([
+          { id: "i1", userId: "u1", name: "番茄", normalizedName: "番茄", quantity: "1", unitTypeId: 1, locationId: "l1", expiryDate: null, imageFileId: null, source: "manual", createdDate: "d", updatedDate: "d" },
+        ]),
+        { status: 200 },
+      );
+    }
+    if (/\/RecipeIngredients\?/.test(str)) {
+      return new Response(
+        JSON.stringify([
+          { id: 1, recipeId: recipeRow.id, ingredientId: null, nameSnapshot: "番茄", unitTypeId: 1, quantity: "2", isOptional: false },
+          { id: 2, recipeId: recipeRow.id, ingredientId: null, nameSnapshot: "鸡蛋", unitTypeId: 1, quantity: "3", isOptional: false },
+          { id: 3, recipeId: recipeRow.id, ingredientId: null, nameSnapshot: "葱花", unitTypeId: 1, quantity: "1", isOptional: true },
+        ]),
+        { status: 200 },
+      );
+    }
+    throw new Error(`Unexpected fetch call: ${str}`);
+  }) as typeof fetch;
+
+  const response = await handleRecipes({
+    httpMethod: "GET",
+    headers: authHeader(),
+    queryStringParameters: {},
+  } as HttpEvent);
+
+  assert.equal(response.statusCode, 200);
+  const payload = JSON.parse(response.body) as {
+    data: Array<{ matchSummary: string; hasEnoughIngredients: boolean; cookTime: string }>;
+  };
+  // 番茄: has 1, needs 2 (short); 鸡蛋: has 0, needs 3 (short); 葱花 is optional so it's ignored.
+  assert.equal(payload.data[0].hasEnoughIngredients, false);
+  assert.equal(payload.data[0].matchSummary, "缺少 2 种主要食材");
+  assert.equal(payload.data[0].cookTime, "20 分钟");
 });
 
 test("PATCH rejects a non-boolean isFavorite", async () => {

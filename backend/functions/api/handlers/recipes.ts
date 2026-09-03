@@ -7,13 +7,15 @@ import {
   getRecipes,
   getRecipeSeasonings,
   getRecipeSteps,
+  listIngredients,
   listUnitTypes,
   saveRecipeWithSteps,
   updateRecipeFavorite,
 } from "../../../shared/database";
 import type { HttpEvent, HttpResponse } from "../../../shared/types/api";
 import { getMethod, getQueryParams, parseJsonBody, requireString } from "../../../shared/validation/http";
-import type { RecipeDetailResponse, SaveRecipeRequest, UpdateRecipeFavoriteRequest } from "../contracts";
+import type { RecipeDetailResponse, RecipeListItem, SaveRecipeRequest, UpdateRecipeFavoriteRequest } from "../contracts";
+import type { Ingredient, RecipeIngredient } from "../../../shared/types/domain";
 
 const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
@@ -45,6 +47,33 @@ function optionalStringArray(value: unknown, field: string): string[] {
     throw new AppError("VALIDATION_ERROR", `${field} must be an array of strings`);
   }
   return value;
+}
+
+// Aggregates on-hand quantity by name (case/whitespace-insensitive, same convention as
+// consumeIngredientByName) so multiple inventory rows of the same ingredient combine.
+function aggregateInventoryByName(inventory: Ingredient[]): Map<string, number> {
+  const totals = new Map<string, number>();
+  for (const item of inventory) {
+    const key = (item.normalizedName ?? item.name).trim().toLowerCase();
+    totals.set(key, (totals.get(key) ?? 0) + item.quantity);
+  }
+  return totals;
+}
+
+// A recipe "has enough ingredients" when every required (non-optional) RecipeIngredients row
+// is matched, by name, to enough on-hand inventory quantity; missingCount feeds matchSummary.
+function checkIngredientAvailability(
+  inventoryTotals: Map<string, number>,
+  required: RecipeIngredient[],
+): { hasEnoughIngredients: boolean; missingCount: number } {
+  let missingCount = 0;
+  for (const ingredient of required) {
+    if (ingredient.nameSnapshot === null) continue;
+    const key = ingredient.nameSnapshot.trim().toLowerCase();
+    const available = inventoryTotals.get(key) ?? 0;
+    if (available < ingredient.quantity) missingCount += 1;
+  }
+  return { hasEnoughIngredients: missingCount === 0, missingCount };
 }
 
 export async function handleRecipes(event: HttpEvent): Promise<HttpResponse> {
@@ -101,7 +130,26 @@ export async function handleRecipes(event: HttpEvent): Promise<HttpResponse> {
       throw new AppError("VALIDATION_ERROR", "isFavorite query param must be 'true' or 'false'");
     }
     const recipes = await getRecipes(userId, isFavoriteParam === null ? undefined : isFavoriteParam === "true");
-    return successResponse(recipes, 200);
+    const [inventory, requiredIngredientsByRecipe] = await Promise.all([
+      listIngredients(userId),
+      Promise.all(recipes.map((recipe) => getRecipeIngredients(recipe.id))),
+    ]);
+    const inventoryTotals = aggregateInventoryByName(inventory);
+    const items: RecipeListItem[] = recipes.map((recipe, index) => {
+      const required = requiredIngredientsByRecipe[index].filter((ingredient) => !ingredient.isOptional);
+      const { hasEnoughIngredients, missingCount } = checkIngredientAvailability(inventoryTotals, required);
+      return {
+        id: recipe.id,
+        name: recipe.name,
+        cookTime: formatCookTime(recipe.time),
+        difficulty: recipe.difficulty,
+        isFavorite: recipe.isFavorite,
+        updatedDate: recipe.updatedDate,
+        matchSummary: missingCount === 0 ? "主要食材全部已有" : `缺少 ${missingCount} 种主要食材`,
+        hasEnoughIngredients,
+      };
+    });
+    return successResponse(items, 200);
   }
 
   if (method === "POST") {

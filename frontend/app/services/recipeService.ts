@@ -60,10 +60,25 @@ export interface RecipeDetail {
   steps: RecipeStepDto[];
 }
 
+// Returned by GET /recipes (list): a lightweight card view for 我的菜谱, enriched with a
+// live ingredient-availability check computed on the backend.
+export interface RecipeListItem {
+  id: string;
+  name: string;
+  cookTime: string;
+  difficulty: string | null;
+  isFavorite: boolean;
+  updatedDate: string;
+  // e.g. "主要食材全部已有" / "缺少 2 种主要食材".
+  matchSummary: string;
+  hasEnoughIngredients: boolean;
+}
+
 export const recipeService = {
   save: (input: SaveRecipeInput) => apiClient.post<SavedRecipe, SaveRecipeInput>("/recipes", input),
   getById: (id: string) => apiClient.get<RecipeDetail>(`/recipes/${encodeURIComponent(id)}`),
-  listFavorites: () => apiClient.get<Recipe[]>("/recipes", { query: { isFavorite: true } }),
+  list: () => apiClient.get<RecipeListItem[]>("/recipes"),
+  listFavorites: () => apiClient.get<RecipeListItem[]>("/recipes", { query: { isFavorite: true } }),
   updateFavorite: (id: string, isFavorite: boolean) =>
     apiClient.patch<UpdateRecipeFavoriteResult, { isFavorite: boolean }>(`/recipes/${encodeURIComponent(id)}`, { isFavorite }),
 };

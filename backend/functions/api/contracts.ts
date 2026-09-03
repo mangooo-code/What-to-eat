@@ -108,3 +108,19 @@ export interface RecipeDetailResponse {
   steps: SaveRecipeStepRequest[];
 }
 
+// Returned by GET /recipes (list): a lightweight card view for 我的菜谱, enriched with a
+// live ingredient-availability check (RecipeIngredients matched against the user's current
+// Ingredients by name) instead of anything precomputed/stored.
+export interface RecipeListItem {
+  id: string;
+  name: string;
+  /** Formatted display string (e.g. "15 分钟"), not raw minutes. */
+  cookTime: string;
+  difficulty: string | null;
+  isFavorite: boolean;
+  updatedDate: string;
+  /** e.g. "主要食材全部已有" / "缺少 2 种主要食材". */
+  matchSummary: string;
+  hasEnoughIngredients: boolean;
+}
+

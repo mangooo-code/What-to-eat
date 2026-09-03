@@ -2,16 +2,50 @@
 import "../styles/pages/recipes.css";
 import "../styles/components/recipe-card.css";
 import "../styles/components/tabs.css";
+import { useEffect, useState } from "react";
 import { useApp } from "../context/AppContext";
 import { Header } from "../components/Header";
 import { Placeholder } from "../components/Placeholder";
 import { AssetImage } from "../components/AssetImage";
-import { recipesDone, recipesLiked } from "../lib/data";
+import { recipesLiked } from "../lib/data";
+import { recipeService, type RecipeListItem } from "../services/recipeService";
 
 export function RecipesPage() {
   const { page, setRecipeOrigin, go, goBack, recipesListOrigin } = useApp();
   const recipeTab: "done" | "liked" = page === "recipesFavorites" ? "liked" : "done";
-  const data = recipeTab === "done" ? recipesDone : recipesLiked;
+
+  const [historyRecipes, setHistoryRecipes] = useState<RecipeListItem[]>([]);
+  const [historyLoaded, setHistoryLoaded] = useState(false);
+
+  useEffect(() => {
+    if (recipeTab !== "done") return;
+    let cancelled = false;
+    recipeService
+      .list()
+      .then((items) => {
+        if (!cancelled) setHistoryRecipes(items);
+      })
+      .catch(() => {
+        if (!cancelled) setHistoryRecipes([]);
+      })
+      .finally(() => {
+        if (!cancelled) setHistoryLoaded(true);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [recipeTab]);
+
+  const data =
+    recipeTab === "done"
+      ? historyRecipes.map((item) => ({
+          key: item.id,
+          name: item.name,
+          subtitle: [item.cookTime, item.difficulty].filter(Boolean).join(" · "),
+          summary: item.matchSummary,
+        }))
+      : recipesLiked.map(([name, subtitle, summary]) => ({ key: name, name, subtitle, summary }));
+
   return (
     <>
       <Header title="我的菜谱" back={() => goBack(recipesListOrigin)} />
@@ -40,7 +74,7 @@ export function RecipesPage() {
           <button
             type="button"
             className="saved-card"
-            key={x[0]}
+            key={x.key}
             onClick={() => {
               setRecipeOrigin(recipeTab);
               go("recipe");
@@ -48,14 +82,14 @@ export function RecipesPage() {
           >
             <Placeholder wide />
             <span>
-              <strong>{x[0]}</strong>
-              <small>{x[1]}</small>
-              <em>{x[2]}</em>
+              <strong>{x.name}</strong>
+              <small>{x.subtitle}</small>
+              <em>{x.summary}</em>
               {recipeTab === "liked" && <i>♥ 已喜欢</i>}
             </span>
           </button>
         ))}
-      </div> : <div className="recipes-empty"><AssetImage name="empty-recipes-state.png" alt="" className="asset-state" /><h2>{recipeTab === "done" ? "还没有做过的菜谱" : "还没有喜欢的菜谱"}</h2><p>之后的菜谱会出现在这里。</p></div>}
+      </div> : (recipeTab === "done" && !historyLoaded ? null : <div className="recipes-empty"><AssetImage name="empty-recipes-state.png" alt="" className="asset-state" /><h2>{recipeTab === "done" ? "还没有做过的菜谱" : "还没有喜欢的菜谱"}</h2><p>之后的菜谱会出现在这里。</p></div>)}
     </>
   );
 }
