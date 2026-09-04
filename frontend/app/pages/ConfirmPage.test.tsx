@@ -86,6 +86,23 @@ describe("ConfirmPage", () => {
     ));
   });
 
+  it("validates every unit before sending any inventory create request", async () => {
+    const say = vi.fn();
+    vi.mocked(inventoryService.create).mockClear();
+    mockApp({
+      foods: [
+        foods[0],
+        { name: "菠菜", qty: 1, unit: "把", place: "冷藏", days: null },
+      ],
+      say,
+    });
+    render(<ConfirmPage />);
+    fireEvent.click(screen.getByText("确认添加"));
+
+    await waitFor(() => expect(say).toHaveBeenCalledWith("找不到“把”对应的单位"));
+    expect(inventoryService.create).not.toHaveBeenCalled();
+  });
+
   it("shows the editor modal with a delete option for existing foods", () => {
     const setFoods = vi.fn();
     const setConfirmEdit = vi.fn();

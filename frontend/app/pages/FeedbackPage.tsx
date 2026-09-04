@@ -16,9 +16,16 @@ export function FeedbackPage() {
   } = useApp();
   return (
     <>
-      <Header title="吃起来怎么样？" sub="随手记一下，下次会更懂你的口味。" />
+      <div className="feedback-page-header">
+        <Header title="吃起来怎么样？" sub="随手记一下，下次会更懂你的口味。" />
+      </div>
       <section className="block">
-        <h2>这道菜你觉得怎么样？</h2>
+        <div className="feedback-reaction-heading">
+          <h2>这道菜你觉得怎么样？</h2>
+          <button className="heart feedback-like-button" type="button" aria-pressed={liked} onClick={() => setLiked(!liked)}>
+            {liked ? "♥ 已加入喜欢" : "♡ 加入喜欢"}
+          </button>
+        </div>
         <div className="reaction-options">
           {["好吃！", "一般", "不喜欢"].map((x) => (
             <button
@@ -41,9 +48,6 @@ export function FeedbackPage() {
         还有什么想说的？
         <textarea placeholder="很好吃，就是有点甜……" />
       </label>
-      <button className="heart big" type="button" aria-pressed={liked} onClick={() => setLiked(!liked)}>
-        {liked ? "♥ 已加入喜欢" : "♡ 加入喜欢"}
-      </button>
       <button
         className="primary sticky"
         onClick={() => {

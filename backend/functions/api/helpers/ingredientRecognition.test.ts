@@ -110,3 +110,17 @@ test("prompt covers meat, seafood, packaged ingredients, and quantity-unit rules
   assert.match(prompt, /禁止把所有食材统一使用“个”/);
   assert.match(prompt, /示例仅用于说明 JSON 格式和单位选择方式，不得照搬/);
 });
+
+test("prompt restricts unit to the inventory-supported set", async () => {
+  let prompt = "";
+  await recognizeIngredientImage(Buffer.from("image"), "image/png", async (messages) => {
+    prompt = messages[0]?.content.find((part) => part.text)?.text ?? "";
+    return '{"items":[]}';
+  });
+
+  assert.match(prompt, /unit 只能从以下集合中选择：个、颗、根、块、盒、袋、瓶、把、条、片、罐、g、kg、ml、L/);
+  assert.match(prompt, /禁止生成集合之外的新单位/);
+  assert.match(prompt, /无法可靠判断数量时，quantity 必须为 null，unit 也必须为 null/);
+  assert.match(prompt, /根据食材实际包装或形态选择上述集合中的单位/);
+  assert.match(prompt, /不推测重量/);
+});

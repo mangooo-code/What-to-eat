@@ -157,9 +157,18 @@ export function ConfirmPage() {
             const locationKey = keyByPlace[fridgePlace as keyof typeof keyByPlace];
             const locationId = snapshot.locations.find((item) => item.key === locationKey)?.id;
             if (!locationId) throw new Error("找不到当前存放区域");
-            await Promise.all(foods.map((food) => {
+            const mappedFoods = foods.map((food) => {
               const unitTypeId = snapshot.unitTypes.find((item) => item.name === food.unit)?.id;
-              if (!unitTypeId) throw new Error(`找不到“${food.unit}”对应的单位`);
+              if (!unitTypeId) return null;
+              return { food, unitTypeId };
+            });
+            const invalidFoodIndex = mappedFoods.findIndex((item) => item === null);
+            if (invalidFoodIndex !== -1) {
+              say(`找不到“${foods[invalidFoodIndex].unit}”对应的单位`);
+              return;
+            }
+            await Promise.all(mappedFoods.map((mappedFood) => {
+              const { food, unitTypeId } = mappedFood!;
               return inventoryService.create({
                 name: food.name.trim(),
                 normalizedName: food.normalizedName ?? food.name.trim(),
