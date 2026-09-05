@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-03T07:00:41.398Z",
-  "gitCommit": "68499ea59be7c0c9e5ee667793a8625ef36b6874",
+  "updatedAt": "2026-09-05T05:21:33.310Z",
+  "gitCommit": "b0e1dbe0be08708695508b0e6fafc0c0fe224306",
   "envId": "kaifanmiao-d4g695xaj0f058d58",
   "resources": {
     "hosting": [
@@ -9,28 +9,40 @@
         "name": "web",
         "files": {
           "404.html": {
-            "hash": "cdef830d95ffdf66",
+            "hash": "55c749c02ad8d574",
             "size": 9029
           },
           "__next.__PAGE__.txt": {
-            "hash": "a023aac60208c1fc",
+            "hash": "ed86c9892332a555",
             "size": 1344
           },
           "__next._full.txt": {
-            "hash": "23134a7ecd043216",
+            "hash": "9e968eca09f94693",
             "size": 5907
           },
           "__next._head.txt": {
-            "hash": "675cc5279207470a",
+            "hash": "444b1843b389f3f3",
             "size": 965
           },
           "__next._index.txt": {
-            "hash": "495f22a33e2a7703",
+            "hash": "b9a910972a6c4968",
             "size": 2680
           },
           "__next._tree.txt": {
-            "hash": "6b35a68771a6f659",
+            "hash": "c814534f213be2e6",
             "size": 406
+          },
+          "_next/static/Eb8MX0iUI3jwDAHM8faMf/_buildManifest.js": {
+            "hash": "9476e0afd3f9da68",
+            "size": 219
+          },
+          "_next/static/Eb8MX0iUI3jwDAHM8faMf/_clientMiddlewareManifest.js": {
+            "hash": "5483e3295dc35dfe",
+            "size": 96
+          },
+          "_next/static/Eb8MX0iUI3jwDAHM8faMf/_ssgManifest.js": {
+            "hash": "678f6ce2cb80b1fe",
+            "size": 80
           },
           "_next/static/chunks/0-rgvty.k3srq.css": {
             "hash": "8a78177631243130",
@@ -52,14 +64,6 @@
             "hash": "3f996dee06071e82",
             "size": 291
           },
-          "_next/static/chunks/01nt6q03uul95.js": {
-            "hash": "c32c60f737f51cba",
-            "size": 4928
-          },
-          "_next/static/chunks/023br~timqfog.js": {
-            "hash": "5715a30f79bb7464",
-            "size": 11293
-          },
           "_next/static/chunks/029_kzfy5-.av.css": {
             "hash": "5c1ce41e4f5b9e87",
             "size": 749
@@ -68,21 +72,17 @@
             "hash": "e4f0fa52acb0a9bd",
             "size": 53149
           },
-          "_next/static/chunks/02m6f-9ct_4ur.js": {
-            "hash": "fc6d07626960f44c",
-            "size": 7037
-          },
           "_next/static/chunks/03~yq9q893hmn.js": {
             "hash": "0973c1d64c88adc8",
             "size": 112594
           },
+          "_next/static/chunks/04b429-73xjgu.js": {
+            "hash": "0682511a4cea509e",
+            "size": 2079
+          },
           "_next/static/chunks/052eyd~gfuf0h.css": {
             "hash": "e7928598fcfe4ab9",
             "size": 4769
-          },
-          "_next/static/chunks/068qn49xw7o04.css": {
-            "hash": "41c6d1b41a006f5c",
-            "size": 663
           },
           "_next/static/chunks/06ni615ajr.ts.js": {
             "hash": "4a72013e72a7ad2a",
@@ -108,10 +108,6 @@
             "hash": "b308884d8e025464",
             "size": 1269
           },
-          "_next/static/chunks/09tsi6tu_i7_i.js": {
-            "hash": "4be1ce07974c9d22",
-            "size": 4695
-          },
           "_next/static/chunks/0_3coiyw.nyrh.css": {
             "hash": "1474d38c75580f17",
             "size": 599
@@ -124,9 +120,17 @@
             "hash": "257c1890f581c512",
             "size": 538294
           },
+          "_next/static/chunks/0b7nomph--kcs.js": {
+            "hash": "1778e5c31f3a30c7",
+            "size": 16387
+          },
           "_next/static/chunks/0dbhjjzl8qfwv.js": {
             "hash": "59d6d21868686254",
             "size": 57909
+          },
+          "_next/static/chunks/0dobqi.qezyt6.css": {
+            "hash": "fcf088d2c15576f5",
+            "size": 1457
           },
           "_next/static/chunks/0e9e6sg_r6tel.js": {
             "hash": "ea9e5982f6e83bf9",
@@ -140,6 +144,10 @@
             "hash": "d3a2bd2e50dcbf59",
             "size": 49
           },
+          "_next/static/chunks/0gzvrrz_.ifa9.js": {
+            "hash": "356d2a35f022dfd1",
+            "size": 17102
+          },
           "_next/static/chunks/0h9mrc.or0u5d.css": {
             "hash": "67a2e2d6811cbec3",
             "size": 2877
@@ -152,13 +160,17 @@
             "hash": "839bef05a8275b39",
             "size": 2464
           },
-          "_next/static/chunks/0iy~kl.kr4ysb.js": {
-            "hash": "86a3217f20dacbf4",
-            "size": 7522
-          },
           "_next/static/chunks/0jteo1mheam7g.css": {
             "hash": "5810f6fa4d52a65e",
             "size": 57
+          },
+          "_next/static/chunks/0k~~ggo_npv~e.js": {
+            "hash": "beb9c60f109f60d3",
+            "size": 14760
+          },
+          "_next/static/chunks/0llse_fme4uco.js": {
+            "hash": "391962b675684b74",
+            "size": 17704
           },
           "_next/static/chunks/0lsj_zruymm43.css": {
             "hash": "27646b04c5c1df1d",
@@ -172,25 +184,25 @@
             "hash": "0aea755338d1ce86",
             "size": 143749
           },
-          "_next/static/chunks/0o0id7mqtv2vu.js": {
-            "hash": "317ae66143a79a40",
-            "size": 6322
+          "_next/static/chunks/0mi514rqvf4_j.js": {
+            "hash": "7c03578c0c0fe6c0",
+            "size": 14993
           },
-          "_next/static/chunks/0o6w-txj3uj47.js": {
-            "hash": "bbdd12eb479e61d1",
-            "size": 4928
+          "_next/static/chunks/0mvewc9picpi8.js": {
+            "hash": "052e029e9e4bc2b5",
+            "size": 14006
           },
-          "_next/static/chunks/0sy.nliat9ig1.js": {
-            "hash": "f10aef682ce4848c",
-            "size": 1909
+          "_next/static/chunks/0spwy9pe4wl_~.js": {
+            "hash": "b47536fce69c2a65",
+            "size": 14862
           },
           "_next/static/chunks/0syg5st5_f3hp.js": {
             "hash": "68e9eb0a0c97a433",
             "size": 3529
           },
-          "_next/static/chunks/0w-swfz92tox2.js": {
-            "hash": "8625a7946385c590",
-            "size": 3941
+          "_next/static/chunks/0w4opd9kzd.ym.js": {
+            "hash": "e5de9fc3b1e48b60",
+            "size": 4365
           },
           "_next/static/chunks/0wuifoxwqwvsu.css": {
             "hash": "e493194dc5d51395",
@@ -204,13 +216,13 @@
             "hash": "cf590681e487b996",
             "size": 1583
           },
-          "_next/static/chunks/0~no6ipp95gcx.js": {
-            "hash": "ee8b29ab74f3c00b",
-            "size": 14805
-          },
           "_next/static/chunks/10es28fz_qveg.css": {
             "hash": "2b5eeecfaa65252a",
             "size": 3741
+          },
+          "_next/static/chunks/10jdu4_cx7_lx.js": {
+            "hash": "e564dba9207cc266",
+            "size": 14993
           },
           "_next/static/chunks/11loio6y7d5jn.css": {
             "hash": "6f6ec593d4445609",
@@ -219,6 +231,10 @@
           "_next/static/chunks/121gfbso2q-a-.js": {
             "hash": "5bda6305f7014b94",
             "size": 8118
+          },
+          "_next/static/chunks/12ftx6p7581d3.js": {
+            "hash": "21d0a2b5872c2ca0",
+            "size": 21358
           },
           "_next/static/chunks/131a9ce1p.ozq.js": {
             "hash": "cf0107bb1b151b48",
@@ -231,10 +247,6 @@
           "_next/static/chunks/14hem_uhutnjs.css": {
             "hash": "c60826d1f2008100",
             "size": 650
-          },
-          "_next/static/chunks/14u9kpz6cf0ry.js": {
-            "hash": "951b588466596678",
-            "size": 4346
           },
           "_next/static/chunks/16e6f9sg.v4js.css": {
             "hash": "ae14e28f88c2d64d",
@@ -252,48 +264,36 @@
             "hash": "ee1fe352a5b26bc3",
             "size": 10580
           },
-          "_next/static/v-we44uMj8xBLBb7iZW3S/_buildManifest.js": {
-            "hash": "9476e0afd3f9da68",
-            "size": 219
-          },
-          "_next/static/v-we44uMj8xBLBb7iZW3S/_clientMiddlewareManifest.js": {
-            "hash": "5483e3295dc35dfe",
-            "size": 96
-          },
-          "_next/static/v-we44uMj8xBLBb7iZW3S/_ssgManifest.js": {
-            "hash": "678f6ce2cb80b1fe",
-            "size": 80
-          },
           "_not-found/__next._full.txt": {
-            "hash": "414b2158a905c3f5",
+            "hash": "8d62a28463269507",
             "size": 6510
           },
           "_not-found/__next._head.txt": {
-            "hash": "659d021899131790",
+            "hash": "4cd627f67f0b5d11",
             "size": 1016
           },
           "_not-found/__next._index.txt": {
-            "hash": "495f22a33e2a7703",
+            "hash": "b9a910972a6c4968",
             "size": 2680
           },
           "_not-found/__next._not-found.__PAGE__.txt": {
-            "hash": "3f726458713ac123",
+            "hash": "05b5d81b691321f2",
             "size": 1502
           },
           "_not-found/__next._not-found.txt": {
-            "hash": "5cc45ea2a26acc0f",
+            "hash": "1f8797483a2e896c",
             "size": 525
           },
           "_not-found/__next._tree.txt": {
-            "hash": "f9469b32785c41ad",
+            "hash": "3f022f29bf901db6",
             "size": 373
           },
           "_not-found.html": {
-            "hash": "cdef830d95ffdf66",
+            "hash": "55c749c02ad8d574",
             "size": 9029
           },
           "_not-found.txt": {
-            "hash": "414b2158a905c3f5",
+            "hash": "8d62a28463269507",
             "size": 6510
           },
           "assets/ai-decision-loading.png": {
@@ -493,163 +493,163 @@
             "size": 168676
           },
           "capture/__next._full.txt": {
-            "hash": "03036bfd6cc456ff",
+            "hash": "da6141de59683b6c",
             "size": 6536
           },
           "capture/__next._head.txt": {
-            "hash": "675cc5279207470a",
+            "hash": "444b1843b389f3f3",
             "size": 965
           },
           "capture/__next._index.txt": {
-            "hash": "495f22a33e2a7703",
+            "hash": "b9a910972a6c4968",
             "size": 2680
           },
           "capture/__next._tree.txt": {
-            "hash": "28d06f35db32884a",
+            "hash": "db376b45f088371e",
             "size": 531
           },
           "capture/__next.capture.__PAGE__.txt": {
-            "hash": "34b218b5c64a8b09",
+            "hash": "8bf24ca0f1dae955",
             "size": 1503
           },
           "capture/__next.capture.txt": {
-            "hash": "5cc45ea2a26acc0f",
+            "hash": "1f8797483a2e896c",
             "size": 525
           },
           "capture.html": {
-            "hash": "097aa26c030a4431",
+            "hash": "45b203be554e892d",
             "size": 9391
           },
           "capture.txt": {
-            "hash": "03036bfd6cc456ff",
+            "hash": "da6141de59683b6c",
             "size": 6536
           },
           "confirm/__next._full.txt": {
-            "hash": "eb5cd545a4f69793",
+            "hash": "4ab345175c6a595c",
             "size": 6745
           },
           "confirm/__next._head.txt": {
-            "hash": "675cc5279207470a",
+            "hash": "444b1843b389f3f3",
             "size": 965
           },
           "confirm/__next._index.txt": {
-            "hash": "495f22a33e2a7703",
+            "hash": "b9a910972a6c4968",
             "size": 2680
           },
           "confirm/__next._tree.txt": {
-            "hash": "16792e405d2a3140",
+            "hash": "3c155fdf17748b1e",
             "size": 585
           },
           "confirm/__next.confirm.__PAGE__.txt": {
-            "hash": "4f73809139d804f3",
+            "hash": "d8540fe0bda31760",
             "size": 1664
           },
           "confirm/__next.confirm.txt": {
-            "hash": "5cc45ea2a26acc0f",
+            "hash": "1f8797483a2e896c",
             "size": 525
           },
           "confirm.html": {
-            "hash": "bfdb370af16586ed",
+            "hash": "b29a6a37c5e3a0ed",
             "size": 9709
           },
           "confirm.txt": {
-            "hash": "eb5cd545a4f69793",
+            "hash": "4ab345175c6a595c",
             "size": 6745
           },
           "cook/__next._full.txt": {
-            "hash": "5d9d9dfe1a524066",
+            "hash": "fa4da574a25173d9",
             "size": 6739
           },
           "cook/__next._head.txt": {
-            "hash": "675cc5279207470a",
+            "hash": "444b1843b389f3f3",
             "size": 965
           },
           "cook/__next._index.txt": {
-            "hash": "495f22a33e2a7703",
+            "hash": "b9a910972a6c4968",
             "size": 2680
           },
           "cook/__next._tree.txt": {
-            "hash": "a01335464f79c9c7",
+            "hash": "7f786c9938e1f0b6",
             "size": 582
           },
           "cook/__next.cook.__PAGE__.txt": {
-            "hash": "25d0b9491d1860a7",
+            "hash": "a5b502c58adf9fb0",
             "size": 1664
           },
           "cook/__next.cook.txt": {
-            "hash": "5cc45ea2a26acc0f",
+            "hash": "1f8797483a2e896c",
             "size": 525
           },
           "cook.html": {
-            "hash": "db64e12004ec9c17",
+            "hash": "bc1087e9bcc8ad15",
             "size": 9703
           },
           "cook.txt": {
-            "hash": "5d9d9dfe1a524066",
+            "hash": "fa4da574a25173d9",
             "size": 6739
           },
           "diet/__next._full.txt": {
-            "hash": "9b26f3ef0bc12bec",
+            "hash": "d4aa0b88e1a0492e",
             "size": 6323
           },
           "diet/__next._head.txt": {
-            "hash": "675cc5279207470a",
+            "hash": "444b1843b389f3f3",
             "size": 965
           },
           "diet/__next._index.txt": {
-            "hash": "495f22a33e2a7703",
+            "hash": "b9a910972a6c4968",
             "size": 2680
           },
           "diet/__next._tree.txt": {
-            "hash": "f471201b583ac012",
+            "hash": "68a38e3cd89bce93",
             "size": 474
           },
           "diet/__next.diet.__PAGE__.txt": {
-            "hash": "209842a6b9ed211f",
+            "hash": "feef52642b4f7deb",
             "size": 1344
           },
           "diet/__next.diet.txt": {
-            "hash": "5cc45ea2a26acc0f",
+            "hash": "1f8797483a2e896c",
             "size": 525
           },
           "diet.html": {
-            "hash": "6ca258a974e66f65",
+            "hash": "f26bc449944416bf",
             "size": 9069
           },
           "diet.txt": {
-            "hash": "9b26f3ef0bc12bec",
+            "hash": "d4aa0b88e1a0492e",
             "size": 6323
           },
           "edit/__next._full.txt": {
-            "hash": "04da8a398a7bcae9",
+            "hash": "aaf744dd3139a042",
             "size": 6323
           },
           "edit/__next._head.txt": {
-            "hash": "675cc5279207470a",
+            "hash": "444b1843b389f3f3",
             "size": 965
           },
           "edit/__next._index.txt": {
-            "hash": "495f22a33e2a7703",
+            "hash": "b9a910972a6c4968",
             "size": 2680
           },
           "edit/__next._tree.txt": {
-            "hash": "838cc565f7875917",
+            "hash": "dc049e7889a57773",
             "size": 474
           },
           "edit/__next.edit.__PAGE__.txt": {
-            "hash": "b9076d48f2a5a611",
+            "hash": "911ac812696b5484",
             "size": 1344
           },
           "edit/__next.edit.txt": {
-            "hash": "5cc45ea2a26acc0f",
+            "hash": "1f8797483a2e896c",
             "size": 525
           },
           "edit.html": {
-            "hash": "25dd04fa164bf051",
+            "hash": "10ae823a6be5c08e",
             "size": 9069
           },
           "edit.txt": {
-            "hash": "04da8a398a7bcae9",
+            "hash": "aaf744dd3139a042",
             "size": 6323
           },
           "favicon.svg": {
@@ -657,567 +657,567 @@
             "size": 712
           },
           "feedback/__next._full.txt": {
-            "hash": "178716ab19f0d0e0",
+            "hash": "e75fe50be8c5cde4",
             "size": 6331
           },
           "feedback/__next._head.txt": {
-            "hash": "675cc5279207470a",
+            "hash": "444b1843b389f3f3",
             "size": 965
           },
           "feedback/__next._index.txt": {
-            "hash": "495f22a33e2a7703",
+            "hash": "b9a910972a6c4968",
             "size": 2680
           },
           "feedback/__next._tree.txt": {
-            "hash": "c5c67d0993f2496c",
+            "hash": "c5fe492e4e2cf6fe",
             "size": 478
           },
           "feedback/__next.feedback.__PAGE__.txt": {
-            "hash": "2c243e4dab731ddf",
+            "hash": "7f1270437265a1bf",
             "size": 1344
           },
           "feedback/__next.feedback.txt": {
-            "hash": "5cc45ea2a26acc0f",
+            "hash": "1f8797483a2e896c",
             "size": 525
           },
           "feedback.html": {
-            "hash": "4d837fcbe700b111",
+            "hash": "97379e8c26809720",
             "size": 9077
           },
           "feedback.txt": {
-            "hash": "178716ab19f0d0e0",
+            "hash": "e75fe50be8c5cde4",
             "size": 6331
           },
           "fridge/__next._full.txt": {
-            "hash": "d0a50476d358cdd6",
+            "hash": "9ff28394e0dec6ef",
             "size": 6950
           },
           "fridge/__next._head.txt": {
-            "hash": "675cc5279207470a",
+            "hash": "444b1843b389f3f3",
             "size": 965
           },
           "fridge/__next._index.txt": {
-            "hash": "495f22a33e2a7703",
+            "hash": "b9a910972a6c4968",
             "size": 2680
           },
           "fridge/__next._tree.txt": {
-            "hash": "7bee8129386d73e4",
+            "hash": "40a4dcd7fe5d244e",
             "size": 638
           },
           "fridge/__next.fridge.__PAGE__.txt": {
-            "hash": "9eb33e0d060dcb84",
+            "hash": "eda4de73d4ce748c",
             "size": 1823
           },
           "fridge/__next.fridge.txt": {
-            "hash": "5cc45ea2a26acc0f",
+            "hash": "1f8797483a2e896c",
             "size": 525
           },
           "fridge.html": {
-            "hash": "22fb6929c6aab0ff",
+            "hash": "49adbab2a8dd1201",
             "size": 10023
           },
           "fridge.txt": {
-            "hash": "d0a50476d358cdd6",
+            "hash": "9ff28394e0dec6ef",
             "size": 6950
           },
           "index.html": {
-            "hash": "dd49b4e86a6f624a",
+            "hash": "a90788c616d53405",
             "size": 8587
           },
           "index.txt": {
-            "hash": "23134a7ecd043216",
+            "hash": "9e968eca09f94693",
             "size": 5907
           },
           "login/__next._full.txt": {
-            "hash": "a47ba26978311f08",
+            "hash": "0b0d2c4d064d4c2b",
             "size": 6117
           },
           "login/__next._head.txt": {
-            "hash": "675cc5279207470a",
+            "hash": "444b1843b389f3f3",
             "size": 965
           },
           "login/__next._index.txt": {
-            "hash": "495f22a33e2a7703",
+            "hash": "b9a910972a6c4968",
             "size": 2680
           },
           "login/__next._tree.txt": {
-            "hash": "a614ac5aea11af68",
+            "hash": "24e6eb33de9b0e35",
             "size": 421
           },
           "login/__next.login.__PAGE__.txt": {
-            "hash": "a51e10f7ad30d515",
+            "hash": "9e996c6d617eeb47",
             "size": 1184
           },
           "login/__next.login.txt": {
-            "hash": "5cc45ea2a26acc0f",
+            "hash": "1f8797483a2e896c",
             "size": 525
           },
           "login.html": {
-            "hash": "7853e42fcb9c2b04",
+            "hash": "296066e05dbacca3",
             "size": 8754
           },
           "login.txt": {
-            "hash": "a47ba26978311f08",
+            "hash": "0b0d2c4d064d4c2b",
             "size": 6117
           },
           "member/__next._full.txt": {
-            "hash": "afbeb47cdf369e55",
+            "hash": "8bc7489a7f080e42",
             "size": 6326
           },
           "member/__next._head.txt": {
-            "hash": "675cc5279207470a",
+            "hash": "444b1843b389f3f3",
             "size": 965
           },
           "member/__next._index.txt": {
-            "hash": "495f22a33e2a7703",
+            "hash": "b9a910972a6c4968",
             "size": 2680
           },
           "member/__next._tree.txt": {
-            "hash": "d329eb18ba81e3ef",
+            "hash": "21c59bec842283e9",
             "size": 476
           },
           "member/__next.member.__PAGE__.txt": {
-            "hash": "6b5256e6d96c27a6",
+            "hash": "3ef98c3d42e8a54b",
             "size": 1343
           },
           "member/__next.member.txt": {
-            "hash": "5cc45ea2a26acc0f",
+            "hash": "1f8797483a2e896c",
             "size": 525
           },
           "member.html": {
-            "hash": "844c3f3ba3115487",
+            "hash": "105bb235f09ed57c",
             "size": 9072
           },
           "member.txt": {
-            "hash": "afbeb47cdf369e55",
+            "hash": "8bc7489a7f080e42",
             "size": 6326
           },
           "profile/__next._full.txt": {
-            "hash": "180ccab9e3030bbf",
+            "hash": "61f90d843685bec6",
             "size": 6328
           },
           "profile/__next._head.txt": {
-            "hash": "675cc5279207470a",
+            "hash": "444b1843b389f3f3",
             "size": 965
           },
           "profile/__next._index.txt": {
-            "hash": "495f22a33e2a7703",
+            "hash": "b9a910972a6c4968",
             "size": 2680
           },
           "profile/__next._tree.txt": {
-            "hash": "f338841a3f869200",
+            "hash": "ef475ccee84cfffe",
             "size": 477
           },
           "profile/__next.profile.__PAGE__.txt": {
-            "hash": "6166c15251d5f207",
+            "hash": "968bec12c1b7f769",
             "size": 1343
           },
           "profile/__next.profile.txt": {
-            "hash": "5cc45ea2a26acc0f",
+            "hash": "1f8797483a2e896c",
             "size": 525
           },
           "profile.html": {
-            "hash": "f085d8f0bc0a4423",
+            "hash": "46eea63c90389198",
             "size": 9074
           },
           "profile.txt": {
-            "hash": "180ccab9e3030bbf",
+            "hash": "61f90d843685bec6",
             "size": 6328
           },
           "recipe/__next._full.txt": {
-            "hash": "8593bc9b76cb6fa0",
+            "hash": "5e32487a8c4391ab",
             "size": 6743
           },
           "recipe/__next._head.txt": {
-            "hash": "675cc5279207470a",
+            "hash": "444b1843b389f3f3",
             "size": 965
           },
           "recipe/__next._index.txt": {
-            "hash": "495f22a33e2a7703",
+            "hash": "b9a910972a6c4968",
             "size": 2680
           },
           "recipe/__next._tree.txt": {
-            "hash": "9fc5122e61d5e52e",
+            "hash": "6d5e5b51c4569a01",
             "size": 584
           },
           "recipe/__next.recipe.__PAGE__.txt": {
-            "hash": "202d54ab79dbf21e",
+            "hash": "0a6594c2891523f4",
             "size": 1664
           },
           "recipe/__next.recipe.txt": {
-            "hash": "5cc45ea2a26acc0f",
+            "hash": "1f8797483a2e896c",
             "size": 525
           },
           "recipe.html": {
-            "hash": "5111ee6b09ca7062",
+            "hash": "cb8f3eed7b5978f9",
             "size": 9707
           },
           "recipe.txt": {
-            "hash": "8593bc9b76cb6fa0",
+            "hash": "5e32487a8c4391ab",
             "size": 6743
           },
           "recipes/__next._full.txt": {
-            "hash": "1961a29dd9de219d",
+            "hash": "47b989de6a8c9d98",
             "size": 5913
           },
           "recipes/__next._head.txt": {
-            "hash": "675cc5279207470a",
+            "hash": "444b1843b389f3f3",
             "size": 965
           },
           "recipes/__next._index.txt": {
-            "hash": "495f22a33e2a7703",
+            "hash": "b9a910972a6c4968",
             "size": 2680
           },
           "recipes/__next._tree.txt": {
-            "hash": "ea1b873073c289fe",
+            "hash": "af043cd4314ccf0b",
             "size": 369
           },
           "recipes/__next.recipes.__PAGE__.txt": {
-            "hash": "9aea3217ed180468",
+            "hash": "47d86a6b96f4627e",
             "size": 1024
           },
           "recipes/__next.recipes.txt": {
-            "hash": "5cc45ea2a26acc0f",
+            "hash": "1f8797483a2e896c",
             "size": 525
           },
           "recipes/cookMode/__next._full.txt": {
-            "hash": "15c8faf74fe91b0d",
+            "hash": "19d156c08d98057c",
             "size": 7155
           },
           "recipes/cookMode/__next._head.txt": {
-            "hash": "675cc5279207470a",
+            "hash": "444b1843b389f3f3",
             "size": 965
           },
           "recipes/cookMode/__next._index.txt": {
-            "hash": "495f22a33e2a7703",
+            "hash": "b9a910972a6c4968",
             "size": 2680
           },
           "recipes/cookMode/__next._tree.txt": {
-            "hash": "1677243a34b0be13",
+            "hash": "d203e0d33ba029ab",
             "size": 657
           },
           "recipes/cookMode/__next.recipes.cookMode.__PAGE__.txt": {
-            "hash": "3750a55ca652934a",
+            "hash": "755fe70b4c07380f",
             "size": 1664
           },
           "recipes/cookMode/__next.recipes.cookMode.txt": {
-            "hash": "5cc45ea2a26acc0f",
+            "hash": "1f8797483a2e896c",
             "size": 525
           },
           "recipes/cookMode/__next.recipes.txt": {
-            "hash": "5cc45ea2a26acc0f",
+            "hash": "1f8797483a2e896c",
             "size": 525
           },
           "recipes/cookMode.html": {
-            "hash": "39bd27793ccdfc76",
+            "hash": "329704324abcb788",
             "size": 10183
           },
           "recipes/cookMode.txt": {
-            "hash": "15c8faf74fe91b0d",
+            "hash": "19d156c08d98057c",
             "size": 7155
           },
           "recipes/favorites/__next._full.txt": {
-            "hash": "028b55baee6b5e7e",
+            "hash": "b9a259c471f84373",
             "size": 7365
           },
           "recipes/favorites/__next._head.txt": {
-            "hash": "675cc5279207470a",
+            "hash": "444b1843b389f3f3",
             "size": 965
           },
           "recipes/favorites/__next._index.txt": {
-            "hash": "495f22a33e2a7703",
+            "hash": "b9a910972a6c4968",
             "size": 2680
           },
           "recipes/favorites/__next._tree.txt": {
-            "hash": "ef71299c69d0964c",
+            "hash": "27fbde1e11b03add",
             "size": 712
           },
           "recipes/favorites/__next.recipes.favorites.__PAGE__.txt": {
-            "hash": "ab596424eb14e4d0",
+            "hash": "b1599430826a4f1e",
             "size": 1824
           },
           "recipes/favorites/__next.recipes.favorites.txt": {
-            "hash": "5cc45ea2a26acc0f",
+            "hash": "1f8797483a2e896c",
             "size": 525
           },
           "recipes/favorites/__next.recipes.txt": {
-            "hash": "5cc45ea2a26acc0f",
+            "hash": "1f8797483a2e896c",
             "size": 525
           },
           "recipes/favorites/currentRecipe/__next._full.txt": {
-            "hash": "8a4b61335f16ae35",
+            "hash": "75488e86fb6fd04e",
             "size": 7577
           },
           "recipes/favorites/currentRecipe/__next._head.txt": {
-            "hash": "675cc5279207470a",
+            "hash": "444b1843b389f3f3",
             "size": 965
           },
           "recipes/favorites/currentRecipe/__next._index.txt": {
-            "hash": "495f22a33e2a7703",
+            "hash": "b9a910972a6c4968",
             "size": 2680
           },
           "recipes/favorites/currentRecipe/__next._tree.txt": {
-            "hash": "744467442a064d86",
+            "hash": "e1ce323fa74c5e6c",
             "size": 735
           },
           "recipes/favorites/currentRecipe/__next.recipes.favorites.currentRecipe.__PAGE__.txt": {
-            "hash": "0af66f5fce8bc3f9",
+            "hash": "11fea32e1d60981b",
             "size": 1664
           },
           "recipes/favorites/currentRecipe/__next.recipes.favorites.currentRecipe.txt": {
-            "hash": "5cc45ea2a26acc0f",
+            "hash": "1f8797483a2e896c",
             "size": 525
           },
           "recipes/favorites/currentRecipe/__next.recipes.favorites.txt": {
-            "hash": "5cc45ea2a26acc0f",
+            "hash": "1f8797483a2e896c",
             "size": 525
           },
           "recipes/favorites/currentRecipe/__next.recipes.txt": {
-            "hash": "5cc45ea2a26acc0f",
+            "hash": "1f8797483a2e896c",
             "size": 525
           },
           "recipes/favorites/currentRecipe.html": {
-            "hash": "2f7932a01bba07dd",
+            "hash": "8bc2204f7d509563",
             "size": 10669
           },
           "recipes/favorites/currentRecipe.txt": {
-            "hash": "8a4b61335f16ae35",
+            "hash": "75488e86fb6fd04e",
             "size": 7577
           },
           "recipes/favorites.html": {
-            "hash": "095d779081181ca7",
+            "hash": "d7378c02de681fb9",
             "size": 10502
           },
           "recipes/favorites.txt": {
-            "hash": "028b55baee6b5e7e",
+            "hash": "b9a259c471f84373",
             "size": 7365
           },
           "recipes/history/__next._full.txt": {
-            "hash": "1eb9ba4a973b3dde",
+            "hash": "3a03b0312fdb14a6",
             "size": 7361
           },
           "recipes/history/__next._head.txt": {
-            "hash": "675cc5279207470a",
+            "hash": "444b1843b389f3f3",
             "size": 965
           },
           "recipes/history/__next._index.txt": {
-            "hash": "495f22a33e2a7703",
+            "hash": "b9a910972a6c4968",
             "size": 2680
           },
           "recipes/history/__next._tree.txt": {
-            "hash": "2f66265e3e6529e6",
+            "hash": "46c35281aca9b62f",
             "size": 710
           },
           "recipes/history/__next.recipes.history.__PAGE__.txt": {
-            "hash": "0ef45cfb00ad1f98",
+            "hash": "8868720f2324275a",
             "size": 1824
           },
           "recipes/history/__next.recipes.history.txt": {
-            "hash": "5cc45ea2a26acc0f",
+            "hash": "1f8797483a2e896c",
             "size": 525
           },
           "recipes/history/__next.recipes.txt": {
-            "hash": "5cc45ea2a26acc0f",
+            "hash": "1f8797483a2e896c",
             "size": 525
           },
           "recipes/history/currentRecipe/__next._full.txt": {
-            "hash": "eddefdd72b6d0b0e",
+            "hash": "e48d5fa6d7e9440b",
             "size": 7573
           },
           "recipes/history/currentRecipe/__next._head.txt": {
-            "hash": "675cc5279207470a",
+            "hash": "444b1843b389f3f3",
             "size": 965
           },
           "recipes/history/currentRecipe/__next._index.txt": {
-            "hash": "495f22a33e2a7703",
+            "hash": "b9a910972a6c4968",
             "size": 2680
           },
           "recipes/history/currentRecipe/__next._tree.txt": {
-            "hash": "5891af16c5490765",
+            "hash": "0d5d36a12cb72c07",
             "size": 733
           },
           "recipes/history/currentRecipe/__next.recipes.history.currentRecipe.__PAGE__.txt": {
-            "hash": "9a29a2046fec8f9d",
+            "hash": "ebf72eb0e9e59369",
             "size": 1664
           },
           "recipes/history/currentRecipe/__next.recipes.history.currentRecipe.txt": {
-            "hash": "5cc45ea2a26acc0f",
+            "hash": "1f8797483a2e896c",
             "size": 525
           },
           "recipes/history/currentRecipe/__next.recipes.history.txt": {
-            "hash": "5cc45ea2a26acc0f",
+            "hash": "1f8797483a2e896c",
             "size": 525
           },
           "recipes/history/currentRecipe/__next.recipes.txt": {
-            "hash": "5cc45ea2a26acc0f",
+            "hash": "1f8797483a2e896c",
             "size": 525
           },
           "recipes/history/currentRecipe.html": {
-            "hash": "8dc2eac9fa849a8f",
+            "hash": "4243a96da217e37e",
             "size": 10665
           },
           "recipes/history/currentRecipe.txt": {
-            "hash": "eddefdd72b6d0b0e",
+            "hash": "e48d5fa6d7e9440b",
             "size": 7573
           },
           "recipes/history.html": {
-            "hash": "54ea95940ed08db0",
+            "hash": "8dd5ccec665fc6d9",
             "size": 10498
           },
           "recipes/history.txt": {
-            "hash": "1eb9ba4a973b3dde",
+            "hash": "3a03b0312fdb14a6",
             "size": 7361
           },
           "recipes/recommendations/__next._full.txt": {
-            "hash": "f3eddeb4d359b245",
+            "hash": "22ef8e24e8d55c8b",
             "size": 6961
           },
           "recipes/recommendations/__next._head.txt": {
-            "hash": "675cc5279207470a",
+            "hash": "444b1843b389f3f3",
             "size": 965
           },
           "recipes/recommendations/__next._index.txt": {
-            "hash": "495f22a33e2a7703",
+            "hash": "b9a910972a6c4968",
             "size": 2680
           },
           "recipes/recommendations/__next._tree.txt": {
-            "hash": "4bdb608deca0554c",
+            "hash": "65b67d397b6b5b67",
             "size": 610
           },
           "recipes/recommendations/__next.recipes.recommendations.__PAGE__.txt": {
-            "hash": "11334721fdf5afa4",
+            "hash": "0afeebeac60f277a",
             "size": 1504
           },
           "recipes/recommendations/__next.recipes.recommendations.txt": {
-            "hash": "5cc45ea2a26acc0f",
+            "hash": "1f8797483a2e896c",
             "size": 525
           },
           "recipes/recommendations/__next.recipes.txt": {
-            "hash": "5cc45ea2a26acc0f",
+            "hash": "1f8797483a2e896c",
             "size": 525
           },
           "recipes/recommendations/currentRecipe/__next._full.txt": {
-            "hash": "03f4ec4de1d44b0a",
+            "hash": "6767c2a28b277797",
             "size": 7589
           },
           "recipes/recommendations/currentRecipe/__next._head.txt": {
-            "hash": "675cc5279207470a",
+            "hash": "444b1843b389f3f3",
             "size": 965
           },
           "recipes/recommendations/currentRecipe/__next._index.txt": {
-            "hash": "495f22a33e2a7703",
+            "hash": "b9a910972a6c4968",
             "size": 2680
           },
           "recipes/recommendations/currentRecipe/__next._tree.txt": {
-            "hash": "d4a7f2aca083a484",
+            "hash": "2870f0b87612c32d",
             "size": 741
           },
           "recipes/recommendations/currentRecipe/__next.recipes.recommendations.currentRecipe.__PAGE__.txt": {
-            "hash": "46869db943290963",
+            "hash": "23a36b711a9f4434",
             "size": 1664
           },
           "recipes/recommendations/currentRecipe/__next.recipes.recommendations.currentRecipe.txt": {
-            "hash": "5cc45ea2a26acc0f",
+            "hash": "1f8797483a2e896c",
             "size": 525
           },
           "recipes/recommendations/currentRecipe/__next.recipes.recommendations.txt": {
-            "hash": "5cc45ea2a26acc0f",
+            "hash": "1f8797483a2e896c",
             "size": 525
           },
           "recipes/recommendations/currentRecipe/__next.recipes.txt": {
-            "hash": "5cc45ea2a26acc0f",
+            "hash": "1f8797483a2e896c",
             "size": 525
           },
           "recipes/recommendations/currentRecipe.html": {
-            "hash": "08253ebd290e2e38",
+            "hash": "02af754506be4cd4",
             "size": 10681
           },
           "recipes/recommendations/currentRecipe.txt": {
-            "hash": "03f4ec4de1d44b0a",
+            "hash": "6767c2a28b277797",
             "size": 7589
           },
           "recipes/recommendations.html": {
-            "hash": "36b4f982612f0e8d",
+            "hash": "38f241e8c7507d93",
             "size": 9880
           },
           "recipes/recommendations.txt": {
-            "hash": "f3eddeb4d359b245",
+            "hash": "22ef8e24e8d55c8b",
             "size": 6961
           },
           "recipes/search/__next._full.txt": {
-            "hash": "d6db3e830dbe23ce",
+            "hash": "91d1d9a364cfef97",
             "size": 6943
           },
           "recipes/search/__next._head.txt": {
-            "hash": "675cc5279207470a",
+            "hash": "444b1843b389f3f3",
             "size": 965
           },
           "recipes/search/__next._index.txt": {
-            "hash": "495f22a33e2a7703",
+            "hash": "b9a910972a6c4968",
             "size": 2680
           },
           "recipes/search/__next._tree.txt": {
-            "hash": "1701372c8389e6eb",
+            "hash": "9ad6d8465fbbc7ba",
             "size": 601
           },
           "recipes/search/__next.recipes.search.__PAGE__.txt": {
-            "hash": "fcd45a2c55f3c87a",
+            "hash": "03747222d18dedff",
             "size": 1504
           },
           "recipes/search/__next.recipes.search.txt": {
-            "hash": "5cc45ea2a26acc0f",
+            "hash": "1f8797483a2e896c",
             "size": 525
           },
           "recipes/search/__next.recipes.txt": {
-            "hash": "5cc45ea2a26acc0f",
+            "hash": "1f8797483a2e896c",
             "size": 525
           },
           "recipes/search.html": {
-            "hash": "3b43d3121319d152",
+            "hash": "95f14eb1721f75b0",
             "size": 9862
           },
           "recipes/search.txt": {
-            "hash": "d6db3e830dbe23ce",
+            "hash": "91d1d9a364cfef97",
             "size": 6943
           },
           "recipes.html": {
-            "hash": "5fd9f06e84649131",
+            "hash": "e7bb822c57dc7887",
             "size": 8441
           },
           "recipes.txt": {
-            "hash": "1961a29dd9de219d",
+            "hash": "47b989de6a8c9d98",
             "size": 5913
           },
           "recognize/__next._full.txt": {
-            "hash": "de379d4bec026975",
+            "hash": "42522f1c9373ed35",
             "size": 6125
           },
           "recognize/__next._head.txt": {
-            "hash": "675cc5279207470a",
+            "hash": "444b1843b389f3f3",
             "size": 965
           },
           "recognize/__next._index.txt": {
-            "hash": "495f22a33e2a7703",
+            "hash": "b9a910972a6c4968",
             "size": 2680
           },
           "recognize/__next._tree.txt": {
-            "hash": "4247cf24cfc5f733",
+            "hash": "24a5758b66cdfd0a",
             "size": 425
           },
           "recognize/__next.recognize.__PAGE__.txt": {
-            "hash": "e118cba933dcbe46",
+            "hash": "1e994e333c6b5e04",
             "size": 1184
           },
           "recognize/__next.recognize.txt": {
-            "hash": "5cc45ea2a26acc0f",
+            "hash": "1f8797483a2e896c",
             "size": 525
           },
           "recognize.html": {
-            "hash": "98f387c707661e61",
+            "hash": "d2779aace376db7a",
             "size": 8762
           },
           "recognize.txt": {
-            "hash": "de379d4bec026975",
+            "hash": "42522f1c9373ed35",
             "size": 6125
           }
         }
