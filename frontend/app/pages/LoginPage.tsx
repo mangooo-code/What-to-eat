@@ -45,7 +45,9 @@ export function LoginPage() {
       authToken.set(token);
       await Promise.all([loadCurrentUser(), loadMembers()]);
       setLoginError("");
-      go("home");
+      setPassword("");
+      // replace() so the back button can't return to the login page with stale credentials
+      go("home", { replace: true });
     } catch (error) {
       await new Promise((resolve) => setTimeout(resolve, 500));
       setLoginError(getLoginErrorMessage(error));

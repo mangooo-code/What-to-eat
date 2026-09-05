@@ -7,9 +7,10 @@ import { memberService } from "../services/memberService";
 import type { User } from "../types/domain";
 
 const mockPush = vi.fn();
+const mockReplace = vi.fn();
 let mockPathname = "/fridge";
 vi.mock("next/navigation", () => ({
-  useRouter: () => ({ push: mockPush }),
+  useRouter: () => ({ push: mockPush, replace: mockReplace }),
   usePathname: () => mockPathname,
 }));
 vi.mock("../services/userService", () => ({
@@ -42,10 +43,11 @@ describe("auth guard", () => {
   beforeEach(() => {
     localStorage.clear();
     mockPush.mockClear();
+    mockReplace.mockClear();
     vi.mocked(memberService.list).mockResolvedValue([]);
   });
 
-  it("redirects an unauthenticated user away from a guarded page to /login", async () => {
+  it("redirects an unauthenticated user away from a guarded page to /login without a new history entry", async () => {
     mockPathname = "/fridge";
 
     render(
@@ -54,7 +56,8 @@ describe("auth guard", () => {
       </AppProvider>,
     );
 
-    await waitFor(() => expect(mockPush).toHaveBeenCalledWith("/login"));
+    await waitFor(() => expect(mockReplace).toHaveBeenCalledWith("/login"));
+    expect(mockPush).not.toHaveBeenCalled();
   });
 
   it("does not redirect an authenticated user viewing a guarded page", async () => {
@@ -69,10 +72,10 @@ describe("auth guard", () => {
     );
 
     await waitFor(() => expect(screen.getByLabelText("auth-checked")).toHaveTextContent("checked"));
-    expect(mockPush).not.toHaveBeenCalledWith("/login");
+    expect(mockReplace).not.toHaveBeenCalledWith("/login");
   });
 
-  it("redirects an authenticated user away from the login page to home", async () => {
+  it("redirects an authenticated user away from the login page to home without leaving /login in history", async () => {
     mockPathname = "/login";
     authToken.set(makeToken({ exp: Math.floor(Date.now() / 1000) + 3600 }));
     vi.mocked(userService.getProfile).mockResolvedValue(fakeUser);
@@ -83,6 +86,7 @@ describe("auth guard", () => {
       </AppProvider>,
     );
 
-    await waitFor(() => expect(mockPush).toHaveBeenCalledWith("/"));
+    await waitFor(() => expect(mockReplace).toHaveBeenCalledWith("/"));
+    expect(mockPush).not.toHaveBeenCalled();
   });
 });

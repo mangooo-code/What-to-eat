@@ -45,7 +45,7 @@ const RECOMMENDED_RECIPES_KEY = "wte_recommended_recipes";
 interface AppContextValue {
   page: Page;
   authChecked: boolean;
-  go: (p: Page) => void;
+  go: (p: Page, options?: { replace?: boolean }) => void;
   goBack: (override?: Page) => void;
   countryCode: string;
   setCountryCode: (v: string) => void;
@@ -314,8 +314,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
     }
   }, [recommendedRecipes]);
 
-  const go = (p: Page) => {
-    router.push(pageToPath[p]);
+  const go = (p: Page, options?: { replace?: boolean }) => {
+    if (options?.replace) router.replace(pageToPath[p]);
+    else router.push(pageToPath[p]);
     window.scrollTo(0, 0);
   };
   // Defaults to real browser back navigation; pass an override for the few pages
@@ -371,14 +372,15 @@ export function AppProvider({ children }: { children: ReactNode }) {
     if (authed) {
       loadCurrentUser();
       loadMembers();
+      // replace() so signing in doesn't leave /login in history for the back button to return to
       if (pathname === "/login") {
-        go("home");
+        go("home", { replace: true });
         return;
       }
     } else {
       setMembersLoading(false);
       if (pathname !== "/login") {
-        go("login");
+        go("login", { replace: true });
         return;
       }
     }

@@ -50,6 +50,7 @@ describe("LoginPage", () => {
   it("logs in and navigates home with the correct test credentials", async () => {
     const go = vi.fn();
     const setLoginError = vi.fn();
+    const setPassword = vi.fn();
     mockedLogin.mockResolvedValue("signed-jwt-token");
     mockApp({
       phone: "800800",
@@ -57,14 +58,16 @@ describe("LoginPage", () => {
       agreed: true,
       go,
       setLoginError,
+      setPassword,
     });
     render(<LoginPage />);
     const button = screen.getByRole("button", { name: "登录" });
     expect(button).not.toBeDisabled();
     fireEvent.click(button);
-    await waitFor(() => expect(go).toHaveBeenCalledWith("home"));
+    await waitFor(() => expect(go).toHaveBeenCalledWith("home", { replace: true }));
     expect(authToken.set).toHaveBeenCalledWith("signed-jwt-token");
     expect(setLoginError).toHaveBeenCalledWith("");
+    expect(setPassword).toHaveBeenCalledWith("");
   });
 
   it("shows an error and does not navigate with the wrong password", async () => {
