@@ -90,7 +90,7 @@ describe("CookModePage", () => {
       tags: [],
       isFavorite: false,
       cookTime: "20 分钟",
-      ingredients: [{ name: "牛柳", quantity: 300 }],
+      ingredients: [{ name: "牛柳", quantity: 300, unit: "g" }],
       seasonings: [],
       steps: [],
     });
